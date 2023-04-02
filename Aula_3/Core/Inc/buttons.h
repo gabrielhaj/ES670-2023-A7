@@ -1,6 +1,6 @@
 // ********************************************** //
 // File name:                           buttons.c //
-// File description:     This file is the header  //
+// File description:    This file is the header   //
 //                    of the file that implements //
 //                    the functions to read a     //
 //                    button                      //
