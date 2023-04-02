@@ -2,39 +2,94 @@
 // File name:                               led.h //
 // File description:       This file declares the //
 //                    functions needed to turn on //
-//                          the leds in the system//
+//                    off, and toggles the leds   //
+//                    in the system               //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 23/03/2023                      //
-// Revision date: ----------					  //
+// Revision date: 02/04/2023					  //
 // ********************************************** //
 #ifndef LED_C
 #define LED_C
+#include <led.h>
+#include <stm32g4xx.h>
+#include <main.h>
 
-void ledInitLed(void){
-	/*Initializing all the buttons registers, as knowns as: PC and PB*/
-	RCC->AHB2ENR |= PB;
-	RCC->AHB2ENR |= PC; /*There is a define with the values of PB and PC in the header buttons.h*/
-	/*Alternative way: SET_BIT(RCC->AHB2ENR,PB)*/
-	/*Clock initialized*/
 
-	/*Setting mode for BT_Enter - PB0 - positions 0 and 1 = 3dec*/
-	CLEAR_BIT(GPIOB->MODER,3); /*00 = input mode*/
-	/*Setting mode for BT_UP - PC1 - positions 2 and 3 = 12 (3*4)dec and 0xC*/
-	CLEAR_BIT(GPIOC->MODER,0xC); /*00 = input mode*/
-	/*Setting mode for BT_DOWN - PC2 - positions 4 and 5 = 48(3*4^2)dec and 0x30*/
-	CLEAR_BIT(GPIOC->MODER,0x30); /*00 = input mode*/
-	/*Setting mode for BT_LEFT - PC3 - positions 6 and 7 = 192(3*4^3)dec and  0xC0*/
-	CLEAR_BIT(GPIOC->MODER,0xC0); /*00 = input mode*/
-	/*Setting mode for BT_RIGHT - PC4 - positions 8 and 9 = 192(3*4^4)dec and 0x300*/
-	CLEAR_BIT(GPIOC->MODER,0x300); /*00 = input mode*/
-
-	/*Setting Pull-up Pull-down config (Same logic as before)*/
-	CLEAR_BIT(GPIOB->PUPDR,3); /*00 = No pull-up or pull-down*/
-	CLEAR_BIT(GPIOC->PUPDR,0xC);
-	CLEAR_BIT(GPIOC->PUPDR,0x30);
-	CLEAR_BIT(GPIOC->PUPDR,0xC0);
-	CLEAR_BIT(GPIOC->PUPDR,0x300);
+void ledWrite(leds led, pinState state){
+	if(led == green1){
+		if(state == set){
+			SET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
+		}else{
+			RESET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
+		}
+	}else if(led == green2){
+		if(state == set) {
+			SET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
+		}else{
+			RESET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
+		}
+	}else if(led == yellow){
+		if(state == set){
+			SET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
+		}else {
+			RESET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
+		}
+	}else if(led == red){
+		if(state == set){
+			SET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
+		}else {
+			RESET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
+		}
+	}else{
+		if(state == set){
+			SET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
+		}else {
+			RESET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
+		}
+	}
 }
+
+void ledOn(leds led){
+	ledWrite(led,set);
+}
+void ledOff(leds led){
+	ledWrite(led,reset);
+}
+void ledToggle(leds led){
+	if(led == green1){
+		if(READ_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN)){
+			RESET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
+		}else{
+			SET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
+		}
+	}else if(led == green2){
+		if(READ_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN)) {
+			RESET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
+		}else{
+			SET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
+		}
+	}else if(led == yellow){
+		if(READ_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN)){
+			RESET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
+		}else {
+			SET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
+		}
+	}else if(led == red){
+		if(READ_BIT(LED_RED_PORT->ODR,LED_RED_PIN)){
+			RESET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
+		}else {
+			SET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
+		}
+	}else{
+		if(READ_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN)){
+			RESET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
+		}else {
+			SET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
+		}
+	}
+}
+
+
 
 // body of automaticPilotControl.h file
 #endif // AUTOPILOTCONTROL_H

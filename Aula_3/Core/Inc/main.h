@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "buttons.h"
+#include "led.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -74,6 +75,16 @@ void Error_Handler(void);
 #define T_SWO_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
+#define BT_ENTER_PORT          GPIOB
+#define BT_ENTER_PIN           GPIO_PIN_0
+#define BT_UP_PORT             GPIOC
+#define BT_UP_PIN              GPIO_PIN_1
+#define BT_DOWN_PORT           GPIOC
+#define BT_DOWN_PIN            GPIO_PIN_2
+#define BT_LEFT_PORT           GPIOC
+#define BT_LEFT_PIN            GPIO_PIN_3
+#define BT_RIGHT_PORT          GPIOC
+#define BT_RIGHT_PIN           GPIO_PIN_4
 #define LED_GREEN1_PORT        GPIOA
 #define LED_GREEN1_PIN         GPIO_PIN_5
 #define LED_YELLOW_PORT		   GPIOA

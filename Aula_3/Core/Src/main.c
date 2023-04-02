@@ -66,7 +66,7 @@ void ledInitLed(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	int count[6];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,8 +97,27 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_TogglePin(GPIOx, GPIO_Pin)
-
+	  /*Testing functions implemented in lab03:*/
+	  /*Button Up = Led Green 1, count[1]*/
+	  /*Button Down = Led Yellow, count[2]*/
+	  /*Button Left = Led Red*, count[3]/
+	  /*Button Right = Led Green2, count4]*/
+	  /*Button Enter = Led Blue, count[5]*/
+	  /*Pressing button 1x = Turn on Led*/
+	  /*Pressing button 2x = Turn off Led*/
+	  /*Pressing button 3x = Toggle Led*/
+	  for(button i = up; i<= enter; i++){
+		  if(buttonsReadState(i) && (count[i] == 0)){
+			  count[i]++;
+			  ledOn(i);
+		  }else if(buttonsReadState(i) && (count[i] == 1)){
+			  count[i]++;
+			  ledOff(i);
+		  }else if(buttonsReadState(i) && (count[i] == 2)){
+			  count[i] = 0;
+			  ledToggle(i);
+		  }
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -245,22 +264,22 @@ void buttonsInitButtons(void){
 	/*Clock initialized*/
 
 	/*Setting mode for BT_Enter - PB0 - positions 0 and 1 = 3dec*/
-	CLEAR_BIT(GPIOB->MODER,3); /*00 = input mode*/
+	CLEAR_BIT(BT_ENTER_PORT->MODER,(3<<(BT_ENTER_PIN*2))); /*00 = input mode*/
 	/*Setting mode for BT_UP - PC1 - positions 2 and 3 = 12 (3*4)dec and 0xC*/
-	CLEAR_BIT(GPIOC->MODER,0xC); /*00 = input mode*/
+	CLEAR_BIT(BT_UP_PORT->MODER,(3<<(BT_UP_PIN*2))); /*00 = input mode*/
 	/*Setting mode for BT_DOWN - PC2 - positions 4 and 5 = 48(3*4^2)dec and 0x30*/
-	CLEAR_BIT(GPIOC->MODER,0x30); /*00 = input mode*/
+	CLEAR_BIT(BT_DOWN_PORT->MODER,(3<<(BT_DOWN_PIN*2))); /*00 = input mode*/
 	/*Setting mode for BT_LEFT - PC3 - positions 6 and 7 = 192(3*4^3)dec and  0xC0*/
-	CLEAR_BIT(GPIOC->MODER,0xC0); /*00 = input mode*/
+	CLEAR_BIT(BT_LEFT_PORT->MODER,(3<<(BT_LEFT_PIN*2))); /*00 = input mode*/
 	/*Setting mode for BT_RIGHT - PC4 - positions 8 and 9 = 192(3*4^4)dec and 0x300*/
-	CLEAR_BIT(GPIOC->MODER,0x300); /*00 = input mode*/
+	CLEAR_BIT(BT_RIGHT_PORT->MODER,(3<<(BT_RIGHT_PIN*2))); /*00 = input mode*/
 
 	/*Setting Pull-up Pull-down config (Same logic as before)*/
-	CLEAR_BIT(GPIOB->PUPDR,3); /*00 = No pull-up or pull-down*/
-	CLEAR_BIT(GPIOC->PUPDR,0xC);
-	CLEAR_BIT(GPIOC->PUPDR,0x30);
-	CLEAR_BIT(GPIOC->PUPDR,0xC0);
-	CLEAR_BIT(GPIOC->PUPDR,0x300);
+	CLEAR_BIT(BT_ENTER_PORT->PUPDR,(3<<(BT_ENTER_PIN*2))); /*00 = No pull-up or pull-down*/
+	CLEAR_BIT(BT_UP_PORT->PUPDR,(3<<(BT_UP_PIN*2)));
+	CLEAR_BIT(BT_DOWN_PORT->PUPDR,(3<<(BT_DOWN_PIN*2)));
+	CLEAR_BIT(BT_LEFT_PORT->PUPDR,(3<<(BT_LEFT_PIN*2)));
+	CLEAR_BIT(BT_RIGHT_PORT->PUPDR,(3<<(BT_RIGHT_PIN*2)));
 }
 
 void ledInitLed(void){
