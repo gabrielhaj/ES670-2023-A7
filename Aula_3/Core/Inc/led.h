@@ -6,13 +6,13 @@
 //                     in the system              //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 23/03/2023                      //
-// Revision date: 02/04/2023					  //
+// Revision date: 03/04/2023					  //
 // ********************************************** //
 #ifndef LED_H
 #define LED_H
+#include "help.h"
 
-typedef enum {reset,set} pinState;
-typedef enum {green1,yellow,red,green2,blue} leds;
+typedef enum {green1 = 1,yellow,red,green2,blue} leds;
 
 void ledWrite(leds led, pinState state);
 void ledOn(leds led);

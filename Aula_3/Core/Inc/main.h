@@ -33,6 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "buttons.h"
 #include "led.h"
+#include "help.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
