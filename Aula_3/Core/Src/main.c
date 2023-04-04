@@ -67,7 +67,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	int count[6] = {0,0,0,0,0,0};
-	int x = 0;
 	buttons i;
   /* USER CODE END 1 */
 
@@ -99,7 +98,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  x++;
+
 	  /*Testing functions implemented in lab03:*/
 	  /*Button Up = Led Green 1, count[1]*/
 	  /*Button Down = Led Yellow, count[2]*/
@@ -123,7 +122,8 @@ int main(void)
 			  count[i] = 0;
 			  ledToggle(i);
 		  }
-		  HAL_Delay(50);
+		  /*For a better functionality, include the delay*/
+		  /*HAL_Delay(50);*/
 	  }
 
 
