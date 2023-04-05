@@ -1,16 +1,19 @@
 // ********************************************** //
-// File name:                               led.h //
+// File name:                    matrixKeyboard.h //
 // File description:       This file declares the //
-//                    functions needed to turn on,//
-//                     off, and toggles the leds  //
-//                     in the system              //
+//                    functions needed to init the//
+//                    clock to interrupt the sys  //
+//                    the callback to read the    //
+//                    keyboard and also to give   //
+//                    the keyboard to the applica-//
+//                    tion that call it           //
 // Author names: Gabriel Haj and Luccas Yonei     //
-// Creation date: 23/03/2023                      //
-// Revision date: 03/04/2023					  //
+// Creation date: 05/04/2023                      //
+// Revision date: 05/04/2023					  //
 // ********************************************** //
-#ifndef LED_H
-#define LED_H
-#include "help.h"
+#ifndef MATRIXKEYBOARD_H
+#define MATRIXKEYBOARD_H
+
 
 typedef struct {
 	char c1;
@@ -29,6 +32,8 @@ typedef struct {
 	char c0;
 	char cHashtag;
 	char cD;
-} xKeyboard;
+} Keyboard;
 
 void matrixKeyboardInit(void);
+Keyboard matrixKeyboardGetKeys(void);
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
