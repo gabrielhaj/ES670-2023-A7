@@ -30,3 +30,5 @@ typedef struct {
 	char cHashtag;
 	char cD;
 } xKeyboard;
+
+void matrixKeyboardInit(void);
