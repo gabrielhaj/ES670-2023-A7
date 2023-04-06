@@ -14,34 +14,34 @@
 #include <stm32g4xx.h>
 #include <main.h>
 
-
-void ledWrite(leds led, pinState state){
-	if(led == green1){
-		if(state == set){
+// Write led if its pin is SET
+void vLedWriteLed(leds iLed, pinState iState){
+	if(iLed == GREEN1){
+		if(iState == SET){
 			SET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
 		}else{
 			CLEAR_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
 		}
-	}else if(led == green2){
-		if(state == set) {
+	}else if(iLed == GREEN2){
+		if(iState == SET) {
 			SET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
 		}else{
 			CLEAR_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
 		}
-	}else if(led == yellow){
-		if(state == set){
+	}else if(iLed == YELLOW){
+		if(iState == SET){
 			SET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
 		}else {
 			CLEAR_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
 		}
-	}else if(led == red){
-		if(state == set){
+	}else if(iLed == RED){
+		if(iState == SET){
 			SET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
 		}else {
 			CLEAR_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
 		}
-	}else if(led == blue){
-		if(state == set){
+	}else if(iLed == BLUE){
+		if(iState == SET){
 			SET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
 		}else {
 			CLEAR_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
@@ -49,57 +49,60 @@ void ledWrite(leds led, pinState state){
 	}
 }
 
-void ledOn(leds led){
-	ledWrite(led,set);
+void vLedTurnLedOn(leds iLed){
+	vLedWriteLed(iLed,SET);
 }
-void ledOff(leds led){
-	ledWrite(led,reset);
+
+void vLedTurnLedOff(leds iLed){
+	vLedWriteLed(iLed,RESET);
 }
-void ledToggle(leds led){
-	if(led == green1){
+
+// Turn led on if off and off if on
+void vLedToggle(leds iLed){
+	if(iLed == GREEN1){
 		if(READ_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN)){
 			//CLEAR_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
-			ledOff(led);
+			vLedTurnLedOff(iLed);
 		}else{
 			//SET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
-			ledOn(led);
+			vLedTurnLedOn(iLed);
 		}
-	}else if(led == green2){
+	}else if(iLed == GREEN2){
 		if(READ_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN)) {
 			//CLEAR_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
-			ledOff(led);
+			vLedTurnLedOff(iLed);
 		}else{
 			//SET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
-			ledOn(led);
+			vLedTurnLedOn(iLed);
 		}
-	}else if(led == yellow){
+	}else if(iLed == YELLOW){
 		if(READ_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN)){
 			//CLEAR_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
-			ledOff(led);
+			vLedTurnLedOff(iLed);
 		}else {
 			//SET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
-			ledOn(led);
+			vLedTurnLedOn(iLed);
 		}
-	}else if(led == red){
+	}else if(iLed == RED){
 		if(READ_BIT(LED_RED_PORT->ODR,LED_RED_PIN)){
 			//CLEAR_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
-			ledOff(led);
+			vLedTurnLedOff(iLed);
 		}else {
 			//SET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
-			ledOn(led);
+			vLedTurnLedOn(iLed);
 		}
-	}else if(led == blue){
+	}else if(iLed == BLUE){
 		if(READ_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN)){
 			//CLEAR_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
-			ledOff(led);
+			vLedTurnLedOff(iLed);
 		}else {
 			//SET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
-			ledOn(led);
+			vLedTurnLedOn(iLed);
 		}
 	}
 }
 
 
 
-// body of automaticPilotControl.h file
-#endif // AUTOPILOTCONTROL_H
+// body of led.h file
+#endif // LED_H

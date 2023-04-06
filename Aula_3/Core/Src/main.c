@@ -66,7 +66,7 @@ void ledInitLed(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int count[6] = {0,0,0,0,0,0};
+	int iCount[6] = {0,0,0,0,0,0};
 	buttons i;
   /* USER CODE END 1 */
 
@@ -100,27 +100,27 @@ int main(void)
   {
 
 	  /*Testing functions implemented in lab03:*/
-	  /*Button Up = Led Green 1, count[1]*/
-	  /*Button Down = Led Yellow, count[2]*/
-	  /*Button Left = Led Red*, count[3]*/
+	  /*Button Up = Led Green 1, iCount[1]*/
+	  /*Button Down = Led Yellow, iCount[2]*/
+	  /*Button Left = Led Red*, iCount[3]*/
 	  /*Button Right = Led Green2, count4]*/
-	  /*Button Enter = Led Blue, count[5]*/
+	  /*Button Enter = Led Blue, iCount[5]*/
 	  /*Pressing button 1x = Turn on Led*/
 	  /*Pressing button 2x = Turn off Led*/
 	  /*Pressing button 3x = Toggle Led*/
-	  for(i = up; i<= enter; i++){
-		  if(buttonsReadStatus(i) && (count[i] == 0)){
-			  count[i]++;
-			  ledOn(i);
-		  }else if(buttonsReadStatus(i) && (count[i] == 1)){
-			  count[i]++;
-			  ledOff(i);
-		  }else if(buttonsReadStatus(i) && (count[i] == 2)){
-			  count[i] ++;
-			  ledToggle(i);
-		  }else if(buttonsReadStatus(i) && (count[i] == 3)){
-			  count[i] = 0;
-			  ledToggle(i);
+	  for(i = UP; i<= ENTER; i++){
+		  if(iButtonsReadStatus(i) && (iCount[i] == 0)){
+			  iCount[i]++;
+			  vLedTurnLedOn(i);
+		  }else if(iButtonsReadStatus(i) && (iCount[i] == 1)){
+			  iCount[i]++;
+			  vLedTurnLedOff(i);
+		  }else if(iButtonsReadStatus(i) && (iCount[i] == 2)){
+			  iCount[i] ++;
+			  vLedToggle(i);
+		  }else if(iButtonsReadStatus(i) && (iCount[i] == 3)){
+			  iCount[i] = 0;
+			  vLedToggle(i);
 		  }
 		  /*For a better functionality, include the delay*/
 		  /*HAL_Delay(50);*/

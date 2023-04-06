@@ -12,11 +12,11 @@
 #define LED_H
 #include "help.h"
 
-typedef enum {green1 = 1,yellow,red,green2,blue} leds;
+typedef enum {GREEN1 = 1,YELLOW,RED,GREEN2,BLUE} leds;
 
-void ledWrite(leds led, pinState state);
-void ledOn(leds led);
-void ledOff(leds led);
-void ledToggle(leds led);
-// body of automaticPilotControl.h file
-#endif // AUTOPILOTCONTROL_H
+void vLedWriteLed(leds iLed, pinState iState);
+void vLedTurnLedOn(leds iLed);
+void vLedTurnLedOff(leds iLed);
+void vLedToggle(leds iLed);
+// body of led.h file
+#endif // LED_H

@@ -12,6 +12,6 @@
 #ifndef HELP_H
 #define HELP_H
 
-typedef enum {reset,set} pinState;
+typedef enum {RESET,set} pinState;
 
 #endif

@@ -15,36 +15,36 @@
 
 
 
-pinState buttonsReadStatus(buttons button){
-	if(button == up){
+pinState iButtonsReadStatus(buttons iButton){
+	if(iButton == UP){
 		if(READ_BIT(BT_UP_PORT->IDR,BT_UP_PIN)){
-			return set;
+			return SET;
 		} else {
-			return reset;
+			return RESET;
 		}
-	}else if(button == down){
+	}else if(iButton == DOWN){
 		if(READ_BIT(BT_DOWN_PORT->IDR,BT_DOWN_PIN)){
-			return set;
+			return SET;
 		} else {
-			return reset;
+			return RESET;
 		}
-	}else if(button == left){
+	}else if(iButton == LEFT){
 		if(READ_BIT(BT_LEFT_PORT->IDR,BT_LEFT_PIN)){
-			return set;
+			return SET;
 		} else {
-			return reset;
+			return RESET;
 		}
-	}else if(button == right){
+	}else if(iButton == RIGHT){
 		if(READ_BIT(BT_RIGHT_PORT->IDR,BT_RIGHT_PIN)){
-			return set;
+			return SET;
 		} else {
-			return reset;
+			return RESET;
 		}
 	}else{
 		if(READ_BIT(BT_ENTER_PORT->IDR,BT_ENTER_PIN)){
-			return set;
+			return SET;
 		} else {
-			return reset;
+			return RESET;
 		}
 	}
 }
