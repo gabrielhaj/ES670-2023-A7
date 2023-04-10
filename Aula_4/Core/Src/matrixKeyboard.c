@@ -26,7 +26,7 @@ void matrixKeyboardInit(void){
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
 	if(cCOL == 1){
 		HAL_GPIO_WritePin(xKB_Col1_GPIO_PORT->ODR,xKB_Col1_Pin,GPIO_PIN_SET);
-		if(HAL_GPIO_ReadPin(xKB_Lin1_GPIO_PORT->IDR,xKB_Lin1_Pin)){
+		if(HAL_GPIO_ReadPin(xKB_Lin1_GPIO_PORT->IDR,xKB_Lin1_Pin)){ 
 			xKB.c1 = 1;
 		} else{
 			xKB.c1 = 0;
@@ -118,7 +118,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
 		HAL_GPIO_WritePin(xKB_Col4_GPIO_PORT->ODR,xKB_Col4_Pin,GPIO_PIN_RESET);
 		cCOL = 1;
 	}
-	cCOL ++;
+	cCOL ++; // não precisa retornar pra coluna 1 quando cCOL = 5?
 }
 
 Keyboard matrixKeyboardGetKeys(void){
