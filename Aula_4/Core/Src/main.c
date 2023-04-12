@@ -18,6 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
+#include "tim.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,9 +42,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-UART_HandleTypeDef hlpuart1;
-
-TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN PV */
 
@@ -49,9 +49,6 @@ TIM_HandleTypeDef htim6;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_LPUART1_UART_Init(void);
-static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 void buttonsInitButtons(void);
 void ledInitLed(void);
@@ -69,8 +66,8 @@ void ledInitLed(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int count[6] = {0,0,0,0,0,0};
-	buttons i;
+
+	Keyboard xKb;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -96,44 +93,141 @@ int main(void)
   /* USER CODE BEGIN 2 */
   buttonsInitButtons();
   ledInitLed();
+  matrixKeyboardInit();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-	  /*Testing functions implemented in lab03:*/
-	  /*Button Up = Led Green 1, count[1]*/
-	  /*Button Down = Led Yellow, count[2]*/
-	  /*Button Left = Led Red*, count[3]*/
-	  /*Button Right = Led Green2, count4]*/
-	  /*Button Enter = Led Blue, count[5]*/
-	  /*Pressing button 1x = Turn on Led*/
-	  /*Pressing button 2x = Turn off Led*/
-	  /*Pressing button 3x = Toggle Led*/
-	  for(i = up; i<= enter; i++){
-		  if(buttonsReadStatus(i) && (count[i] == 0)){
-			  count[i]++;
-			  ledOn(i);
-		  }else if(buttonsReadStatus(i) && (count[i] == 1)){
-			  count[i]++;
-			  ledOff(i);
-		  }else if(buttonsReadStatus(i) && (count[i] == 2)){
-			  count[i] ++;
-			  ledToggle(i);
-		  }else if(buttonsReadStatus(i) && (count[i] == 3)){
-			  count[i] = 0;
-			  ledToggle(i);
-		  }
-		  /*For a better functionality, include the delay*/
-		  /*HAL_Delay(50);*/
-	  }
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  // 1 = greenled1
+	  // 2 = Yellow
+	  // 3 = Red
+	  // 4 = Green2
+	  // 5 = blue
+	  xKb = matrixKeyboardGetKeys();
+	  if(xKb.c1 == 1){
+		  ledOn(5);
+		  ledOff(4);
+		  ledOff(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c2 == 1){
+		  ledOff(5);
+		  ledOn(4);
+		  ledOff(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c3 == 1){
+		  ledOn(5);
+		  ledOn(4);
+		  ledOff(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.cA == 1){
+		  ledOff(5);
+		  ledOff(4);
+		  ledOn(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c4 == 1){
+		  ledOn(5);
+		  ledOff(4);
+		  ledOn(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c5 == 1){
+		  ledOff(5);
+		  ledOn(4);
+		  ledOn(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c6 == 1){
+		  ledOn(5);
+		  ledOn(4);
+		  ledOn(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.cB == 1){
+		  ledOff(5);
+		  ledOff(4);
+		  ledOff(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c7 == 1){
+		  ledOn(5);
+		  ledOff(4);
+		  ledOff(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c8 == 1){
+		  ledOff(5);
+		  ledOn(4);
+		  ledOff(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c9 == 1){
+		  ledOn(5);
+		  ledOn(4);
+		  ledOff(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.cC == 1){
+		  ledOff(5);
+		  ledOff(4);
+		  ledOn(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.cStar == 1){
+		  ledOn(5);
+		  ledOff(4);
+		  ledOn(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.c0 == 1){
+		  ledOff(5);
+		  ledOn(4);
+		  ledOn(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.cHashtag == 1){
+		  ledOn(5);
+		  ledOn(4);
+		  ledOn(3);
+		  ledOn(2);
+		  ledOff(1);
+	  }
+	  else if(xKb.cD == 1){
+		  ledOff(5);
+		  ledOff(4);
+		  ledOff(3);
+		  ledOff(2);
+		  ledOn(1);
+	  }
+	  else{
+		  ledOff(5);
+		  ledOff(4);
+		  ledOff(3);
+		  ledOff(2);
+		  ledOff(1);
+	  }
   }
   /* USER CODE END 3 */
 }
@@ -182,138 +276,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-}
-
-/**
-  * @brief LPUART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_LPUART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN LPUART1_Init 0 */
-
-  /* USER CODE END LPUART1_Init 0 */
-
-  /* USER CODE BEGIN LPUART1_Init 1 */
-
-  /* USER CODE END LPUART1_Init 1 */
-  hlpuart1.Instance = LPUART1;
-  hlpuart1.Init.BaudRate = 115200;
-  hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
-  hlpuart1.Init.StopBits = UART_STOPBITS_1;
-  hlpuart1.Init.Parity = UART_PARITY_NONE;
-  hlpuart1.Init.Mode = UART_MODE_TX_RX;
-  hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  hlpuart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetTxFifoThreshold(&hlpuart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetRxFifoThreshold(&hlpuart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_DisableFifoMode(&hlpuart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN LPUART1_Init 2 */
-
-  /* USER CODE END LPUART1_Init 2 */
-
-}
-
-/**
-  * @brief TIM6 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM6_Init(void)
-{
-
-  /* USER CODE BEGIN TIM6_Init 0 */
-
-  /* USER CODE END TIM6_Init 0 */
-
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM6_Init 1 */
-
-  /* USER CODE END TIM6_Init 1 */
-  htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 170-1;
-  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim6.Init.Period = 999;
-  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM6_Init 2 */
-
-  /* USER CODE END TIM6_Init 2 */
-
-}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LD2_Pin|KB_Col1_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, KB_Col4_Pin|KB_Col3_Pin|KB_Col2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : LD2_Pin KB_Col1_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin|KB_Col1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : KB_Lin4_Pin KB_Lin3_Pin KB_Lin2_Pin KB_Lin1_Pin */
-  GPIO_InitStruct.Pin = KB_Lin4_Pin|KB_Lin3_Pin|KB_Lin2_Pin|KB_Lin1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : KB_Col4_Pin KB_Col3_Pin KB_Col2_Pin */
-  GPIO_InitStruct.Pin = KB_Col4_Pin|KB_Col3_Pin|KB_Col2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
 }
 
 /* USER CODE BEGIN 4 */

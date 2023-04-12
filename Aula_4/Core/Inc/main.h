@@ -34,6 +34,7 @@ extern "C" {
 #include "buttons.h"
 #include "led.h"
 #include "help.h"
+#include "matrixKeyboard.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -67,16 +68,12 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOA
 #define KB_Lin4_Pin GPIO_PIN_11
 #define KB_Lin4_GPIO_Port GPIOB
-#define KB_Lin4_EXTI_IRQn EXTI15_10_IRQn
 #define KB_Lin3_Pin GPIO_PIN_12
 #define KB_Lin3_GPIO_Port GPIOB
-#define KB_Lin3_EXTI_IRQn EXTI15_10_IRQn
 #define KB_Lin2_Pin GPIO_PIN_13
 #define KB_Lin2_GPIO_Port GPIOB
-#define KB_Lin2_EXTI_IRQn EXTI15_10_IRQn
 #define KB_Lin1_Pin GPIO_PIN_15
 #define KB_Lin1_GPIO_Port GPIOB
-#define KB_Lin1_EXTI_IRQn EXTI15_10_IRQn
 #define KB_Col4_Pin GPIO_PIN_7
 #define KB_Col4_GPIO_Port GPIOC
 #define KB_Col3_Pin GPIO_PIN_8
