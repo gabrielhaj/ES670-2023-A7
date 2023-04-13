@@ -14,6 +14,41 @@
 #include <stm32g4xx.h>
 #include <main.h>
 
+void ledInitLed(void){
+	RCC->AHB2ENR |= 0x0; /*Enabling clock for GPIOA*/
+
+	/*Setting operation mode for all the LEDS*/
+	/*Output mode = 01*/
+	/*Green Led 1 - Pin 5 */
+	SET_BIT(LED_GREEN1_PORT->MODER,(1<<(5*2)));
+	CLEAR_BIT(LED_GREEN1_PORT->MODER,(1<<((5*2)+1)));
+	/*Yellow Led - Pin 4 */
+	SET_BIT(LED_YELLOW_PORT->MODER,(1<<(4*2)));
+	CLEAR_BIT(LED_YELLOW_PORT->MODER,(1<<((4*2)+1)));
+	/*Green Led 2 - Pin 12*/
+	SET_BIT(LED_GREEN2_PORT->MODER,(1<<(12*2)));
+	CLEAR_BIT(LED_GREEN2_PORT->MODER,(1<<((12*2)+1)));
+	/*Blue Led - Pin 5*/
+	SET_BIT(LED_BLUE_PORT->MODER,(1<<(5*2)));
+	CLEAR_BIT(LED_BLUE_PORT->MODER,(1<<((5*2)+1)));
+	/*Red Led - Pino 14 */
+	SET_BIT(LED_RED_PORT->MODER,(1<<(14*2)));
+	CLEAR_BIT(LED_RED_PORT->MODER,(1<<((14*2)+1)));
+
+	/*Setting Pull-up Pull-down config (Same logic as before)*/
+	CLEAR_BIT(LED_GREEN1_PORT->PUPDR,3<<(5*2)); /*00 = No pull-up or pull-down*/
+	CLEAR_BIT(LED_YELLOW_PORT->PUPDR,3<<(4*2));
+	CLEAR_BIT(LED_RED_PORT->PUPDR,3<<(14*2));
+	CLEAR_BIT(LED_GREEN2_PORT->PUPDR,3<<(12*2));
+	CLEAR_BIT(LED_BLUE_PORT->PUPDR,3<<(5*2));
+
+	/*Setting Speed config (Same logic as before)*/
+	CLEAR_BIT(LED_GREEN1_PORT->OSPEEDR,3<<(5*2)); /*00 = Low Speed*/
+	CLEAR_BIT(LED_YELLOW_PORT->OSPEEDR,3<<(4*2));
+	CLEAR_BIT(LED_RED_PORT->OSPEEDR,3<<(15*2));
+	CLEAR_BIT(LED_GREEN2_PORT->OSPEEDR,3<<(12*2));
+	CLEAR_BIT(LED_BLUE_PORT->OSPEEDR,3<<(5*2));
+}
 
 void ledWrite(leds led, pinState state){
 	if(led == green1){
