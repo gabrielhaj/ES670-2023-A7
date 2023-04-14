@@ -13,7 +13,7 @@
 #include "help.h"
 
 
-typedef enum {up= 1, down,left,right,enter} buttons;
+typedef enum {enter,up ,down,left,right} buttons;
 
 pinState buttonsReadStatus(buttons button);
 

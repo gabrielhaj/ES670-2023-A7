@@ -86,10 +86,10 @@ typedef struct {
 	char cFlagD;
 } Keyboard;
 
-void matrixKeyboardInit(void);
+void matrixKeyboardInit(TIM_HandleTypeDef *pTimerMatrixKeyboardParam);
 Keyboard  matrixKeyboardGetKeys(void);
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
+void timerMatrixKeyboardPeriodElapsedCallback(void);
 void matrixKeyboard3sEvent(int*);
-void matrixKeyboard500msEvent(void);
+void matrixKeyboard500msEvent(int*);
 
 #endif

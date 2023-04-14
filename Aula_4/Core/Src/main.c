@@ -44,6 +44,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
+extern TIM_HandleTypeDef *pTimDebouncer;
+extern TIM_HandleTypeDef *pTimPressedTime;
 
 /* USER CODE END PV */
 
@@ -67,7 +70,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
-	Keyboard xKb;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -90,10 +92,13 @@ int main(void)
   MX_GPIO_Init();
   MX_LPUART1_UART_Init();
   MX_TIM6_Init();
+  MX_TIM7_Init();
+  MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
   buttonsInitButtons();
   ledInitLed();
-  matrixKeyboardInit();
+  matrixKeyboardInit(&htim6);
+  vButtonsEventsInit(&htim7, &htim16);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,133 +108,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  // 1 = greenled1
-	  // 2 = Yellow
-	  // 3 = Red
-	  // 4 = Green2
-	  // 5 = blue
-	  xKb = matrixKeyboardGetKeys();
-	  if(xKb.c1 == 1){
-		  ledOn(5);
-		  ledOff(4);
-		  ledOff(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c2 == 1){
-		  ledOff(5);
-		  ledOn(4);
-		  ledOff(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c3 == 1){
-		  ledOn(5);
-		  ledOn(4);
-		  ledOff(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.cA == 1){
-		  ledOff(5);
-		  ledOff(4);
-		  ledOn(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c4 == 1){
-		  ledOn(5);
-		  ledOff(4);
-		  ledOn(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c5 == 1){
-		  ledOff(5);
-		  ledOn(4);
-		  ledOn(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c6 == 1){
-		  ledOn(5);
-		  ledOn(4);
-		  ledOn(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.cB == 1){
-		  ledOff(5);
-		  ledOff(4);
-		  ledOff(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c7 == 1){
-		  ledOn(5);
-		  ledOff(4);
-		  ledOff(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c8 == 1){
-		  ledOff(5);
-		  ledOn(4);
-		  ledOff(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c9 == 1){
-		  ledOn(5);
-		  ledOn(4);
-		  ledOff(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.cC == 1){
-		  ledOff(5);
-		  ledOff(4);
-		  ledOn(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.cStar == 1){
-		  ledOn(5);
-		  ledOff(4);
-		  ledOn(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.c0 == 1){
-		  ledOff(5);
-		  ledOn(4);
-		  ledOn(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.cHashtag == 1){
-		  ledOn(5);
-		  ledOn(4);
-		  ledOn(3);
-		  ledOn(2);
-		  ledOff(1);
-	  }
-	  else if(xKb.cD == 1){
-		  ledOff(5);
-		  ledOff(4);
-		  ledOff(3);
-		  ledOff(2);
-		  ledOn(1);
-	  }
-	  else{
-		  ledOff(5);
-		  ledOff(4);
-		  ledOff(3);
-		  ledOff(2);
-		  ledOff(1);
-	  }
-  }
+
   /* USER CODE END 3 */
+  }
 }
 
 /**
@@ -279,19 +160,40 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void matrixKeyboard3sEvent(int*i){
-	*
-	while(*i != 0){
-		ledToggle(1);
-		ledToggle(2);
-		ledToggle(3);
-		ledToggle(4);
-		ledToggle(5);
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	//pTimerMatrixKeyboard = Pointer that holds the handler TIM6 address (&htim6)
+	// Utilized by MatrixKeyboard Library
+	if(htim == pTimerMatrixKeyboard){
+		timerMatrixKeyboardPeriodElapsedCallback();
+	}
+	else {
+		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)
+		// Utilized by ButtonsEvents library
+		if(htim == pTimDebouncer){
+			timerButtonsEventsDebouncingPeriodElapsedCallback();
+		} else if(htim == pTimPressedTime) {
+			//pTimerButtonsEventsLongPress = Pointer that holds the handler TIM16 address (&htim16)
+			// Utilized by ButtonsEvents library
+			timerButtonsEventsLongPressPeriodElapsedCallback();
+		}
 	}
 }
-void matrixKeyboard500msEvent(void){
+
+void vButtonsEventCallbackPressedEvent(buttons xBt){
 
 }
+void vButtonsEventCallbackReleasedEvent(buttons xBt){
+
+}
+void vButtonsEventCallback500msPressedEvent(buttons xBt){
+
+}
+void vButtonsEventCallback3sPressedEvent(buttons xBt){
+
+}
+
 
 
 

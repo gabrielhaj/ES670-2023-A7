@@ -35,6 +35,7 @@ extern "C" {
 #include "led.h"
 #include "help.h"
 #include "matrixKeyboard.h"
+#include "buttonsEvents.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -56,16 +57,32 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define BT_Up_Pin GPIO_PIN_1
+#define BT_Up_GPIO_Port GPIOC
+#define BT_Up_EXTI_IRQn EXTI1_IRQn
+#define BT_Down_Pin GPIO_PIN_2
+#define BT_Down_GPIO_Port GPIOC
+#define BT_Down_EXTI_IRQn EXTI2_IRQn
+#define BT_Left_Pin GPIO_PIN_3
+#define BT_Left_GPIO_Port GPIOC
+#define BT_Left_EXTI_IRQn EXTI3_IRQn
 #define LPUART1_TX_Pin GPIO_PIN_2
 #define LPUART1_TX_GPIO_Port GPIOA
 #define LPUART1_RX_Pin GPIO_PIN_3
 #define LPUART1_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+#define BT_Right_Pin GPIO_PIN_4
+#define BT_Right_GPIO_Port GPIOC
+#define BT_Right_EXTI_IRQn EXTI4_IRQn
+#define BT_Enter_Pin GPIO_PIN_0
+#define BT_Enter_GPIO_Port GPIOB
+#define BT_Enter_EXTI_IRQn EXTI0_IRQn
 #define KB_Lin4_Pin GPIO_PIN_11
 #define KB_Lin4_GPIO_Port GPIOB
 #define KB_Lin3_Pin GPIO_PIN_12
