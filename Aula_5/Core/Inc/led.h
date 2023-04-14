@@ -14,9 +14,10 @@
 
 typedef enum {green1 = 0,yellow,red,green2,blue} leds;
 
-void ledWrite(leds led, pinState state);
-void ledOn(leds led);
-void ledOff(leds led);
-void ledToggle(leds led);
-// body of automaticPilotControl.h file
-#endif // AUTOPILOTCONTROL_H
+void vInitLed(void);
+void vWriteLed(leds xLed, pinState xState);
+void vTurnOnLed(leds xLed);
+void vTurnOffLed(leds xLed);
+void vToggleLed(leds xLed);
+
+#endif 

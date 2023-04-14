@@ -13,7 +13,7 @@
 #include <stm32g4xx.h>
 #include <main.h>
 
-void buttonsInitButtons(void){
+void vInitButtons(void){
 	/*Initializing all the buttons registers, as knowns as: PC and PB*/
 	RCC->AHB2ENR |= 0x2;
 	RCC->AHB2ENR |= 0x4;
@@ -39,26 +39,26 @@ void buttonsInitButtons(void){
 	CLEAR_BIT(BT_RIGHT_PORT->PUPDR,(3<<(4*2)));
 }
 
-pinState buttonsReadStatus(buttons button){
-	if(button == up){
+pinState xReadButtonStatus(buttons xButton){
+	if(xButton == up){
 		if(READ_BIT(BT_UP_PORT->IDR,BT_UP_PIN)){
 			return set;
 		} else {
 			return reset;
 		}
-	}else if(button == down){
+	}else if(xButton == down){
 		if(READ_BIT(BT_DOWN_PORT->IDR,BT_DOWN_PIN)){
 			return set;
 		} else {
 			return reset;
 		}
-	}else if(button == left){
+	}else if(xButton == left){
 		if(READ_BIT(BT_LEFT_PORT->IDR,BT_LEFT_PIN)){
 			return set;
 		} else {
 			return reset;
 		}
-	}else if(button == right){
+	}else if(xButton == right){
 		if(READ_BIT(BT_RIGHT_PORT->IDR,BT_RIGHT_PIN)){
 			return set;
 		} else {

@@ -15,6 +15,7 @@
 
 typedef enum {enter,up ,down,left,right} buttons;
 
-pinState buttonsReadStatus(buttons button);
+pinState xReadButtonStatus(buttons xButton);
+void vInitButtons(void);
 
 #endif

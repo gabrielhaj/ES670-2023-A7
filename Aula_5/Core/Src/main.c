@@ -54,8 +54,8 @@ int iLedValue = 0;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void buttonsInitButtons(void);
-void ledInitLed(void);
+void vInitButtons(void);
+void vInitLed(void);
 unsigned int uiMask = 1;
 unsigned int uiBit;
 /* USER CODE END PFP */
@@ -98,9 +98,9 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
-  buttonsInitButtons();
-  ledInitLed();
-  matrixKeyboardInit(&htim6);
+  vInitButtons();
+  vInitLed();
+  vMatrixKeyboardInit(&htim6);
   vButtonsEventsInit(&htim7, &htim16);
   /* USER CODE END 2 */
 
@@ -174,7 +174,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	//pTimerMatrixKeyboard = Pointer that holds the handler TIM6 address (&htim6)
 	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
-		timerMatrixKeyboardPeriodElapsedCallback();
+		vTimerMatrixKeyboardPeriodElapsedCallback();
 	}
 	else {
 		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)
@@ -200,7 +200,7 @@ void vButtonsEventCallbackReleasedEvent(buttons xBt){
 
 }
 void vButtonsEventCallback500msPressedEvent(buttons xBt){
-	vButtonsEventCallbackPressedEvent(xBt);
+	vButtonsEventCallbackPressedEvent(xBt); // the events of 500 ms have the same effect as single press
 }
 void vButtonsEventCallback3sPressedEvent(buttons xBt){
 	if(xBt == enter){

@@ -20,7 +20,7 @@ char cCOL = 1;
 extern TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef *pTimerMatrixKeyboard;
 
-void matrixKeyboardInit(TIM_HandleTypeDef *pTimerMatrixKeyboardParam){
+void vMatrixKeyboardInit(TIM_HandleTypeDef *pTimerMatrixKeyboardParam){
 	pTimerMatrixKeyboard = pTimerMatrixKeyboardParam;
 	HAL_TIM_Base_Start_IT(pTimerMatrixKeyboard);
 }
@@ -187,80 +187,80 @@ void timerMatrixKeyboardPeriodElapsedCallback(){
 	}
 	cCOL ++;
 	if(xKB.i1 >= 75 && xKB.cFlag1== 0){
-		matrixKeyboard3sEvent(&xKB.i1);
+		vMatrixKeyboard3sEvent(&xKB.i1);
 	} else if(xKB.i2 >= 75 && xKB.cFlag2== 0){
-		matrixKeyboard3sEvent(&xKB.i2);
+		vMatrixKeyboard3sEvent(&xKB.i2);
 	} else if(xKB.i3 >= 75 && xKB.cFlag3== 0){
-		matrixKeyboard3sEvent(&xKB.i3);
+		vMatrixKeyboard3sEvent(&xKB.i3);
 	}else if(xKB.iA >= 75 && xKB.cFlagA== 0){
-		matrixKeyboard3sEvent(&xKB.iA);
+		vMatrixKeyboard3sEvent(&xKB.iA);
 	}else if(xKB.i4 >= 75 && xKB.cFlag4== 0){
-		matrixKeyboard3sEvent(&xKB.i4);
+		vMatrixKeyboard3sEvent(&xKB.i4);
 	}else if(xKB.i5 >= 75 && xKB.cFlag5== 0){
-		matrixKeyboard3sEvent(&xKB.i5);
+		vMatrixKeyboard3sEvent(&xKB.i5);
 	}else if(xKB.i6 >= 75 && xKB.cFlag6== 0){
-		matrixKeyboard3sEvent(&xKB.i6);
+		vMatrixKeyboard3sEvent(&xKB.i6);
 	}else if(xKB.iB >= 75 && xKB.cFlagB== 0){
-		matrixKeyboard3sEvent(&xKB.iB);
+		vMatrixKeyboard3sEvent(&xKB.iB);
 	}else if(xKB.i7 >= 75 && xKB.cFlag7== 0){
-		matrixKeyboard3sEvent(&xKB.i7);
+		vMatrixKeyboard3sEvent(&xKB.i7);
 	}else if(xKB.i8 >= 75 && xKB.cFlag8== 0){
-		matrixKeyboard3sEvent(&xKB.i8);
+		vMatrixKeyboard3sEvent(&xKB.i8);
 	}else if(xKB.i9 >= 75 && xKB.cFlag9== 0){
-		matrixKeyboard3sEvent(&xKB.i9);
+		vMatrixKeyboard3sEvent(&xKB.i9);
 	}else if(xKB.iC >= 75 && xKB.cFlagC== 0){
-		matrixKeyboard3sEvent(&xKB.iC);
+		vMatrixKeyboard3sEvent(&xKB.iC);
 	}else if(xKB.iStar >= 75 && xKB.cFlagStar== 0){
-		matrixKeyboard3sEvent(&xKB.iStar);
+		vMatrixKeyboard3sEvent(&xKB.iStar);
 	}else if(xKB.i0 >= 75 && xKB.cFlag0== 0){
-		matrixKeyboard3sEvent(&xKB.i0);
+		vMatrixKeyboard3sEvent(&xKB.i0);
 	}else if(xKB.iHashtag >= 75 && xKB.cFlagHashtag== 0){
-		matrixKeyboard3sEvent(&xKB.iHashtag);
+		vMatrixKeyboard3sEvent(&xKB.iHashtag);
 	}else if(xKB.iD >= 75 && xKB.cFlagD== 0){
-		matrixKeyboard3sEvent(&xKB.iD);
+		vMatrixKeyboard3sEvent(&xKB.iD);
 	}
 
 	if(xKB.i1 >= 13){
-		matrixKeyboard500msEvent(&xKB.i1);
+		vMatrixKeyboard500msEvent(&xKB.i1);
 	} else if(xKB.i2 >= 13){
-		matrixKeyboard500msEvent(&xKB.i2);
+		vMatrixKeyboard500msEvent(&xKB.i2);
 	} else if(xKB.i3 >= 13){
-		matrixKeyboard500msEvent(&xKB.i3);
+		vMatrixKeyboard500msEvent(&xKB.i3);
 	}else if(xKB.iA >= 13){
-		matrixKeyboard500msEvent(&xKB.iA);
+		vMatrixKeyboard500msEvent(&xKB.iA);
 	}else if(xKB.i4 >= 13){
-		matrixKeyboard500msEvent(&xKB.i4);
+		vMatrixKeyboard500msEvent(&xKB.i4);
 	}else if(xKB.i5 >= 13){
-		matrixKeyboard500msEvent(&xKB.i5);
+		vMatrixKeyboard500msEvent(&xKB.i5);
 	}else if(xKB.i6 >= 13){
-		matrixKeyboard500msEvent(&xKB.i6);
+		vMatrixKeyboard500msEvent(&xKB.i6);
 	}else if(xKB.iB >= 13){
-		matrixKeyboard500msEvent(&xKB.iB);
+		vMatrixKeyboard500msEvent(&xKB.iB);
 	}else if(xKB.i7 >= 13){
-		matrixKeyboard500msEvent(&xKB.i7);
+		vMatrixKeyboard500msEvent(&xKB.i7);
 	}else if(xKB.i8 >= 13){
-		matrixKeyboard500msEvent(&xKB.i8);
+		vMatrixKeyboard500msEvent(&xKB.i8);
 	}else if(xKB.i9 >= 13){
-		matrixKeyboard500msEvent(&xKB.i9);
+		vMatrixKeyboard500msEvent(&xKB.i9);
 	}else if(xKB.iC >= 13){
-		matrixKeyboard500msEvent(&xKB.iC);
+		vMatrixKeyboard500msEvent(&xKB.iC);
 	}else if(xKB.iStar >= 13){
-		matrixKeyboard500msEvent(&xKB.iStar);
+		vMatrixKeyboard500msEvent(&xKB.iStar);
 	}else if(xKB.i0 >= 13){
-		matrixKeyboard500msEvent(&xKB.i0);
+		vMatrixKeyboard500msEvent(&xKB.i0);
 	}else if(xKB.iHashtag >= 13){
-		matrixKeyboard500msEvent(&xKB.iHashtag);
+		vMatrixKeyboard500msEvent(&xKB.iHashtag);
 	}else if(xKB.iD >= 13){
-		matrixKeyboard500msEvent(&xKB.iD);
+		vMatrixKeyboard500msEvent(&xKB.iD);
 	}
 
 
 
 }
 
-Keyboard  matrixKeyboardGetKeys(void){
+Keyboard  xMatrixKeyboardGetKeys(void){
 	return xKB;
 }
 
-__weak void matrixKeyboard3sEvent(int*);
-__weak void matrixKeyboard500msEvent(int*);
+__weak void vMatrixKeyboard3sEvent(int*);
+__weak void vMatrixKeyboard500msEvent(int*);
