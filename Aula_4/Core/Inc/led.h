@@ -12,7 +12,7 @@
 #define LED_H
 #include "help.h"
 
-typedef enum {green1 = 1,yellow,red,green2,blue} leds;
+typedef enum {green1 = 0,yellow,red,green2,blue} leds;
 
 void ledWrite(leds led, pinState state);
 void ledOn(leds led);

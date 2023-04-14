@@ -47,6 +47,7 @@
 extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
 extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
+int iLedValue = 0;
 
 /* USER CODE END PV */
 
@@ -55,6 +56,8 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void buttonsInitButtons(void);
 void ledInitLed(void);
+unsigned int uiMask = 1;
+unsigned int uiBit;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -109,6 +112,11 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+	  iLedValue
+	  for(int i = 4; i < 0; i--){
+
+	  }
+	  ledWrite()
   /* USER CODE END 3 */
   }
 }
@@ -182,16 +190,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 }
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
-
+	if(xBt == up){
+		iLedValue ++;
+	} else if(xBt == down){
+		iLedValue --;
+	}
 }
 void vButtonsEventCallbackReleasedEvent(buttons xBt){
 
 }
 void vButtonsEventCallback500msPressedEvent(buttons xBt){
-
+	vButtonsEventCallbackPressedEvent(xBt);
 }
 void vButtonsEventCallback3sPressedEvent(buttons xBt){
-
+	if(xBt == enter){
+		iLedValue = 0;
+	}
 }
 
 
