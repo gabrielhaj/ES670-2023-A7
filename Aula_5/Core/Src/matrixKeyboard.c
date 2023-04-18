@@ -26,7 +26,7 @@ void vMatrixKeyboardInit(TIM_HandleTypeDef *pTimerMatrixKeyboardParam){
 }
 
 
-void timerMatrixKeyboardPeriodElapsedCallback(){
+void vTimerMatrixKeyboardPeriodElapsedCallback(){
 	if(cCOL == 1){
 		HAL_GPIO_WritePin((GPIO_TypeDef*)KB_Col1_GPIO_Port,KB_Col1_Pin,GPIO_PIN_SET);
 		if(HAL_GPIO_ReadPin((GPIO_TypeDef*)KB_Lin1_GPIO_Port,KB_Lin1_Pin)){

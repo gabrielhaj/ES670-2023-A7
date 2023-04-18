@@ -61,6 +61,7 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(void){
 		if(cFlagDebouncer[i] == 1){
 			HAL_NVIC_EnableIRQ(EXTI0_IRQn + i);//EXTI0_IRQn equals 6, and then EXTI1_IRQn == 7 and so on
 			cFlagDebouncer[i] = 0;
+			HAL_TIM_Base_Stop_IT(pTimDebouncer);
 			if(xReadButtonStatus(i)){ //buttons are enum that goes from 0 to 4, and they are related to their pins as button enter is 0 and his pin is 0
 				vButtonsEventCallbackPressedEvent(i);
 			} else {
@@ -74,9 +75,9 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(void){
 void timerButtonsEventsLongPressPeriodElapsedCallback(void){
 	for(int i = 0; i < 5; i++) {
 		//increase the counter of the timers if the buttons are pressed
-		if(xReadButtonStatus(i) /*&& !cFlagDebouncer[i] Maybe it is needed*/){
+		if(xReadButtonStatus(i)){
 			uiCounterButtons[i] += 10;
-			if(((int)uiCounterButtons % 500) == 0){
+			if(((int)uiCounterButtons[i] % 500) == 0){
 				vButtonsEventCallback500msPressedEvent(i);
 			}
 			if(uiCounterButtons[i] == 3000 ){
@@ -86,12 +87,6 @@ void timerButtonsEventsLongPressPeriodElapsedCallback(void){
 			uiCounterButtons[i] = 0;
 		}
 	}
-	if(uiCounterButtons[0] == 0 && uiCounterButtons[1] == 0 && uiCounterButtons[2] == 0 && uiCounterButtons[3] == 0 && uiCounterButtons[4] == 0){ //passar para o released button talvez
-		//Verify if all counters are 0, therefore all buttons are released and turns off the timer
-		HAL_TIM_Base_Stop_IT(pTimPressedTime);
-		cFlagLongPressTimer = 0;
-	}
-
 }
 __weak void vButtonsEventCallbackPressedEvent(buttons xBt){}
 __weak void vButtonsEventCallbackReleasedEvent(buttons xBt){}

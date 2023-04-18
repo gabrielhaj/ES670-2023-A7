@@ -21,6 +21,7 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
+#include "matrixKeyboard.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -47,7 +48,9 @@
 extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
 extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
+extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
 int iLedValue = 0;
+extern char cFlagLongPressTimer;
 
 /* USER CODE END PV */
 
@@ -56,7 +59,8 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void vInitButtons(void);
 void vInitLed(void);
-unsigned int uiMask = 1;
+unsigned int uiMask;
+unsigned int uiMasked;
 unsigned int uiBit;
 /* USER CODE END PFP */
 
@@ -111,12 +115,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-	  iLedValue
-	  for(int i = 4; i < 0; i--){
-
+	  //We take every bit separately from iLedValue and feed to the right led
+	  //Taking bitwise with this known algorithm
+	  for(int i = 0; i < 5; i++){
+		  uiMask = 1 << i;
+		  uiMasked = iLedValue&uiMask;
+		  uiBit = uiMasked >> i;
+		  vWriteLed(i,uiBit);
 	  }
-	  ledWrite()
   /* USER CODE END 3 */
   }
 }
@@ -197,7 +203,11 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 	}
 }
 void vButtonsEventCallbackReleasedEvent(buttons xBt){
-
+	if(uiCounterButtons[0] == 0 && uiCounterButtons[1] == 0 && uiCounterButtons[2] == 0 && uiCounterButtons[3] == 0 && uiCounterButtons[4] == 0){
+		//Verify if all counters are 0, therefore all buttons are released and turns off the timer
+		HAL_TIM_Base_Stop_IT(pTimPressedTime);
+		cFlagLongPressTimer = 0;
+	}
 }
 void vButtonsEventCallback500msPressedEvent(buttons xBt){
 	vButtonsEventCallbackPressedEvent(xBt); // the events of 500 ms have the same effect as single press
