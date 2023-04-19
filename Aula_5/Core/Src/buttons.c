@@ -6,14 +6,14 @@
 //                                                //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 23/03/2023                      //
-// Revision date: 03/04/2023					  //
+// Revision date: 19/04/2023					  //
 // ********************************************** //
 
 #include <buttons.h>
 #include <stm32g4xx.h>
 #include <main.h>
 
-void vInitButtons(void){
+void vButtonsInit(void){
 	/*Initializing all the buttons registers, as knowns as: PC and PB*/
 	RCC->AHB2ENR |= 0x2;
 	RCC->AHB2ENR |= 0x4;
@@ -39,7 +39,7 @@ void vInitButtons(void){
 	CLEAR_BIT(BT_RIGHT_PORT->PUPDR,(3<<(4*2)));
 }
 
-pinState xReadButtonStatus(buttons xButton){
+pinState xButtonsReadStatus(buttons xButton){
 	if(xButton == up){
 		if(READ_BIT(BT_UP_PORT->IDR,BT_UP_PIN)){
 			return set;

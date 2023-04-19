@@ -6,7 +6,7 @@
 //                    button                      //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 23/03/2023                      //
-// Revision date: 03/04/2023					  //
+// Revision date: 19/04/2023					  //
 // ********************************************** //
 #ifndef BUTTONS_H
 #define BUTTONS_H
@@ -15,7 +15,7 @@
 
 typedef enum {enter,up ,down,left,right} buttons;
 
-pinState xReadButtonStatus(buttons xButton);
-void vInitButtons(void);
+pinState xButtonsReadStatus(buttons xButton);
+void vButtonsInit(void);
 
 #endif

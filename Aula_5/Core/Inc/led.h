@@ -6,7 +6,7 @@
 //                     in the system              //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 23/03/2023                      //
-// Revision date: 03/04/2023					  //
+// Revision date: 19/04/2023					  //
 // ********************************************** //
 #ifndef LED_H
 #define LED_H
@@ -14,10 +14,10 @@
 
 typedef enum {green1 = 4,yellow = 3,red = 2,green2 = 1,blue = 0} leds;
 
-void vInitLed(void);
-void vWriteLed(leds xLed, pinState xState);
-void vTurnOnLed(leds xLed);
-void vTurnOffLed(leds xLed);
-void vToggleLed(leds xLed);
+void vLedInit(void);
+void vLedWrite(leds xLed, pinState xState);
+void vLedTurnOn(leds xLed);
+void vLedTurnOff(leds xLed);
+void vLedToggle(leds xLed);
 
 #endif 

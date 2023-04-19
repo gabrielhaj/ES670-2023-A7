@@ -6,7 +6,7 @@
 //                    in the system               //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 23/03/2023                      //
-// Revision date: 03/04/2023					  //
+// Revision date: 19/04/2023					  //
 // ********************************************** //
 #ifndef LED_C
 #define LED_C
@@ -14,7 +14,7 @@
 #include <stm32g4xx.h>
 #include <main.h>
 
-void vInitLed(void){
+void vLedInit(void){
 	RCC->AHB2ENR |= 0x0; /*Enabling clock for GPIOA*/
 
 	/*Setting operation mode for all the LEDS*/
@@ -50,7 +50,7 @@ void vInitLed(void){
 	CLEAR_BIT(LED_BLUE_PORT->OSPEEDR,3<<(5*2));
 }
 
-void vWriteLed(leds xLed, pinState xState){
+void vLedWrite(leds xLed, pinState xState){
 	if(xLed == green1){
 		if(xState == set){
 			SET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
@@ -84,52 +84,52 @@ void vWriteLed(leds xLed, pinState xState){
 	}
 }
 
-void vTurnOnLed(leds xLed){
-	vWriteLed(xLed,set);
+void vLedTurnOn(leds xLed){
+	vLedWrite(xLed,set);
 }
-void vTurnOffLed(leds xLed){
-	vWriteLed(xLed,reset);
+void vLedTurnOff(leds xLed){
+	vLedWrite(xLed,reset);
 }
-void vToggleLed(leds xLed){
+void vLedToggle(leds xLed){
 	if(xLed == green1){
 		if(READ_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN)){
 			//CLEAR_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
-			vTurnOffLed(xLed);
+			vLedTurnOff(xLed);
 		}else{
 			//SET_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN);
-			vTurnOnLed(xLed);
+			vLedTurnOn(xLed);
 		}
 	}else if(xLed == green2){
 		if(READ_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN)) {
 			//CLEAR_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
-			vTurnOffLed(xLed);
+			vLedTurnOff(xLed);
 		}else{
 			//SET_BIT(LED_GREEN2_PORT->ODR,LED_GREEN2_PIN);
-			vTurnOnLed(xLed);
+			vLedTurnOn(xLed);
 		}
 	}else if(xLed == yellow){
 		if(READ_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN)){
 			//CLEAR_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
-			vTurnOffLed(xLed);
+			vLedTurnOff(xLed);
 		}else {
 			//SET_BIT(LED_YELLOW_PORT->ODR,LED_YELLOW_PIN);
-			vTurnOnLed(xLed);
+			vLedTurnOn(xLed);
 		}
 	}else if(xLed == red){
 		if(READ_BIT(LED_RED_PORT->ODR,LED_RED_PIN)){
 			//CLEAR_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
-			vTurnOffLed(xLed);
+			vLedTurnOff(xLed);
 		}else {
 			//SET_BIT(LED_RED_PORT->ODR,LED_RED_PIN);
-			vTurnOnLed(xLed);
+			vLedTurnOn(xLed);
 		}
 	}else if(xLed == blue){
 		if(READ_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN)){
 			//CLEAR_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
-			vTurnOffLed(xLed);
+			vLedTurnOff(xLed);
 		}else {
 			//SET_BIT(LED_BLUE_PORT->ODR,LED_BLUE_PIN);
-			vTurnOnLed(xLed);
+			vLedTurnOn(xLed);
 		}
 	}
 }

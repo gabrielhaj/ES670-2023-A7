@@ -6,7 +6,7 @@
 //                                                //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 18/04/2023                      //
-// Revision date: 18/04/2023					  //
+// Revision date: 19/04/2023					  //
 // ********************************************** //
 
 
@@ -14,7 +14,8 @@
 
 
 
-
+#include "buttons.h"
+#include "help.h"
 #include "buttonsEvents.h"
 #include "tim.h"
 
@@ -65,13 +66,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
 }
 
-void timerButtonsEventsDebouncingPeriodElapsedCallback(void){
+void vButtonsEventsDebouncingPeriodElapsedCallback(void){
 	for(int i = 0; i < 5; i++){
 		if(cFlagDebouncer[i] == 1){
 			HAL_NVIC_EnableIRQ(EXTI0_IRQn + i);//EXTI0_IRQn equals 6, and then EXTI1_IRQn == 7 and so on
 			cFlagDebouncer[i] = 0;
 			HAL_TIM_Base_Stop_IT(pTimDebouncer);
-			if(xReadButtonStatus(i)){ //buttons are enum that goes from 0 to 4, and they are related to their pins as button enter is 0 and his pin is 0
+			if(xButtonsReadStatus(i)){ //buttons are enum that goes from 0 to 4, and they are related to their pins as button enter is 0 and his pin is 0
 				vButtonsEventCallbackPressedEvent(i);
 			} else {
 				vButtonsEventCallbackReleasedEvent(i);
@@ -81,10 +82,10 @@ void timerButtonsEventsDebouncingPeriodElapsedCallback(void){
 
 }
 
-void timerButtonsEventsLongPressPeriodElapsedCallback(void){
+void vButtonsEventsLongPressPeriodElapsedCallback(void){
 	for(int i = 0; i < 5; i++) {
 		//increase the counter of the timers if the buttons are pressed
-		if(xReadButtonStatus(i)){
+		if(xButtonsReadStatus(i)){
 			uiCounterButtons[i] += 10;
 			if(((int)uiCounterButtons[i] % 500) == 0){
 				vButtonsEventCallback500msPressedEvent(i);

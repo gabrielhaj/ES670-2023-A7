@@ -102,8 +102,8 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   /* USER CODE BEGIN 2 */
-  vInitButtons();
-  vInitLed();
+  vButtonsInit();
+  vLedInit();
   vMatrixKeyboardInit(&htim6);
   vButtonsEventsInit(&htim7, &htim16);
   /* USER CODE END 2 */
@@ -121,7 +121,7 @@ int main(void)
 		  uiMask = 1 << i;
 		  uiMasked = iLedValue&uiMask;
 		  uiBit = uiMasked >> i;
-		  vWriteLed(i,uiBit);
+		  vLedWrite(i,uiBit);
 	  }
   /* USER CODE END 3 */
   }
@@ -180,17 +180,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	//pTimerMatrixKeyboard = Pointer that holds the handler TIM6 address (&htim6)
 	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
-		vTimerMatrixKeyboardPeriodElapsedCallback();
+		vMatrixKeyboardPeriodElapsedCallback();
 	}
 	else {
 		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)
 		// Utilized by ButtonsEvents library
 		if(htim == pTimDebouncer){
-			timerButtonsEventsDebouncingPeriodElapsedCallback();
+			vButtonsEventsDebouncingPeriodElapsedCallback();
 		} else if(htim == pTimPressedTime) {
 			//pTimerButtonsEventsLongPress = Pointer that holds the handler TIM16 address (&htim16)
 			// Utilized by ButtonsEvents library
-			timerButtonsEventsLongPressPeriodElapsedCallback();
+			vButtonsEventsLongPressPeriodElapsedCallback();
 		}
 	}
 }

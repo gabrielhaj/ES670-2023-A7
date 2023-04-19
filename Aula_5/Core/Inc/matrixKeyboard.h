@@ -9,7 +9,7 @@
 //                    tion that call it           //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 05/04/2023                      //
-// Revision date: 05/04/2023					  //
+// Revision date: 19/04/2023					  //
 // ********************************************** //
 #ifndef MATRIXKEYBOARD_H
 #define MATRIXKEYBOARD_H
@@ -88,7 +88,7 @@ typedef struct {
 
 void vMatrixKeyboardInit(TIM_HandleTypeDef *pTimerMatrixKeyboardParam);
 Keyboard  xMatrixKeyboardGetKeys(void);
-void vTimerMatrixKeyboardPeriodElapsedCallback(void);
+void vMatrixKeyboardPeriodElapsedCallback(void);
 void vMatrixKeyboard3sEvent(int*);
 void vMatrixKeyboard500msEvent(int*);
 
