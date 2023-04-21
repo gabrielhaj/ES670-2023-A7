@@ -17,10 +17,12 @@
 
 
 extern char cData;
-char cVector[10];
+char cVector[5];
 int iCounter = 0;
 char cFlagEnter = 0;
 double fNumber = 0;
+char sInstrucaoUsuario2[58] = "\n\rPress enter and insert a number between -1000 and 1000\n\r";
+uint8_t *pMensagem;
 
 
 
@@ -30,23 +32,24 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	if(huart == &hlpuart1){
 		if(cData == 13){
 			cFlagEnter = 1;
-		} else if(HAL_UART_Receive_IT(huart, (uint8_t*)&cData, 1) == HAL_OK && cFlagEnter) {
+		} else if(cFlagEnter) {
 			cVector[iCounter] = cData;
 			iCounter ++;
-			if(iCounter == 10) {
-				iCounter = 0;
+			if((iCounter % 4) == 0) {
 				fNumber = atof(cVector);
-				vFtoa(cVector, fNumber,3);
-				HAL_UART_Transmit_IT(huart, (uint8_t *)cVector, 10);
+				if(fNumber <= 1000 || fNumber >= -1000){
+					vFtoa(cVector, 1/fNumber, 3);
+					HAL_UART_Transmit_IT(huart, (uint8_t *)cVector, sizeof(cVector));
+					pMensagem = sInstrucaoUsuario2;
+				}
 			}
 		}
-
-		//vFtoa(cData, atof(cData), 3);
-
-
-
 		HAL_UART_Receive_IT(huart, (uint8_t*)&cData, 1);
 	}
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart) {
+	HAL_UART_Transmit_IT(huart,pMensagem,sizeof(pMensagem));
 }
 
 void vFtoa(char* cStr, double fNum, int iNumCasaDec){

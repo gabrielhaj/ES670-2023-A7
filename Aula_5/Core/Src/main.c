@@ -112,7 +112,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)sInstrucaoUsuario, 30);
+  HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)sInstrucaoUsuario, 54);
   HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)&cData, 1);
   while (1)
   {
