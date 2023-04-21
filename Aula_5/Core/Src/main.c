@@ -21,7 +21,6 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
-#include "matrixKeyboard.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -62,6 +61,9 @@ void vInitLed(void);
 unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
+char cData;
+char sInstrucaoUsuario[54] = "Press enter and insert a number between -1000 and 1000";
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -110,19 +112,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)sInstrucaoUsuario, 30);
+  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)&cData, 1);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  //We take every bit separately from iLedValue and feed to the right led
-	  //Taking bitwise with this known algorithm
-	  for(int i = 0; i < 5; i++){
-		  uiMask = 1 << i;
-		  uiMasked = iLedValue&uiMask;
-		  uiBit = uiMasked >> i;
-		  vLedWrite(i,uiBit);
-	  }
+
   /* USER CODE END 3 */
   }
 }
