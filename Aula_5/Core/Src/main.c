@@ -62,7 +62,7 @@ unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
 char cData;
-char sInstrucaoUsuario[54] = "Press enter and insert a number between -1000 and 1000";
+char sInstrucaoUsuario[58] = "\n\rInsert a number between -1000 and 1000 and press enter\n\r";
 
 /* USER CODE END PFP */
 
@@ -112,8 +112,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)sInstrucaoUsuario, 54);
-  HAL_UART_Receive_IT(&hlpuart1,(uint8_t *)&cData, 1);
+  HAL_UART_Transmit_IT(&hlpuart1, (uint8_t *)sInstrucaoUsuario, sizeof(sInstrucaoUsuario));
   while (1)
   {
     /* USER CODE END WHILE */

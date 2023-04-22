@@ -15,6 +15,11 @@
 #include <string.h>
 #include "main.h"
 
+typedef struct {
+	unsigned int uiBusyOrder;
+	uint8_t * pAdress;
+	int iSize;
+} xBusyLine;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart);
 void vFtoa(char* cStr, double fNum, int iNumCasaDec);
 #endif
