@@ -13,6 +13,8 @@
 #define COMMUNICATION_H
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "main.h"
 
 typedef struct {
