@@ -34,7 +34,7 @@ xBusyLine xFlag[] = {0};
 int iBusyQueue = 0;
 char cFlagBusy = 0;
 
-/* This callback takes the input, treats it, and transmit it back correctly. Then it waits for another input */
+/* This callback takes the input and treats it. Then it waits for another input */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	if(huart == &hlpuart1){
 		if(cData == 13){
@@ -109,7 +109,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	}
 }
 
-/* This callback checks if the queue is busy, then receives the data */
+/* This callback checks if the queue is busy and transmits the next, then receive data */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart) {
 	if(iBusyQueue == 0){
 		cFlagBusy = 0;
