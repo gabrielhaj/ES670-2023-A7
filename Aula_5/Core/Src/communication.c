@@ -109,7 +109,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	}
 }
 
-/* This callback checks if the queue is busy and transmits the next, then receive data */
+/* This callback checks if the queue is busy and transmits the next, then receives data */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart) {
 	if(iBusyQueue == 0){
 		cFlagBusy = 0;
