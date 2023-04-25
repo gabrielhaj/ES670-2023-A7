@@ -1,12 +1,15 @@
 // ********************************************** //
-// File name:                     buttonsEvents.h //
-// File description:    This file is the header   //
-//                    of buttons events function  //
-//                                                //
+// File name:                     communication.c //
+// File description:     This file implements the //
+//                   functions and callbacks used //
+//             	        to make the communication //
+//                   between the computer and the //
+//                 system, receiving a number and //
+//                      transmitting its inverse. //
 //                                                //
 // Author names: Gabriel Haj and Luccas Yonei     //
-// Creation date: 13/04/2023                      //
-// Revision date: 19/04/2023					  //
+// Creation date: 24/04/2023                      //
+// Revision date: 25/04/2023		          //
 // ********************************************** //
 
 
@@ -15,7 +18,7 @@
 #include "usart.h"
 
 
-
+/* Initializing global variables */
 extern char cData;
 char cVector[64] = {0};
 int iCounter = 0;
@@ -31,7 +34,7 @@ xBusyLine xFlag[] = {0};
 int iBusyQueue = 0;
 char cFlagBusy = 0;
 
-
+/* This callback takes the input, treats it, and transmit it back correctly. Then it waits for another input */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	if(huart == &hlpuart1){
 		if(cData == 13){
@@ -106,6 +109,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 	}
 }
 
+/* This callback checks if the queue is busy, then receives the data */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart) {
 	if(iBusyQueue == 0){
 		cFlagBusy = 0;
@@ -117,6 +121,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart) {
 	HAL_UART_Receive_IT(huart, (uint8_t*)&cData, 1);
 }
 
+/* This function transforms a double number into a string */
 void vFtoa(char* cStr, double fNum, int iNumCasaDec){
 	int iInt, iDec;
 	if(fNum >= 0){
