@@ -22,6 +22,7 @@
 #include "tim.h"
 #include "gpio.h"
 #include "matrixKeyboard.h"
+#include "communicationStateMachine.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -51,6 +52,13 @@ extern TIM_HandleTypeDef *pTimPressedTime;
 extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
 int iLedValue = 0;
 extern char cFlagLongPressTimer;
+float fCurrentTemperature = 36.5;
+float fSetPointTemperature = 80;
+unsigned char ucButtonsBlocked = 0;
+unsigned char ucDutyHeater  = 10;
+unsigned char ucDutyCooler = 20;
+unsigned char ucByte = 0;
+
 
 /* USER CODE END PV */
 
