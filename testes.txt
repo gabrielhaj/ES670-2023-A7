@@ -1,0 +1,23 @@
+Comando:
+-gt!
+resposta esperada: 
+-a !
+36.5
+
+Comando:
+-gb!
+resposta esperada: 
+-a !
+0
+
+Comando:
+-gh!
+resposta esperada: 
+-a !
+10
+
+Comando:
+-gc!
+resposta esperada: 
+-a !
+20
