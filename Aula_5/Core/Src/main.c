@@ -21,8 +21,6 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
-#include "matrixKeyboard.h"
-#include "communicationStateMachine.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,7 +55,7 @@ float fSetPointTemperature = 80;
 unsigned char ucButtonsBlocked = 0;
 unsigned char ucDutyHeater  = 10;
 unsigned char ucDutyCooler = 20;
-unsigned char ucByte = 0;
+unsigned char ucData = 0;
 
 
 /* USER CODE END PV */
@@ -118,6 +116,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   while (1)
   {
     /* USER CODE END WHILE */

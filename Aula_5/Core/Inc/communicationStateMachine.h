@@ -11,7 +11,7 @@
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte);
 char* vFtoa(float fNum, unsigned char ucParam);
 void vReturnParam(unsigned char ucParam);
-void vSetParam(unsigned char ucParam, unsigned char ucValue);
+void vSetParam(unsigned char ucParam, unsigned char* ucValue);
 
 
 

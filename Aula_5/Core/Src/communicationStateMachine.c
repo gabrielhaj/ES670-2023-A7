@@ -8,6 +8,7 @@
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
+#include "communicationStateMachine.h"
 
 #define IDDLE '0'
 #define READY '1'
@@ -23,13 +24,13 @@ unsigned char ucValueCount;
 char sData[3] = {"-a "};
 char sData2[3] = {"!\n\r"};
 char sMessage[MAX_VALUE_LENGHT + 4 + 2] = {0};
-char cData;
+char cStr[4] = {0};
 extern float fCurrentTemperature;
 extern float fSetPointTemperature;
 extern unsigned char ucButtonsBlocked;
 extern unsigned char ucDutyHeater;
 extern unsigned char ucDutyCooler;
-extern unsigned char ucByte;
+extern unsigned char ucData;
 
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 	static unsigned char ucParam;
@@ -96,15 +97,14 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	if(huart == &hlpuart1) {
-		vCommunicationStateMachineProcessStateMachine(ucByte);
-		HAL_UART_Receive_IT(huart, (uint8_t*)&cData, 1);
+		vCommunicationStateMachineProcessStateMachine(ucData);
+		HAL_UART_Receive_IT(huart, (uint8_t*)&ucData, 1);
 	}
 
 }
 
 char* vFtoa(float fNum, unsigned char ucParam){
 	int iInt, iDec;
-	char* cStr;
 	if(ucParam == 'h' || ucParam == 'c') {
 		iInt = (int)fNum;
 		sprintf(cStr, "%d", iInt);
@@ -129,9 +129,9 @@ void vReturnParam(unsigned char ucParam) {
 		case 'b':
 			strcat(sMessage,sData);
 			if(ucButtonsBlocked) {
-				strcat(sMessage,'1');
+				strcat(sMessage,"1");
 			} else {
-				strcat(sMessage,'0');
+				strcat(sMessage,"0");
 			}
 			strcat(sMessage,sData2);
 			HAL_UART_Transmit_IT(&hlpuart1, sMessage, sizeof(sMessage));
@@ -157,7 +157,7 @@ void vReturnParam(unsigned char ucParam) {
 	}
 }
 
-void vSetParam(unsigned char ucParam, unsigned char ucValue){
+void vSetParam(unsigned char ucParam, unsigned char* ucValue){
 	switch(ucParam) {
 		case 't':
 			fSetPointTemperature = atof(ucValue);
