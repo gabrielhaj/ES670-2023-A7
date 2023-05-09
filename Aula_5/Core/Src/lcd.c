@@ -13,6 +13,7 @@
 #include "i2c.h"
 
 
+
 /* line and columns */
 #define LINE0		0U
 #define COLUMN0		0U
@@ -22,6 +23,9 @@
 #define MAX_COLUMN  15U
 
 Lcd xLcd;
+char cBackLight = 0;
+
+
 
 // Function with local scope
 static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType);
@@ -166,7 +170,7 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 
 	// cDataType indica se deve ser enviado um dado ou um comando ao display
 	// Se cDataType for igual a LCD_RS_CMD, deve ser enviado um comando (Pino RS do display em nível baixo)
-	// Se cDataType for igual a LCD_RS_CMD, deve ser enviado um comando (Pino RS do display em nível alto)
+	// Se cDataType for igual a LCD_RS_DATA, deve ser enviado um dado (Pino RS do display em nível alto)
 
 	// Vocês irão enviar o byte de dados ou comando em duas etapas
 	// Na primeira etapa serão enviados os 4 bits mais significativos
@@ -180,19 +184,44 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 	// Na escrita vocês podem acender ou desligar o backlight do LCD (P3 do CI PCF8574). Registrem em uma
 	// variável global se o backlight deve ficar aceso ou apagado. Essa variável global será atualizada nas
 	// funções vLcdBacklighON() e vLcdBacklighOFF()
-	unsigned char ucMessage = 0;
-	ucMessage |= 1<<6; //seta bit R/W pra 1
-	if (cDataType == LCD_RS_CMD){
-		ucMessage &= ~7; //seta bit RS = 0
 
+	unsigned char ucBufferMask = 15;
+	unsigned char ucFirstHalf = ucBuffer & (ucBufferMask<<4);
+	unsigned char ucSecondHalf = (ucBuffer & ucBufferMask)<<4;
+
+	if(cDataType == LCD_RS_CMD) {
+		CLEAR_BIT(ucFirstHalf,LCD_BIT_RS);
+		CLEAR_BIT(ucSecondHalf,LCD_BIT_RS);
+	} else if(cDataType == LCD_RS_DATA){
+		SET_BIT(ucFirstHalf,LCD_BIT_RS);
+		SET_BIT(ucSecondHalf,LCD_BIT_RS);
 	}
-	else if(cDataType == LCD_RS_DATA){
-		ucMessage |= 1<<7; //seta bit RS = 1
+	if(cBackLight) {
+		SET_BIT(ucFirstHalf,LCD_BIT_BACKIGHT);
+		SET_BIT(ucSecondHalf,LCD_BIT_BACKIGHT);
 	}
-	//bota na variável -> lógica do and para setar metade dos bits
-	//enable
-	//delay
-	//transmit
-	//disable
-	//repete
+
+	SET_BIT(ucFirstHalf,LCD_BIT_E);
+	HAL_I2C_Master_Transmit_IT(xLcd.hi2c, xLcd.cAddress<<1, &ucFirstHalf, 1);
+	HAL_Delay(1);
+	CLEAR_BIT(ucFirstHalf,LCD_BIT_E);
+	HAL_I2C_Master_Transmit_IT(xLcd.hi2c, xLcd.cAddress<<1, &ucFirstHalf, 1);
+	HAL_Delay(2);
+
+	SET_BIT(ucSecondHalf,LCD_BIT_E);
+	HAL_I2C_Master_Transmit_IT(xLcd.hi2c, xLcd.cAddress<<1, &ucSecondHalf, 1);
+	HAL_Delay(1);
+	CLEAR_BIT(ucSecondHalf,LCD_BIT_E);
+	HAL_I2C_Master_Transmit_IT(xLcd.hi2c, xLcd.cAddress<<1, &ucSecondHalf, 1);
+	HAL_Delay(2);
 }
+
+void vLcdBackLightOn(void) {
+	cBackLight = 1;
+}
+
+void vLcdBackLightOff(void) {
+	cBackLight = 0;
+}
+
+

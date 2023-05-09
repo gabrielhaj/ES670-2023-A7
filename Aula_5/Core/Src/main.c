@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +58,10 @@ unsigned char ucButtonsBlocked = 0;
 unsigned char ucDutyHeater  = 10;
 unsigned char ucDutyCooler = 20;
 unsigned char ucData = 0;
+unsigned int ui1sCounter = 0;
+unsigned int uiTimeCounter = 0;
+extern char cBackLight;
+char cTestLine2[16];
 
 
 /* USER CODE END PV */
@@ -69,6 +74,7 @@ void vInitLed(void);
 unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
+unsigned char ucLcdAddress = 0x27;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -112,6 +118,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   vButtonsInit();
   vLedInit();
+  vLcdInitLcd(&hi2c1,ucLcdAddress);
   vMatrixKeyboardInit(&htim6);
   vButtonsEventsInit(&htim7, &htim16);
   /* USER CODE END 2 */
@@ -124,16 +131,27 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  //We take every bit separately from iLedValue and feed to the right led
-	  //Taking bitwise with this known algorithm
-	  for(int i = 0; i < 5; i++){
-		  uiMask = 1 << i;
-		  uiMasked = iLedValue&uiMask;
-		  uiBit = uiMasked >> i;
-		  vLedWrite(i,uiBit);
-	  }
+	//Counter for LCD Testing Main
+	// clear LCD
+	vLcdSendCommand(CMD_CLEAR);
+
+	// set the cursor line 0, column 1
+	vLcdSetCursor(0,1);
+
+	// send string
+	vLcdWriteString("Teste Grupo A7");
+
+	// set the cursor line 1, column 0
+	vLcdSetCursor(1,0);
+	sprintf(cTestLine2, "Contagem:%d s", uiTimeCounter);
+	vLcdWriteString(cTestLine2);
+	HAL_Delay(30);
+  }
   /* USER CODE END 3 */
+
+
 }
+
 
 /**
   * @brief System Clock Configuration
@@ -189,6 +207,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
 		vMatrixKeyboardPeriodElapsedCallback();
+		ui1sCounter ++;
+		if(ui1sCounter == 100) {
+		  ui1sCounter = 0;
+		  uiTimeCounter ++;
+		  if(cBackLight) {
+			  vLcdBackLightOff();
+		  } else {
+			  vLcdBackLightOn();
+		  }
+		}
 	}
 	else {
 		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)
@@ -201,6 +229,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			vButtonsEventsLongPressPeriodElapsedCallback();
 		}
 	}
+
 }
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
@@ -225,6 +254,7 @@ void vButtonsEventCallback3sPressedEvent(buttons xBt){
 		iLedValue = 0;
 	}
 }
+
 
 
 
