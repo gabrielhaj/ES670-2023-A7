@@ -62,6 +62,7 @@ unsigned int ui1sCounter = 0;
 unsigned int uiTimeCounter = 0;
 extern char cBackLight;
 char cTestLine2[16];
+char cFlagLcd = 0;
 
 
 /* USER CODE END PV */
@@ -131,21 +132,23 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	//Counter for LCD Testing Main
-	// clear LCD
-	vLcdSendCommand(CMD_CLEAR);
+	if(cFlagLcd){
+		//Counter for LCD Testing Main
+			// clear LCD
+			vLcdSendCommand(CMD_CLEAR);
 
-	// set the cursor line 0, column 1
-	vLcdSetCursor(0,1);
+			// set the cursor line 0, column 1
+			vLcdSetCursor(0,1);
 
-	// send string
-	vLcdWriteString("Teste Grupo A7");
+			// send string
+			vLcdWriteString("Teste Grupo A7");
 
-	// set the cursor line 1, column 0
-	vLcdSetCursor(1,0);
-	sprintf(cTestLine2, "Contagem:%d s", uiTimeCounter);
-	vLcdWriteString(cTestLine2);
-	HAL_Delay(30);
+			// set the cursor line 1, column 0
+			vLcdSetCursor(1,0);
+			sprintf(cTestLine2, "Contagem:%d s", uiTimeCounter);
+			vLcdWriteString(cTestLine2);
+			cFlagLcd = 0;
+	}
   }
   /* USER CODE END 3 */
 
@@ -208,6 +211,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if(htim == pTimerMatrixKeyboard){
 		vMatrixKeyboardPeriodElapsedCallback();
 		ui1sCounter ++;
+		if(!(ui1sCounter % 50)) {
+			cFlagLcd = 1;
+		}
 		if(ui1sCounter == 100) {
 		  ui1sCounter = 0;
 		  uiTimeCounter ++;
