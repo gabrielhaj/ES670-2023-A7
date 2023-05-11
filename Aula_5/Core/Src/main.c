@@ -211,10 +211,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if(htim == pTimerMatrixKeyboard){
 		vMatrixKeyboardPeriodElapsedCallback();
 		ui1sCounter ++;
-		if(!(ui1sCounter % 50)) {
-			cFlagLcd = 1;
-		}
 		if(ui1sCounter == 100) {
+		  cFlagLcd = 1;
 		  ui1sCounter = 0;
 		  uiTimeCounter ++;
 		  if(cBackLight) {
