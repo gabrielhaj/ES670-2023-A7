@@ -116,6 +116,11 @@ int main(void)
   MX_TIM7_Init();
   MX_TIM16_Init();
   MX_I2C1_Init();
+  MX_TIM1_Init();
+  MX_TIM3_Init();
+  MX_TIM5_Init();
+  MX_TIM8_Init();
+  MX_TIM20_Init();
   /* USER CODE BEGIN 2 */
   vButtonsInit();
   vLedInit();
@@ -151,10 +156,7 @@ int main(void)
 	}
   }
   /* USER CODE END 3 */
-
-
 }
-
 
 /**
   * @brief System Clock Configuration

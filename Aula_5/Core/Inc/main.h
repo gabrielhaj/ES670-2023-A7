@@ -62,6 +62,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Heater_PWM_Pin GPIO_PIN_0
+#define Heater_PWM_GPIO_Port GPIOC
 #define BT_Up_Pin GPIO_PIN_1
 #define BT_Up_GPIO_Port GPIOC
 #define BT_Up_EXTI_IRQn EXTI1_IRQn
@@ -83,6 +85,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 #define BT_Enter_Pin GPIO_PIN_0
 #define BT_Enter_GPIO_Port GPIOB
 #define BT_Enter_EXTI_IRQn EXTI0_IRQn
+#define Buzzer_PWM_Pin GPIO_PIN_2
+#define Buzzer_PWM_GPIO_Port GPIOB
 #define KB_Lin4_Pin GPIO_PIN_11
 #define KB_Lin4_GPIO_Port GPIOB
 #define KB_Lin3_Pin GPIO_PIN_12
@@ -103,6 +107,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14
 #define T_SWCLK_GPIO_Port GPIOA
+#define Cooler_PWM_Pin GPIO_PIN_15
+#define Cooler_PWM_GPIO_Port GPIOA
+#define Tacometro_TIM__Ext_Clock_Pin GPIO_PIN_2
+#define Tacometro_TIM__Ext_Clock_GPIO_Port GPIOD
 #define T_SWO_Pin GPIO_PIN_3
 #define T_SWO_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
