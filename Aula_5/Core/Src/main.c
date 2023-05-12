@@ -76,6 +76,8 @@ unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
 unsigned char ucLcdAddress = 0x27;
+float fHeaterPWMDutyCycle = 0;
+float fCoolerPWMDutyCycle = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -127,6 +129,8 @@ int main(void)
   vLcdInitLcd(&hi2c1,ucLcdAddress);
   vMatrixKeyboardInit(&htim6);
   vButtonsEventsInit(&htim7, &htim16);
+  vHeaterAndCoolerCoolerInit(&htim8);
+  vHeaterAndCoolerHeaterInit(&htim1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -137,23 +141,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	if(cFlagLcd){
-		//Counter for LCD Testing Main
-			// clear LCD
-			vLcdSendCommand(CMD_CLEAR);
 
-			// set the cursor line 0, column 1
-			vLcdSetCursor(0,1);
-
-			// send string
-			vLcdWriteString("Teste Grupo A7");
-
-			// set the cursor line 1, column 0
-			vLcdSetCursor(1,0);
-			sprintf(cTestLine2, "Contagem:%d s", uiTimeCounter);
-			vLcdWriteString(cTestLine2);
-			cFlagLcd = 0;
-	}
   }
   /* USER CODE END 3 */
 }
@@ -240,9 +228,25 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
 	if(xBt == up){
-		iLedValue ++;
+		if(fCoolerPWMDutyCycle < 1) {
+			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle + 0.1;
+			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
+		}
 	} else if(xBt == down){
-		iLedValue --;
+		if(fCoolerPWMDutyCycle > 0){
+			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle - 0.1;
+			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
+		}
+	} else if(xBt == right) {
+		if(fHeaterPWMDutyCycle < 1) {
+			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle + 0.1;
+			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
+		}
+	} else if(xBt == left) {
+		if(fHeaterPWMDutyCycle > 0) {
+			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle - 0.1;
+			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
+		}
 	}
 }
 void vButtonsEventCallbackReleasedEvent(buttons xBt){

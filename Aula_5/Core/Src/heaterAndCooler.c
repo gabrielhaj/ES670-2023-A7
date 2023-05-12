@@ -10,10 +10,27 @@
 // ********************************************** //
 
 #include "heaterAndCooler.h"
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim8;
+TIM_HandleTypeDef *pPWMHeater;
+TIM_HandleTypeDef *pPWMCooler;
 
 
-void vCoolerfanPWMDuty(float fCoolerDuty){
 
+void vHeaterAndCoolerCoolerInit(TIM_HandleTypeDef *pCooler){
+	pPWMCooler = pCooler;
+	HAL_TIM_PWM_Start(pPWMCooler, TIM_CHANNEL_1);
+}
+void vHeaterAndCoolerHeaterInit(TIM_HandleTypeDef *pHeater){
+	pPWMHeater = pHeater;
+	HAL_TIM_PWM_Start(pPWMHeater, TIM_CHANNEL_1);
 }
 
-void vHeaterPWMDuty(float fHeaterDuty);
+void vHeaterAndCoolerCoolerfanPWMDuty(float fCoolerDuty){
+	pPWMCooler->Instance->CCR1 = (uint32_t)(fCoolerDuty*1000);
+}
+
+void vHeaterAndCoolerHeaterPWMDuty(float fHeaterDuty) {
+	pPWMHeater->Instance->CCR1 = (uint32_t)(fHeaterDuty*1000);
+}
+
