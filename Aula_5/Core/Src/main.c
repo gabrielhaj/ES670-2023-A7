@@ -230,21 +230,33 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 	if(xBt == up){
 		if(fCoolerPWMDutyCycle < 1) {
 			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle + 0.1;
+			if(fCoolerPWMDutyCycle > 1) {
+				fCoolerPWMDutyCycle = 1;
+			}
 			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
 		}
 	} else if(xBt == down){
 		if(fCoolerPWMDutyCycle > 0){
 			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle - 0.1;
+			if(fCoolerPWMDutyCycle < 0) {
+				fCoolerPWMDutyCycle = 0;
+			}
 			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
 		}
 	} else if(xBt == right) {
 		if(fHeaterPWMDutyCycle < 1) {
 			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle + 0.1;
+			if(fHeaterPWMDutyCycle > 1) {
+				fHeaterPWMDutyCycle = 1;
+			}
 			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
 		}
 	} else if(xBt == left) {
 		if(fHeaterPWMDutyCycle > 0) {
 			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle - 0.1;
+			if(fHeaterPWMDutyCycle < 0) {
+				fHeaterPWMDutyCycle = 0;
+			}
 			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
 		}
 	}
