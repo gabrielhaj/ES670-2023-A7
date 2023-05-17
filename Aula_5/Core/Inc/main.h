@@ -37,6 +37,7 @@ extern "C" {
 #include "matrixKeyboard.h"
 #include "buttonsEvents.h"
 #include "heaterAndCooler.h"
+#include "buzzer.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

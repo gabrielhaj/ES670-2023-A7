@@ -49,9 +49,12 @@
 extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
 extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
+extern TIM_HandleTypeDef *pCounterBuzzer;
+extern TIM_HandleTypeDef *pBuzzer;
 extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
 int iLedValue = 0;
 extern char cFlagLongPressTimer;
+extern unsigned short int usBuzzerPeriod;
 float fCurrentTemperature = 36.5;
 float fSetPointTemperature = 80;
 unsigned char ucButtonsBlocked = 0;
@@ -60,6 +63,7 @@ unsigned char ucDutyCooler = 20;
 unsigned char ucData = 0;
 unsigned int ui1sCounter = 0;
 unsigned int uiTimeCounter = 0;
+unsigned int uiTimeCounterBuzzer = 0;
 extern char cBackLight;
 char cTestLine2[16];
 char cFlagLcd = 0;
@@ -131,6 +135,7 @@ int main(void)
   vButtonsEventsInit(&htim7, &htim16);
   vHeaterAndCoolerCoolerInit(&htim8);
   vHeaterAndCoolerHeaterInit(&htim1);
+  vBuzzerConfig(1000, 100, &htim20);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -211,6 +216,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			  vLcdBackLightOn();
 		  }
 		}
+
+	}
+	else if(htim == pCounterBuzzer){
+		uiTimeCounterBuzzer ++;
+		if(uiTimeCounterBuzzer == 10) {
+			uiTimeCounterBuzzer = 0;
+			HAL_TIM_Base_Stop_IT(pCounterBuzzer);
+			HAL_TIM_PWM_Stop(pBuzzer, TIM_CHANNEL_1);
+		}
 	}
 	else {
 		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)
@@ -259,6 +273,8 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 			}
 			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
 		}
+	} else if(xBt == enter) {
+		vBuzzerPlay();
 	}
 }
 void vButtonsEventCallbackReleasedEvent(buttons xBt){
