@@ -38,6 +38,7 @@ extern "C" {
 #include "buttonsEvents.h"
 #include "heaterAndCooler.h"
 #include "buzzer.h"
+#include "tachometer.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

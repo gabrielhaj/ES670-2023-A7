@@ -22,7 +22,7 @@
 #define L1C0_BASE	0xC0 /* line 1, column 0 */
 #define MAX_COLUMN  15U
 
-Lcd xLcd;
+Lcd xLcd = {0};
 char cBackLight = 0;
 
 

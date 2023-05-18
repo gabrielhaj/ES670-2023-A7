@@ -51,6 +51,8 @@ extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
 extern TIM_HandleTypeDef *pCounterBuzzer;
 extern TIM_HandleTypeDef *pBuzzer;
+extern TIM_HandleTypeDef *pTachometerWindow;
+extern TIM_HandleTypeDef *pTachometer;
 extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
 int iLedValue = 0;
 extern char cFlagLongPressTimer;
@@ -67,6 +69,15 @@ unsigned int uiTimeCounterBuzzer = 0;
 extern char cBackLight;
 char cTestLine2[16];
 char cFlagLcd = 0;
+char cFlagLcdTachometer = 0;
+char cTestString[9];
+unsigned int uiMask;
+unsigned int uiMasked;
+unsigned int uiBit;
+unsigned char ucLcdAddress = 0x27;
+float fHeaterPWMDutyCycle = 0;
+float fCoolerPWMDutyCycle = 0;
+extern unsigned short int usCoolerSpeed;
 
 
 /* USER CODE END PV */
@@ -76,12 +87,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 void vInitButtons(void);
 void vInitLed(void);
-unsigned int uiMask;
-unsigned int uiMasked;
-unsigned int uiBit;
-unsigned char ucLcdAddress = 0x27;
-float fHeaterPWMDutyCycle = 0;
-float fCoolerPWMDutyCycle = 0;
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -127,6 +133,7 @@ int main(void)
   MX_TIM5_Init();
   MX_TIM8_Init();
   MX_TIM20_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   vButtonsInit();
   vLedInit();
@@ -136,6 +143,7 @@ int main(void)
   vHeaterAndCoolerCoolerInit(&htim8);
   vHeaterAndCoolerHeaterInit(&htim1);
   vBuzzerConfig(1000, 100, &htim20);
+  vTachometerInit(&htim4,500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -146,7 +154,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+	  if(cFlagLcdTachometer){
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdBackLightOn();
+		  vLcdSetCursor(0,1);
+		  vLcdWriteString("Veloc do cooler:");
+		  vLcdSetCursor(1,0);
+		  sprintf(cTestString,"%d RPM",usCoolerSpeed);
+		  vLcdWriteString(cTestString);
+		  cFlagLcdTachometer = 0;
+	  }
   }
   /* USER CODE END 3 */
 }
@@ -205,6 +222,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
 		vMatrixKeyboardPeriodElapsedCallback();
+		/*
 		ui1sCounter ++;
 		if(ui1sCounter == 100) {
 		  cFlagLcd = 1;
@@ -216,7 +234,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			  vLcdBackLightOn();
 		  }
 		}
-
+         */
 	}
 	else if(htim == pCounterBuzzer){
 		uiTimeCounterBuzzer ++;
@@ -225,6 +243,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			HAL_TIM_Base_Stop_IT(pCounterBuzzer);
 			HAL_TIM_PWM_Stop(pBuzzer, TIM_CHANNEL_1);
 		}
+	}
+	else if(htim == pTachometerWindow) {
+		vTachometerUpdate();
+		pTachometer->Instance->CNT = 0;
+		cFlagLcdTachometer = 1;
+
 	}
 	else {
 		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)
@@ -249,6 +273,7 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 			}
 			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
 		}
+		vBuzzerPlay();
 	} else if(xBt == down){
 		if(fCoolerPWMDutyCycle > 0){
 			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle - 0.1;
@@ -257,6 +282,7 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 			}
 			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
 		}
+		vBuzzerPlay();
 	} else if(xBt == right) {
 		if(fHeaterPWMDutyCycle < 1) {
 			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle + 0.1;
@@ -265,6 +291,7 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 			}
 			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
 		}
+		vBuzzerPlay();
 	} else if(xBt == left) {
 		if(fHeaterPWMDutyCycle > 0) {
 			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle - 0.1;
@@ -273,6 +300,7 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 			}
 			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
 		}
+		vBuzzerPlay();
 	} else if(xBt == enter) {
 		vBuzzerPlay();
 	}
