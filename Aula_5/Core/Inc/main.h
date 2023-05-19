@@ -39,6 +39,7 @@ extern "C" {
 #include "heaterAndCooler.h"
 #include "buzzer.h"
 #include "tachometer.h"
+#include "temperatureSensor.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

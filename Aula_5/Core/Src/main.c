@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "usart.h"
 #include "tim.h"
@@ -54,6 +56,7 @@ extern TIM_HandleTypeDef *pBuzzer;
 extern TIM_HandleTypeDef *pTachometerWindow;
 extern TIM_HandleTypeDef *pTachometer;
 extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
+extern ADC_HandleTypeDef hadc1;
 int iLedValue = 0;
 extern char cFlagLongPressTimer;
 extern unsigned short int usBuzzerPeriod;
@@ -78,6 +81,8 @@ unsigned char ucLcdAddress = 0x27;
 float fHeaterPWMDutyCycle = 0;
 float fCoolerPWMDutyCycle = 0;
 extern unsigned short int usCoolerSpeed;
+uint16_t usTemperature;
+float fTemp;
 
 
 /* USER CODE END PV */
@@ -123,6 +128,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_LPUART1_UART_Init();
   MX_TIM6_Init();
   MX_TIM7_Init();
@@ -134,6 +140,7 @@ int main(void)
   MX_TIM8_Init();
   MX_TIM20_Init();
   MX_TIM4_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   vButtonsInit();
   vLedInit();
@@ -144,6 +151,7 @@ int main(void)
   vHeaterAndCoolerHeaterInit(&htim1);
   vBuzzerConfig(1000, 100, &htim20);
   vTachometerInit(&htim4,500);
+  vTemperatureSensorInit(&hadc1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -154,16 +162,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(cFlagLcdTachometer){
-		  vLcdSendCommand(CMD_CLEAR);
-		  vLcdBackLightOn();
-		  vLcdSetCursor(0,1);
-		  vLcdWriteString("Veloc do cooler:");
-		  vLcdSetCursor(1,0);
-		  sprintf(cTestString,"%d RPM",usCoolerSpeed);
-		  vLcdWriteString(cTestString);
-		  cFlagLcdTachometer = 0;
-	  }
+	  fTemp = fTemperatureSensorGetTemperature();
+//	  if(cFlagLcdTachometer){
+//		  vLcdSendCommand(CMD_CLEAR);
+//		  vLcdBackLightOn();
+//		  vLcdSetCursor(0,1);
+//		  vLcdWriteString("Veloc do cooler:");
+//		  vLcdSetCursor(1,0);
+//		  sprintf(cTestString,"%d RPM",usCoolerSpeed);
+//		  vLcdWriteString(cTestString);
+//		  cFlagLcdTachometer = 0;
+//	  }
   }
   /* USER CODE END 3 */
 }
@@ -320,6 +329,8 @@ void vButtonsEventCallback3sPressedEvent(buttons xBt){
 		iLedValue = 0;
 	}
 }
+
+
 
 
 
