@@ -24,6 +24,7 @@
 #include "usart.h"
 #include "tim.h"
 #include "gpio.h"
+#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -73,7 +74,10 @@ extern char cBackLight;
 char cTestLine2[16];
 char cFlagLcd = 0;
 char cFlagLcdTachometer = 0;
-char cTestString[9];
+char cFlag500ms = 0;
+char *cTestString;
+char cFlag100ms = 0;
+char *pDummy = {0};
 unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
@@ -163,16 +167,24 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  fTemp = fTemperatureSensorGetTemperature();
-//	  if(cFlagLcdTachometer){
-//		  vLcdSendCommand(CMD_CLEAR);
-//		  vLcdBackLightOn();
-//		  vLcdSetCursor(0,1);
-//		  vLcdWriteString("Veloc do cooler:");
-//		  vLcdSetCursor(1,0);
-//		  sprintf(cTestString,"%d RPM",usCoolerSpeed);
-//		  vLcdWriteString(cTestString);
-//		  cFlagLcdTachometer = 0;
-//	  }
+	  if(cFlag100ms){
+		  vCommunicationStateMachineProcessStateMachine('-');
+		  vCommunicationStateMachineProcessStateMachine('g');
+		  vCommunicationStateMachineProcessStateMachine('t');
+		  vCommunicationStateMachineProcessStateMachine('!');
+		  cFlag100ms = 0;
+	  }
+	  if(cFlag500ms){
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdBackLightOn();
+		  vLcdSetCursor(0,1);
+		  vLcdWriteString("Temperatura:");
+		  vLcdSetCursor(1,0);
+		  cTestString = vFtoa(fTemp,'0');
+		  strcat(cTestString,"C");
+		  vLcdWriteString(cTestString);
+		  cFlag500ms = 0;
+	  }
   }
   /* USER CODE END 3 */
 }
@@ -231,8 +243,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
 		vMatrixKeyboardPeriodElapsedCallback();
-		/*
 		ui1sCounter ++;
+		if(!(ui1sCounter % 10)) {
+			cFlag100ms = 1;
+		}
+		if(ui1sCounter % 50 == 0) {
+			cFlag500ms = 1;
+		}
 		if(ui1sCounter == 100) {
 		  cFlagLcd = 1;
 		  ui1sCounter = 0;
@@ -243,10 +260,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			  vLcdBackLightOn();
 		  }
 		}
-         */
+
 	}
 	else if(htim == pCounterBuzzer){
 		uiTimeCounterBuzzer ++;
+
 		if(uiTimeCounterBuzzer == 10) {
 			uiTimeCounterBuzzer = 0;
 			HAL_TIM_Base_Stop_IT(pCounterBuzzer);

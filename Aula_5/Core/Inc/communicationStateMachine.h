@@ -16,3 +16,4 @@ void vSetParam(unsigned char ucParam, unsigned char* ucValue);
 
 
 #endif /* INC_COMMUNICATIONSTATEMACHINE_H_ */
+

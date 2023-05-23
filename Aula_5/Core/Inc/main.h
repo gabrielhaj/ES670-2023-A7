@@ -40,6 +40,7 @@ extern "C" {
 #include "buzzer.h"
 #include "tachometer.h"
 #include "temperatureSensor.h"
+#include "communicationStateMachine.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

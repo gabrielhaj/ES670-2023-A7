@@ -23,8 +23,7 @@ unsigned char ucMachineState = IDDLE;
 unsigned char ucValueCount;
 char sData[3] = {"-a "};
 char sData2[3] = {"!\n\r"};
-char sMessage[MAX_VALUE_LENGHT + 4 + 2] = {0};
-char cStr[4] = {0};
+char cStr[5] = {0};
 extern float fCurrentTemperature;
 extern float fSetPointTemperature;
 extern unsigned char ucButtonsBlocked;
@@ -103,7 +102,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 
 }
 
-char* vFtoa(float fNum, unsigned char ucParam){
+char* vFtoa(float fNum, unsigned char ucParam){ //Colocar ucParam como global na hora de mandar o final
 	int iInt, iDec;
 	if(ucParam == 'h' || ucParam == 'c') {
 		iInt = (int)fNum;
@@ -111,18 +110,19 @@ char* vFtoa(float fNum, unsigned char ucParam){
 		return cStr;
 	} else {
 		iInt = (int)fNum;
-		iDec = (int)((fNum - iInt)*10);
-		sprintf(cStr, "%d,%01d", iInt, iDec);
+		iDec = (int)((fNum - iInt)*100);
+		sprintf(cStr, "%d,%001d", iInt, iDec);
 		return cStr;
 	}
 
 }
 
 void vReturnParam(unsigned char ucParam) {
+	char sMessage[MAX_VALUE_LENGHT + 5 + 2] = {0};
 	switch(ucParam) {
 		case 't':
 			strcat(sMessage,sData);
-			strcat(sMessage,vFtoa(fCurrentTemperature,ucParam));
+			strcat(sMessage,vFtoa(fTemperatureSensorGetTemperature(),ucParam));
 			strcat(sMessage,sData2);
 			HAL_UART_Transmit_IT(&hlpuart1, sMessage, sizeof(sMessage));
 			break;
