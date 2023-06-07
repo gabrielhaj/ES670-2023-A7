@@ -114,5 +114,7 @@ void vLcdBackLightOn(void);
 /* ************************************************ */
 void vLcdBackLightOff(void);
 
+void vLcdClearToSendLCD(void);
+
 
 #endif /* SOURCES_LCD_H_ */

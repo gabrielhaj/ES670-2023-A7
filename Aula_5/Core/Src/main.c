@@ -61,8 +61,8 @@ extern ADC_HandleTypeDef hadc1;
 int iLedValue = 0;
 extern char cFlagLongPressTimer;
 extern unsigned short int usBuzzerPeriod;
-float fCurrentTemperature = 36.5;
-float fSetPointTemperature = 80;
+float fCurrentTemperature;
+float fSetPointTemperature = 0;
 unsigned char ucButtonsBlocked = 0;
 unsigned char ucDutyHeater  = 10;
 unsigned char ucDutyCooler = 20;
@@ -71,12 +71,15 @@ unsigned int ui1sCounter = 0;
 unsigned int uiTimeCounter = 0;
 unsigned int uiTimeCounterBuzzer = 0;
 extern char cBackLight;
-char cTestLine2[16];
-char cFlagLcd = 0;
+char cTestLine1[16] = {0};
+char cTestLine2[16] = {0};
+char sLogTemp[7] = {0};
 char cFlagLcdTachometer = 0;
 char cFlag500ms = 0;
+char cFlag1s = 0;
 char *cTestString;
 char cFlag100ms = 0;
+char cFlag10s = 0;
 char *pDummy = {0};
 unsigned int uiMask;
 unsigned int uiMasked;
@@ -87,6 +90,7 @@ float fCoolerPWMDutyCycle = 0;
 extern unsigned short int usCoolerSpeed;
 uint16_t usTemperature;
 float fTemp;
+
 
 
 /* USER CODE END PV */
@@ -166,25 +170,37 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  fTemp = fTemperatureSensorGetTemperature();
-	  if(cFlag100ms){
-		  vCommunicationStateMachineProcessStateMachine('-');
-		  vCommunicationStateMachineProcessStateMachine('g');
-		  vCommunicationStateMachineProcessStateMachine('t');
-		  vCommunicationStateMachineProcessStateMachine('!');
+	  pid_init(0, 0, 0, 100, 1);
+	  if(!(ui1sCounter%100)){
+		  vLcdClearToSendLCD();
+		  sprintf(cTestLine1,"P:%d I:%d D:%d",(int)pid_getKp(),(int)pid_getKi(), (int)pid_getKd());
+		  vLcdWriteString(cTestLine1);
+		  vLcdSetCursor(1,0);
+		  sprintf(cTestLine2,"T:%d S:%d H:%d",(int)fTemperatureSensorGetTemperature(),(int)fSetPointTemperature,(int)fHeaterPWMDutyCycle*100);
+		  strcat(cTestLine2,"%");
+		  vLcdWriteString(cTestLine2);
+		  cFlag1s = 0;
+	  }
+	  if(cFlag100ms || !cFlag10s){
+		  vPIDPeriodicControlTask();
+		  strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
+		  strcat(sLogTemp,"\n\r\0");
+		  HAL_UART_Transmit_IT(&hlpuart1, sLogTemp, sizeof(sLogTemp));
 		  cFlag100ms = 0;
 	  }
-	  if(cFlag500ms){
-		  vLcdSendCommand(CMD_CLEAR);
-		  vLcdBackLightOn();
-		  vLcdSetCursor(0,1);
-		  vLcdWriteString("Temperatura:");
-		  vLcdSetCursor(1,0);
-		  cTestString = vFtoa(fTemp,'0');
-		  strcat(cTestString,"C");
-		  vLcdWriteString(cTestString);
-		  cFlag500ms = 0;
-	  }
+
+
+//	  if(cFlag500ms){
+//		  vLcdSendCommand(CMD_CLEAR);
+//		  vLcdBackLightOn();
+//		  vLcdSetCursor(0,1);
+//		  vLcdWriteString("Temperatura:");
+//		  vLcdSetCursor(1,0);
+//		  cTestString = vFtoa(fTemp,'0');
+//		  strcat(cTestString,"C");
+//		  vLcdWriteString(cTestString);
+//		  cFlag500ms = 0;
+//	  }
   }
   /* USER CODE END 3 */
 }
@@ -247,19 +263,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		if(!(ui1sCounter % 10)) {
 			cFlag100ms = 1;
 		}
-		if(ui1sCounter % 50 == 0) {
-			cFlag500ms = 1;
+		if(!(ui1sCounter % 100)) {
+			cFlag1s = 1;
 		}
-		if(ui1sCounter == 100) {
-		  cFlagLcd = 1;
-		  ui1sCounter = 0;
-		  uiTimeCounter ++;
-		  if(cBackLight) {
-			  vLcdBackLightOff();
-		  } else {
-			  vLcdBackLightOn();
-		  }
+		if(ui1sCounter == 1000){
+			cFlag10s = 1;
+			ui1sCounter = 0;
 		}
+//		if(ui1sCounter == 100) {
+//		  cFlagLcd = 1;
+//		  ui1sCounter = 0;
+//		  uiTimeCounter ++;
+//		  if(cBackLight) {
+//			  vLcdBackLightOff();
+//		  } else {
+//			  vLcdBackLightOn();
+//		  }
+//		}
 
 	}
 	else if(htim == pCounterBuzzer){
@@ -347,6 +367,15 @@ void vButtonsEventCallback3sPressedEvent(buttons xBt){
 		iLedValue = 0;
 	}
 }
+
+void vPIDPeriodicControlTask(){
+	float fSensorValue, fSetPoint, fActuatorValue;
+	fSensorValue = fTemperatureSensorGetTemperature();
+	fSetPoint = fPIDGetSetPointTemperature();
+	fActuatorValue = pidUpdateData(fSensorValue,fSetPoint);
+	vPIDActuatorSetValue(fActuatorValue);
+}
+
 
 
 

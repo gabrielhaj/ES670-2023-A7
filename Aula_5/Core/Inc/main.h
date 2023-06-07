@@ -41,6 +41,7 @@ extern "C" {
 #include "tachometer.h"
 #include "temperatureSensor.h"
 #include "communicationStateMachine.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

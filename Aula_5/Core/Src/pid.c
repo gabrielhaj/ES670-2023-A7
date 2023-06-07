@@ -19,6 +19,8 @@ float fIntegratorBuffer[INTEGRATOR_MAX_SIZE]={0};
 
 float fError, fDifference, fOut;
 
+extern float fSetPointTemperature;
+
 /* ************************************************ */
 /* Method name:        pid_init                     */
 /* Method description: Initialize the PID controller*/
@@ -177,8 +179,8 @@ float pidUpdateData(float fSensorValue, float fSetValue)
 	fDifference = (fError - pidConfig.fError_previous);
 
 	fOut = pidConfig.fKp * fError
-		 + pidConfig.fKi * pidConfig.fError_sum *UPDATE_RATE
-		 + pidConfig.fKd * fDifference /UPDATE_RATE;
+		 + pidConfig.fKi * pidConfig.fError_sum *UPDATE_RATE_MS
+		 + pidConfig.fKd * fDifference /UPDATE_RATE_MS;
 
 	pidConfig.fError_previous = fError;
 
@@ -195,3 +197,13 @@ float pidUpdateData(float fSensorValue, float fSetValue)
 
 	return fOut;
 }
+
+float fPIDGetSetPointTemperature() {
+	return fSetPointTemperature;
+}
+
+void vPIDActuatorSetValue(float fActuatorValue) {
+	vHeaterAndCoolerHeaterPWMDuty(fActuatorValue);
+}
+
+__weak void vPIDPeriodicControlTask() {}

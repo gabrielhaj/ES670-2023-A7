@@ -27,10 +27,20 @@ void vHeaterAndCoolerHeaterInit(TIM_HandleTypeDef *pHeater){
 }
 
 void vHeaterAndCoolerCoolerfanPWMDuty(float fCoolerDuty){
+	if(fCoolerDuty > 1) {
+		fCoolerDuty = 1;
+	} else if(fCoolerDuty < 0) {
+		fCoolerDuty = 0;
+	}
 	pPWMCooler->Instance->CCR1 = (uint32_t)(fCoolerDuty*1000);
 }
 
 void vHeaterAndCoolerHeaterPWMDuty(float fHeaterDuty) {
+	if(fHeaterDuty > 1) {
+		fHeaterDuty = 1;
+	} else if(fHeaterDuty < 0) {
+		fHeaterDuty = 0;
+	}
 	pPWMHeater->Instance->CCR1 = (uint32_t)(fHeaterDuty*1000);
 }
 

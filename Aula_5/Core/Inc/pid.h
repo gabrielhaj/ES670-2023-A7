@@ -120,5 +120,10 @@ unsigned short pid_getIntegratorWindow (void);
 /* ************************************************** */
 float pidUpdateData(float fSensorValue, float fReferenceValue);
 
+void vPIDPeriodicControlTask();
+float fPIDGetSetPointTemperature();
+void vPIDActuatorSetValue(float fActuatorValue);
+
+
 
 #endif /* SOURCES_CONTROLLER_PID_H_ */
