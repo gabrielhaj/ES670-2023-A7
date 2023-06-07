@@ -227,6 +227,6 @@ void vLcdBackLightOff(void) {
 void vLcdClearToSendLCD(void) {
 	vLcdSendCommand(CMD_CLEAR);
 	vLcdBackLightOn();
-	vLcdSetCursor(0,1);
+	vLcdSetCursor(0,0);
 }
 

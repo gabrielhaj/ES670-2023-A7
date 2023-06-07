@@ -49,6 +49,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+screens screen;
+screens ActualScreen;
 extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
 extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
@@ -73,7 +75,6 @@ unsigned int uiTimeCounterBuzzer = 0;
 extern char cBackLight;
 char cTestLine1[16] = {0};
 char cTestLine2[16] = {0};
-char sLogTemp[7] = {0};
 char cFlagLcdTachometer = 0;
 char cFlag500ms = 0;
 char cFlag1s = 0;
@@ -160,26 +161,65 @@ int main(void)
   vBuzzerConfig(1000, 100, &htim20);
   vTachometerInit(&htim4,500);
   vTemperatureSensorInit(&hadc1);
+  pid_init(0, 0, 0, 100, 1);
+  HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
+  vLcdClearToSendLCD();
+  vLcdWriteString("Temperatura [oC]:");
+  vLcdSetCursor(1,0);
+  vLcdWriteString(vFtoa(fTemperatureSensorGetTemperature(), '0'));
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  pid_init(0, 0, 0, 100, 1);
-	  if(!(ui1sCounter%100)){
-		  vLcdClearToSendLCD();
-		  sprintf(cTestLine1,"P:%d I:%d D:%d",(int)pid_getKp(),(int)pid_getKi(), (int)pid_getKd());
-		  vLcdWriteString(cTestLine1);
-		  vLcdSetCursor(1,0);
-		  sprintf(cTestLine2,"T:%d S:%d H:%d",(int)fTemperatureSensorGetTemperature(),(int)fSetPointTemperature,(int)fHeaterPWMDutyCycle*100);
-		  strcat(cTestLine2,"%");
-		  vLcdWriteString(cTestLine2);
+	  if(ActualScreen != screen || !(ui1sCounter%100)){
+		  ActualScreen = screen;
+		  switch(screen) {
+		  	  case screen1:
+		  		  vLcdClearToSendLCD();
+		  		  vLcdWriteString("Temperatura [oC]:");
+		  		  vLcdSetCursor(1,0);
+		  		  vLcdWriteString(vFtoa(fTemperatureSensorGetTemperature(), '0'));
+		  		  break;
+		  	  case screen2:
+		  		  vLcdClearToSendLCD();
+		  		  vLcdWriteString("Valor de Kp:");
+		  		  vLcdSetCursor(1,0);
+		  		  vLcdWriteString(vFtoa(pid_getKp(), '0'));
+		  		  break;
+		  	  case screen3:
+		  		  vLcdClearToSendLCD();
+		  		  vLcdWriteString("Valor de Ki:");
+		  		  vLcdSetCursor(1,0);
+		  		  vLcdWriteString(vFtoa(pid_getKi(), '0'));
+		  		  break;
+		  	  case screen4:
+		  		  vLcdClearToSendLCD();
+		  		  vLcdWriteString("Valor de Kd:");
+		  		  vLcdSetCursor(1,0);
+		  		  vLcdWriteString(vFtoa(pid_getKd(), '0'));
+		  		  break;
+		  	  case screen5:
+		  		  vLcdClearToSendLCD();
+		  		  vLcdWriteString("SetPoint[oC]:");
+		  		  vLcdSetCursor(1,0);
+		  		  vLcdWriteString(vFtoa(fSetPointTemperature, '0'));
+		  		  break;
+		  }
 	  }
+//	  if(!(ui1sCounter%100)){
+//		  vLcdClearToSendLCD();
+//		  sprintf(cTestLine1,"P:%d I:%d D:%d",(int)pid_getKp(),(int)pid_getKi(), (int)pid_getKd());
+//		  vLcdWriteString(cTestLine1);
+//		  vLcdSetCursor(1,0);
+//		  sprintf(cTestLine2,"T:%d S:%d H:%d",(int)fTemperatureSensorGetTemperature(),(int)fSetPointTemperature,(int)fHeaterPWMDutyCycle*100);
+//		  strcat(cTestLine2,"%");
+//		  vLcdWriteString(cTestLine2);
+//	  }
 
 
 
@@ -248,16 +288,23 @@ void SystemClock_Config(void)
 
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	char* sLogTemp;
+	int iSize = 1;
 	//pTimerMatrixKeyboard = Pointer that holds the handler TIM6 address (&htim6)
 	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
-		vMatrixKeyboardPeriodElapsedCallback();
+		//vMatrixKeyboardPeriodElapsedCallback();
 		ui1sCounter ++;
 		if(!(ui1sCounter%10) && ui1sCounter < 1000){
 			vPIDPeriodicControlTask();
-			strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
+		}
+		if(!(ui1sCounter%50)){
+			sLogTemp = vFtoa(fTemperatureSensorGetTemperature(),'0');
 			strcat(sLogTemp,"\n\r\0");
-			HAL_UART_Transmit_IT(&hlpuart1, sLogTemp, sizeof(sLogTemp));
+			while(sLogTemp[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
 		}
 		if(cFlag == 1) {
 			ui1sCounter = 0;
@@ -305,40 +352,93 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 }
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
+	float k = 0;
 	if(xBt == up){
-		if(fCoolerPWMDutyCycle < 1) {
-			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle + 0.1;
-			if(fCoolerPWMDutyCycle > 1) {
-				fCoolerPWMDutyCycle = 1;
-			}
-			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
+//		if(fCoolerPWMDutyCycle < 1) {
+//			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle + 0.1;
+//			if(fCoolerPWMDutyCycle > 1) {
+//				fCoolerPWMDutyCycle = 1;
+//			}
+//			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
+//		}
+		switch(screen){
+			case screen1:
+				break;
+			case screen2:
+				k = pid_getKp();
+				k ++;
+				pid_setKp(k);
+				break;
+			case screen3:
+				k = pid_getKi();
+				k ++;
+				pid_setKi(k);
+				break;
+			case screen4:
+				k = pid_getKd();
+				k ++;
+				pid_setKd(k);
+				break;
+			case screen5:
+				fSetPointTemperature++;
+				break;
 		}
 		vBuzzerPlay();
 	} else if(xBt == down){
-		if(fCoolerPWMDutyCycle > 0){
-			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle - 0.1;
-			if(fCoolerPWMDutyCycle < 0) {
-				fCoolerPWMDutyCycle = 0;
-			}
-			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
+//		if(fCoolerPWMDutyCycle > 0){
+//			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle - 0.1;
+//			if(fCoolerPWMDutyCycle < 0) {
+//				fCoolerPWMDutyCycle = 0;
+//			}
+//			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
+//		}
+		switch(screen){
+			case screen1:
+				break;
+			case screen2:
+				k = pid_getKp();
+				k --;
+				pid_setKp(k);
+				break;
+			case screen3:
+				k = pid_getKi();
+				k --;
+				pid_setKi(k);
+				break;
+			case screen4:
+				k = pid_getKd();
+				k --;
+				pid_setKd(k);
+				break;
+			case screen5:
+				fSetPointTemperature--;
+				break;
 		}
 		vBuzzerPlay();
 	} else if(xBt == right) {
-		if(fHeaterPWMDutyCycle < 1) {
-			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle + 0.1;
-			if(fHeaterPWMDutyCycle > 1) {
-				fHeaterPWMDutyCycle = 1;
-			}
-			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
+//		if(fHeaterPWMDutyCycle < 1) {
+//			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle + 0.1;
+//			if(fHeaterPWMDutyCycle > 1) {
+//				fHeaterPWMDutyCycle = 1;
+//			}
+//			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
+//		}
+		screen ++;
+		if(screen > screen5){
+			screen = screen1;
 		}
 		vBuzzerPlay();
 	} else if(xBt == left) {
-		if(fHeaterPWMDutyCycle > 0) {
-			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle - 0.1;
-			if(fHeaterPWMDutyCycle < 0) {
-				fHeaterPWMDutyCycle = 0;
-			}
-			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
+//		if(fHeaterPWMDutyCycle > 0) {
+//			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle - 0.1;
+//			if(fHeaterPWMDutyCycle < 0) {
+//				fHeaterPWMDutyCycle = 0;
+//			}
+//			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
+//		}
+		screen --;
+		if(screen < screen1){
+			screen = screen1;
 		}
 		vBuzzerPlay();
 	} else if(xBt == enter) {

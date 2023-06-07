@@ -42,6 +42,8 @@ typedef struct{
 	char cAddress;
 }Lcd;
 
+typedef enum {screen1,screen2,screen3,screen4,screen5} screens;
+
 /* ************************************************ */
 /* Method name:        vLcdInitLcd                  */
 /* Method description: Initialize the LCD function  */
