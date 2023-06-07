@@ -30,7 +30,7 @@ extern unsigned char ucButtonsBlocked;
 extern float fHeaterPWMDutyCycle;
 extern float fCoolerPWMDutyCycle;
 extern unsigned char ucData;
-extern char cFlag10s;
+extern char cFlag;
 
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 	static unsigned char ucParam;
@@ -180,7 +180,7 @@ void vSetParam(unsigned char ucParam, unsigned char* ucValue){
 			break;
 		case 'd':
 			pid_setKd(atof(ucValue));
-			cFlag10s = 0;
+			cFlag = 1;
 			break;
 	}
 }

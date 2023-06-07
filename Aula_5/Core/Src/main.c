@@ -79,7 +79,7 @@ char cFlag500ms = 0;
 char cFlag1s = 0;
 char *cTestString;
 char cFlag100ms = 0;
-char cFlag10s = 0;
+char cFlag = 0;
 char *pDummy = {0};
 unsigned int uiMask;
 unsigned int uiMasked;
@@ -179,15 +179,8 @@ int main(void)
 		  sprintf(cTestLine2,"T:%d S:%d H:%d",(int)fTemperatureSensorGetTemperature(),(int)fSetPointTemperature,(int)fHeaterPWMDutyCycle*100);
 		  strcat(cTestLine2,"%");
 		  vLcdWriteString(cTestLine2);
-		  cFlag1s = 0;
 	  }
-	  if(cFlag100ms || !cFlag10s){
-		  vPIDPeriodicControlTask();
-		  strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
-		  strcat(sLogTemp,"\n\r\0");
-		  HAL_UART_Transmit_IT(&hlpuart1, sLogTemp, sizeof(sLogTemp));
-		  cFlag100ms = 0;
-	  }
+
 
 
 //	  if(cFlag500ms){
@@ -260,15 +253,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if(htim == pTimerMatrixKeyboard){
 		vMatrixKeyboardPeriodElapsedCallback();
 		ui1sCounter ++;
-		if(!(ui1sCounter % 10)) {
-			cFlag100ms = 1;
+		if(!(ui1sCounter%10) && ui1sCounter < 1000){
+			vPIDPeriodicControlTask();
+			strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
+			strcat(sLogTemp,"\n\r\0");
+			HAL_UART_Transmit_IT(&hlpuart1, sLogTemp, sizeof(sLogTemp));
 		}
-		if(!(ui1sCounter % 100)) {
-			cFlag1s = 1;
-		}
-		if(ui1sCounter == 1000){
-			cFlag10s = 1;
+		if(cFlag == 1) {
 			ui1sCounter = 0;
+			cFlag = 0;
 		}
 //		if(ui1sCounter == 100) {
 //		  cFlagLcd = 1;
