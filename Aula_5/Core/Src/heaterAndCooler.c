@@ -12,6 +12,7 @@
 #include "heaterAndCooler.h"
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim8;
+extern float fHeaterPWMDutyCycle;
 TIM_HandleTypeDef *pPWMHeater;
 TIM_HandleTypeDef *pPWMCooler;
 
@@ -24,6 +25,18 @@ void vHeaterAndCoolerCoolerInit(TIM_HandleTypeDef *pCooler){
 void vHeaterAndCoolerHeaterInit(TIM_HandleTypeDef *pHeater){
 	pPWMHeater = pHeater;
 	HAL_TIM_PWM_Start(pPWMHeater, TIM_CHANNEL_1);
+}
+
+void vHeaterAndCoolerCoolerStart(){
+	HAL_TIM_PWM_Start(pPWMCooler, TIM_CHANNEL_1);
+}
+
+void vHeaterAndCoolerHeaterStop(){
+	HAL_TIM_PWM_Stop(pPWMHeater, TIM_CHANNEL_1);
+}
+
+void vHeaterAndCoolerCoolerStop(){
+	HAL_TIM_PWM_Stop(pPWMCooler, TIM_CHANNEL_1);
 }
 
 void vHeaterAndCoolerCoolerfanPWMDuty(float fCoolerDuty){
@@ -42,5 +55,6 @@ void vHeaterAndCoolerHeaterPWMDuty(float fHeaterDuty) {
 		fHeaterDuty = 0;
 	}
 	pPWMHeater->Instance->CCR1 = (uint32_t)(fHeaterDuty*1000);
+	fHeaterPWMDutyCycle = pPWMHeater->Instance->CCR1;
 }
 

@@ -18,5 +18,8 @@ void vHeaterAndCoolerCoolerfanPWMDuty(float fCoolerDuty);
 void vHeaterAndCoolerHeaterPWMDuty(float fHeaterDuty);
 void vHeaterAndCoolerHeaterInit(TIM_HandleTypeDef *pWMHeater);
 void vHeaterAndCoolerCoolerInit(TIM_HandleTypeDef *pWMCooler);
+void vHeaterAndCoolerCoolerStart(void);
+void vHeaterAndCoolerHeaterStop(void);
+void vHeaterAndCoolerCoolerStop(void);
 
 #endif

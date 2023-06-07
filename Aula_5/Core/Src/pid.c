@@ -184,16 +184,16 @@ float pidUpdateData(float fSensorValue, float fSetValue)
 
 	pidConfig.fError_previous = fError;
 
-	fOut = -fOut;
+	//fOut = -fOut;
 
 	if(fOut > pidConfig.fOutputSaturation)
 	{
 		fOut = pidConfig.fOutputSaturation;
 	}
-	else if (fOut < -pidConfig.fOutputSaturation)
-	{
-		fOut = -pidConfig.fOutputSaturation;
-	}
+//	else if (fOut < -pidConfig.fOutputSaturation)
+//	{
+//		fOut = -pidConfig.fOutputSaturation;
+//	}
 
 	return fOut;
 }
