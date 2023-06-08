@@ -64,7 +64,7 @@ int iLedValue = 0;
 extern char cFlagLongPressTimer;
 extern unsigned short int usBuzzerPeriod;
 float fCurrentTemperature;
-float fSetPointTemperature = 25;
+float fSetPointTemperature = 60;
 unsigned char ucButtonsBlocked = 0;
 unsigned char ucDutyHeater  = 10;
 unsigned char ucDutyCooler = 20;
@@ -81,7 +81,11 @@ char cFlag1s = 0;
 char *cTestString;
 char cFlag100ms = 0;
 char cFlag = 0;
+char cFlagCooler = 0;
 char *pDummy = {0};
+float Kp = 600;
+float Ki = 1;
+float Kd = 1;
 unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
@@ -160,7 +164,7 @@ int main(void)
   vBuzzerConfig(1000, 100, &htim20);
   vTachometerInit(&htim4,500);
   vTemperatureSensorInit(&hadc1);
-  pid_init(0, 0, 0, 100, 100);
+  pid_init(Kp, Ki, Kd, 100, 100);
   HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   vLcdInitLcd(&hi2c1,ucLcdAddress);
   vLcdClearToSendLCD();
@@ -176,6 +180,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  /*O dispositivo possui a seguinte funcionalidade: Os botões direita e esquerda escolhem
+	   * a tela do LCD a ser apresentada. Enquanto estiver nas telas dos ganhos ou na tela do
+	   * Setpoint de temperatura, você pode alterar seus valores usando os botões cima e baixo
+	   * Apertar o botão enter liga/desliga o ventilador
+	   * Controlador tunado usando a técnica de zigler nichols
+	   */
 	  if(ActualScreen != screen || !(ui1sCounter%100)){
 		  ActualScreen = screen;
 		  switch(screen) {
@@ -190,7 +200,7 @@ int main(void)
 		  		  sprintf(cTestLine1,"Kp:%d",(int)pid_getKp());
 		  		  vLcdWriteString(cTestLine1);
 		  		  vLcdSetCursor(1,0);
-		  		  sprintf(cTestLine1,"DCicle[%]:%d",(int)fHeaterPWMDutyCycle/10);
+		  		  sprintf(cTestLine1,"DCicle:%d",(int)fHeaterPWMDutyCycle/10);
 		  		  vLcdWriteString(cTestLine1);
 		  		  break;
 		  	  case screen3:
@@ -198,7 +208,7 @@ int main(void)
 		  		  sprintf(cTestLine1,"Ki:%d",(int)pid_getKi());
 		  		  vLcdWriteString(cTestLine1);
 		  		  vLcdSetCursor(1,0);
-		  		  sprintf(cTestLine1,"DCicle[%]:%d",(int)fHeaterPWMDutyCycle/10);
+		  		  sprintf(cTestLine1,"DCicle:%d",(int)fHeaterPWMDutyCycle/10);
 		  		  vLcdWriteString(cTestLine1);
 		  		  break;
 		  	  case screen4:
@@ -206,7 +216,7 @@ int main(void)
 		  		  sprintf(cTestLine1,"Kd:%d",(int)pid_getKd());
 		  		  vLcdWriteString(cTestLine1);
 		  		  vLcdSetCursor(1,0);
-		  		  sprintf(cTestLine1,"DCicle[%]:%d",(int)fHeaterPWMDutyCycle/10);
+		  		  sprintf(cTestLine1,"DCicle:%d",(int)fHeaterPWMDutyCycle/10);
 		  		  vLcdWriteString(cTestLine1);
 		  		  break;
 		  	  case screen5:
@@ -301,7 +311,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if(htim == pTimerMatrixKeyboard){
 		//vMatrixKeyboardPeriodElapsedCallback();
 		ui1sCounter ++;
-		//if(!(ui1sCounter%10) && ui1sCounter < 3000){
 		if(!(ui1sCounter%10)){
 			vPIDPeriodicControlTask();
 			sLogTemp = vFtoa(fTemperatureSensorGetTemperature(),'0');
@@ -311,29 +320,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			}
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
 		}
-//		if(!(ui1sCounter%50)){
-//			sLogTemp = vFtoa(fTemperatureSensorGetTemperature(),'0');
-//			strcat(sLogTemp,"\n\r\0");
-//			while(sLogTemp[iSize] != '\0'){
-//				iSize ++;
-//			}
-//			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
-//		}
-		if(cFlag == 1) {
-			ui1sCounter = 0;
-			cFlag = 0;
-		}
-//		if(ui1sCounter == 100) {
-//		  cFlagLcd = 1;
-//		  ui1sCounter = 0;
-//		  uiTimeCounter ++;
-//		  if(cBackLight) {
-//			  vLcdBackLightOff();
-//		  } else {
-//			  vLcdBackLightOn();
-//		  }
-//		}
-
 	}
 	else if(htim == pCounterBuzzer){
 		uiTimeCounterBuzzer ++;
@@ -367,13 +353,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 void vButtonsEventCallbackPressedEvent(buttons xBt){
 	float k = 0;
 	if(xBt == up){
-//		if(fCoolerPWMDutyCycle < 1) {
-//			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle + 0.1;
-//			if(fCoolerPWMDutyCycle > 1) {
-//				fCoolerPWMDutyCycle = 1;
-//			}
-//			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
-//		}
 		switch(screen){
 			case screen1:
 				break;
@@ -398,13 +377,6 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 		}
 		//vBuzzerPlay();
 	} else if(xBt == down){
-//		if(fCoolerPWMDutyCycle > 0){
-//			fCoolerPWMDutyCycle = fCoolerPWMDutyCycle - 0.1;
-//			if(fCoolerPWMDutyCycle < 0) {
-//				fCoolerPWMDutyCycle = 0;
-//			}
-//			vHeaterAndCoolerCoolerfanPWMDuty(fCoolerPWMDutyCycle);
-//		}
 		switch(screen){
 			case screen1:
 				break;
@@ -429,34 +401,26 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 		}
 		//vBuzzerPlay();
 	} else if(xBt == right) {
-//		if(fHeaterPWMDutyCycle < 1) {
-//			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle + 0.1;
-//			if(fHeaterPWMDutyCycle > 1) {
-//				fHeaterPWMDutyCycle = 1;
-//			}
-//			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
-//		}
 		screen ++;
 		if(screen > screen5){
 			screen = screen1;
 		}
-		//vBuzzerPlay();
 	} else if(xBt == left) {
-//		if(fHeaterPWMDutyCycle > 0) {
-//			fHeaterPWMDutyCycle = fHeaterPWMDutyCycle - 0.1;
-//			if(fHeaterPWMDutyCycle < 0) {
-//				fHeaterPWMDutyCycle = 0;
-//			}
-//			vHeaterAndCoolerHeaterPWMDuty(fHeaterPWMDutyCycle);
-//		}
-		screen --;
-		if(screen < screen1){
+		if(screen == screen1){
 			screen = screen5;
+		} else {
+			screen --;
 		}
 		//vBuzzerPlay();
 	} else if(xBt == enter) {
 		vBuzzerPlay();
-		cFlag = 1;
+		if(cFlagCooler == 0){
+			vHeaterAndCoolerCoolerfanPWMDuty(1);
+			cFlagCooler = 1;
+		}else if(cFlagCooler == 1){
+			vHeaterAndCoolerCoolerfanPWMDuty(0);
+			cFlagCooler = 0;
+		}
 	}
 }
 void vButtonsEventCallbackReleasedEvent(buttons xBt){
@@ -480,7 +444,7 @@ void vPIDPeriodicControlTask(){
 	fSensorValue = fTemperatureSensorGetTemperature();
 	fSetPoint = fPIDGetSetPointTemperature();
 	fActuatorValue = pidUpdateData(fSensorValue,fSetPoint);
-	vPIDActuatorSetValue(fActuatorValue/100);
+	vPIDActuatorSetValue(fActuatorValue/100); //Saturação igual a 100
 }
 
 

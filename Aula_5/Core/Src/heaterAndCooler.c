@@ -13,6 +13,7 @@
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim8;
 extern float fHeaterPWMDutyCycle;
+extern float fCoolerPWMDutyCycle;
 TIM_HandleTypeDef *pPWMHeater;
 TIM_HandleTypeDef *pPWMCooler;
 
@@ -46,6 +47,7 @@ void vHeaterAndCoolerCoolerfanPWMDuty(float fCoolerDuty){
 		fCoolerDuty = 0;
 	}
 	pPWMCooler->Instance->CCR1 = (uint32_t)(fCoolerDuty*1000);
+	fCoolerPWMDutyCycle = fCoolerDuty*100;
 }
 
 void vHeaterAndCoolerHeaterPWMDuty(float fHeaterDuty) {

@@ -9,6 +9,7 @@
 
 #include "pid.h"
 #include "main.h"
+#include "heaterandcooler.h"
 
 // Struct used to store the PID configuration parameters
 pid_data_type pidConfig;
@@ -203,7 +204,20 @@ float fPIDGetSetPointTemperature() {
 }
 
 void vPIDActuatorSetValue(float fActuatorValue) {
-	vHeaterAndCoolerHeaterPWMDuty(fActuatorValue);
+	/*
+	 * Controle utilizando tanto heater quanto o cooler */
+	if(fActuatorValue < 0) {
+		//vHeaterAndCoolerCoolerfanPWMDuty(-0.3-fActuatorValue);
+		vHeaterAndCoolerCoolerfanPWMDuty(-fActuatorValue);
+		vHeaterAndCoolerHeaterPWMDuty(0);
+	} else if(fActuatorValue > 0) {
+		vHeaterAndCoolerHeaterPWMDuty(fActuatorValue);
+		vHeaterAndCoolerCoolerfanPWMDuty(0);
+	} else {
+		vHeaterAndCoolerCoolerfanPWMDuty(0);
+		vHeaterAndCoolerHeaterPWMDuty(0);
+	}
+
 }
 
 __weak void vPIDPeriodicControlTask() {}
