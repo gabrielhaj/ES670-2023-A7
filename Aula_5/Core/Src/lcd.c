@@ -1,15 +1,16 @@
 /* ***************************************************************** */
-/* File name:		 lcd_hal.c							 			 */
+/* File name:		 lcd.c							 			 */
 /* File description: File dedicated to the hardware abstraction layer*/
 /*                   related to the LCD HARDWARE based on the KS006U */
 /*					 controller										 */
-/* Author name:      dloubach										 */
+/* Author name:      dloubach, Gabriel Haj, Luccas Issao             */
 /* Creation date:    16out2015										 */
-/* Revision date:    03apr2023                                       */
+/* Revision date:    19/06/2023                                      */
 /* ***************************************************************** */
 
 #include <lcd.h>
 #include <main.h>
+#include "string.h"
 #include "i2c.h"
 
 
@@ -22,6 +23,10 @@
 #define L1C0_BASE	0xC0 /* line 1, column 0 */
 #define MAX_COLUMN  15U
 
+extern float fHeaterPWMDutyCycle;
+extern float fCoolerPWMDutyCycle;
+extern float fSetPointTemperature;
+extern unsigned short int usCoolerSpeed;
 Lcd xLcd = {0};
 char cBackLight = 0;
 
@@ -100,11 +105,11 @@ void vLcdSendCommand(unsigned char ucCmd)
 /*                     cColumn = COLUMN0..MAX_COLUMN*/
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdSetCursor(unsigned char cLine, unsigned char cColumn)
+void vLcdSetCursor(unsigned char ucLine, unsigned char ucColumn)
 {
 	char cCommand;
 
-	if(LINE0 == cLine)
+	if(LINE0 == ucLine)
 		/* line 0 */
 		cCommand = L0C0_BASE;
 	else
@@ -112,7 +117,7 @@ void vLcdSetCursor(unsigned char cLine, unsigned char cColumn)
 		cCommand = L1C0_BASE;
 
 	/* maximum MAX_COLUMN columns */
-	cCommand += (cColumn & MAX_COLUMN);
+	cCommand += (ucColumn & MAX_COLUMN);
 
 	// send the command to set the cursor
 	vLcdSendCommand(cCommand);
@@ -216,17 +221,89 @@ static void vLcdWrite2Lcd(unsigned char ucBuffer,  unsigned char cDataType)
 	HAL_Delay(2);
 }
 
+/* ************************************************ */
+/* Method name:        vLcdBackLightOn              */
+/* Method description: Turns the back light On      */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdBackLightOn(void) {
 	cBackLight = 1;
 }
 
+/* ************************************************ */
+/* Method name:        vLcdBackLightOff             */
+/* Method description: Turns the back light Off     */
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
 void vLcdBackLightOff(void) {
 	cBackLight = 0;
 }
 
-void vLcdClearToSendLCD(void) {
-	vLcdSendCommand(CMD_CLEAR);
-	vLcdBackLightOn();
-	vLcdSetCursor(0,0);
+/* ************************************************ */
+/* Method name:        vLcdUpdateScreen             */
+/* Method description: Go to the next screen,       */
+/* 					   updating the values and      */
+/* 					   building the strings to show */
+/* 					   in LCD                       */
+/* Input params:       Actual screen                */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdUpdateScreen(screens screen){
+	char cLine1[16] = {0};
+	char cLine2[16] = {0};
+	char cAuxLine1[5] = {0};
+	char cAuxLine2[5] = {0};
+	//Clear screen, set cursor to lines
+	//Build strings and send them to lcd
+	switch(screen) {
+	  case screen1:
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  strcat(cLine1,"T.Des.:");
+		  strcat(cAuxLine1,vFtoa(fSetPointTemperature,'0'));
+		  strcat(cAuxLine1,"°C");
+		  strcat(cLine1,cAuxLine1);
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  strcat(cLine2,"T.Atual:");
+		  strcat(cAuxLine2,vFtoa(fTemperatureSensorGetTemperature(),'0'));
+		  strcat(cAuxLine2,"°C");
+		  strcat(cLine2,cAuxLine2);
+		  vLcdWriteString(cLine2);
+		  break;
+	  case screen2:
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  sprintf(cLine1,"DutyHeater:%d",(int)fHeaterPWMDutyCycle/10);
+		  strcat(cLine1,"%");
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  sprintf(cLine2,"DutyCooler:%d",(int)fCoolerPWMDutyCycle);
+		  strcat(cLine2,"%");
+		  vLcdWriteString(cLine2);
+		  break;
+	  case screen3:
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  strcat(cLine1,"Kp:");
+		  strcat(cLine1,vFtoa(pid_getKp(),'0'));
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  strcat(cLine2,"Ki:");
+		  strcat(cLine2,vFtoa(pid_getKi(),'0'));
+		  vLcdWriteString(cLine2);
+		  break;
+	  case screen4:
+		  vLcdSendCommand(CMD_CLEAR);
+		  vLcdSetCursor(0,0);
+		  strcat(cLine1,"Cooler Speed:");
+		  vLcdWriteString(cLine1);
+		  vLcdSetCursor(1,0);
+		  sprintf(cLine2,"%d RPM",usCoolerSpeed);
+		  vLcdWriteString(cLine2);
+		  break;
+  }
 }
 
