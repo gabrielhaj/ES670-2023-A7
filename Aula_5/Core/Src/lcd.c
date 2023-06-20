@@ -29,6 +29,8 @@ extern float fSetPointTemperature;
 extern unsigned short int usCoolerSpeed;
 Lcd xLcd = {0};
 char cBackLight = 0;
+screens xScreen = 0;
+screens xActualScreen = 0;
 
 
 

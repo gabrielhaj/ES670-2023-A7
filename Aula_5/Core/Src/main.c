@@ -49,8 +49,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-screens screen;
-screens ActualScreen;
+extern screens xScreen;
+extern screens xActualScreen;
 extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
 extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
@@ -182,9 +182,9 @@ int main(void)
 	   * Apertar o botão enter liga/desliga o ventilador
 	   * Controlador tunado usando a técnica de zigler nichols
 	   */
-	  if(ActualScreen != screen || !(ui1sCounter%100)){
-		  ActualScreen = screen;
-		  vLcdUpdateScreen(ActualScreen);
+	  if(xActualScreen != xScreen || !(ui1sCounter%100)){
+		  xActualScreen = xScreen;
+		  vLcdUpdateScreen(xActualScreen);
 	  }
 //	  if(!(ui1sCounter%100)){
 //		  vLcdClearToSendLCD();
@@ -311,7 +311,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
 	if(xBt == up){
-		switch(screen){
+		switch(xScreen){
 			case screen1:
 				fSetPointTemperature ++;
 				break;
@@ -324,7 +324,7 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 		}
 		//vBuzzerPlay();
 	} else if(xBt == down){
-		switch(screen){
+		switch(xScreen){
 			case screen1:
 				fSetPointTemperature --;
 				break;
@@ -337,15 +337,15 @@ void vButtonsEventCallbackPressedEvent(buttons xBt){
 		}
 		//vBuzzerPlay();
 	} else if(xBt == right) {
-		screen ++;
-		if(screen > screen4){
-			screen = screen1;
+		xScreen ++;
+		if(xScreen > screen4){
+			xScreen = screen1;
 		}
 	} else if(xBt == left) {
-		if(screen == screen1){
-			screen = screen4;
+		if(xScreen == screen1){
+			xScreen = screen4;
 		} else {
-			screen --;
+			xScreen --;
 		}
 		//vBuzzerPlay();
 	} else if(xBt == enter) {

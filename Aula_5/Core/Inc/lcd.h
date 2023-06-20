@@ -91,16 +91,7 @@ void vLcdWriteString(const char *cBuffer);
 /*                     cColumn = COLUMN0..MAX_COLUMN*/
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdSetCursor(unsigned char cLine, unsigned char cColumn);
-
-
-/* ************************************************ */
-/* Method name:        vLcdDummyText                */
-/* Method description: Write a dummy hard coded text*/
-/* Input params:       n/a                          */
-/* Output params:      n/a                          */
-/* ************************************************ */
-void vLcdDummyText(void);
+void vLcdSetCursor(unsigned char ucLine, unsigned char ucColumn);
 
 /* ************************************************ */
 /* Method name:        vLcdBackLightOn              */
