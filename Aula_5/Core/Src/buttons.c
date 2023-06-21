@@ -13,6 +13,13 @@
 #include <stm32g4xx.h>
 #include <main.h>
 
+/* ************************************************ */
+/* Method name:        xButtonsReadStatus           */
+/* Method description: Read Buttons registers status*/
+/* Input params:       xButton -> Button enum struct*/
+/* Output params:      pinState -> set/reset        */
+/*                                                  */
+/* ************************************************ */
 void vButtonsInit(void){
 	/*Initializing all the buttons registers, as knowns as: PC and PB*/
 	RCC->AHB2ENR |= 0x2;
@@ -39,6 +46,14 @@ void vButtonsInit(void){
 	CLEAR_BIT(BT_RIGHT_PORT->PUPDR,(3<<(4*2)));
 }
 
+/* ************************************************ */
+/* Method name:        xButtonsInit                 */
+/* Method description: Init Buttons setting         */
+/* 					   registers properly           */
+/* Input params:                                    */
+/* Output params:                                   */
+/*                                                  */
+/* ************************************************ */
 pinState xButtonsReadStatus(buttons xButton){
 	if(xButton == up){
 		if(READ_BIT(BT_UP_PORT->IDR,BT_UP_PIN)){
