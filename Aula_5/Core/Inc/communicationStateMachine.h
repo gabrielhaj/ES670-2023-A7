@@ -9,9 +9,9 @@
 #define INC_COMMUNICATIONSTATEMACHINE_H_
 
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte);
-char* vFtoa(float fNum, unsigned char ucParam);
-void vReturnParam(unsigned char ucParam);
-void vSetParam(unsigned char ucParam, unsigned char* ucValue);
+char* vFtoa(float fNum, unsigned char ucType);
+void vReturnParam(unsigned char ucParamReturn);
+void vSetParam(unsigned char ucParamSet, unsigned char* ucValue);
 
 
 

@@ -64,7 +64,7 @@ int iLedValue = 0;
 extern char cFlagLongPressTimer;
 extern unsigned short int usBuzzerPeriod;
 float fCurrentTemperature;
-float fSetPointTemperature = 60;
+float fSetPointTemperature = 25;
 unsigned char ucButtonsBlocked = 0;
 unsigned char ucDutyHeater  = 10;
 unsigned char ucDutyCooler = 20;
@@ -263,7 +263,7 @@ void SystemClock_Config(void)
 
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	char* sLogTemp;
+	char sLogTemp[10] = {0};
 	int iSize = 1;
 	//pTimerMatrixKeyboard = Pointer that holds the handler TIM6 address (&htim6)
 	// Utilized by MatrixKeyboard Library
@@ -272,12 +272,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		ui1sCounter ++;
 		if(!(ui1sCounter%10)){
 			vPIDPeriodicControlTask();
-			sLogTemp = vFtoa(fTemperatureSensorGetTemperature(),'0');
+			strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
 			strcat(sLogTemp,"\n\r\0");
 			while(sLogTemp[iSize] != '\0'){
 				iSize ++;
 			}
-			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
+			//HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
 		}
 	}
 	else if(htim == pCounterBuzzer){
