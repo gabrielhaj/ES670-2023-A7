@@ -8,6 +8,7 @@
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "communicationStateMachine.h"
 
 #define IDDLE '0'
@@ -17,11 +18,11 @@
 #define PARAM '4'
 #define VALUE '5'
 
-#define MAX_VALUE_LENGHT 5
+#define MAX_VALUE_LENGHT 6
 
 unsigned char ucMachineState = IDDLE;
 unsigned char ucValueCount;
-char sData[3] = {"-a "};
+char sData[5] = {"-a  \0"};
 char sData2[4] = {"!\n\r\0"};
 char cStr[6] = {0};
 extern float fCurrentTemperature;
@@ -32,7 +33,7 @@ extern float fCoolerPWMDutyCycle;
 extern unsigned char ucData;
 extern char cFlag;
 unsigned char ucParam;
-static unsigned char ucValue[MAX_VALUE_LENGHT+1];
+static char cValue[MAX_VALUE_LENGHT+1];
 char sMessage[MAX_VALUE_LENGHT + 5 + 2] = {0};
 
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
@@ -79,12 +80,12 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 				case VALUE:
 					if((ucByte >= '0' && ucByte <= '9') || ',' == ucByte) {
 						if(ucValueCount < MAX_VALUE_LENGHT){
-							ucValue[ucValueCount++] = ucByte;
+							cValue[ucValueCount++] = ucByte;
 						}
 					} else {
 						if('!' == ucByte) {
-							ucValue[ucValueCount] = '\0';
-							vSetParam(ucParam,ucValue);
+							cValue[ucValueCount] = '\0';
+							vSetParam(ucParam,cValue);
 						}
 						ucMachineState = IDDLE;
 					}
@@ -112,7 +113,7 @@ char* vFtoa(float fNum, unsigned char ucType){ //Colocar ucParam como global na 
 	} else {
 		iInt = (int)fNum;
 		iDec = (int)((fNum - iInt)*100);
-		sprintf(cStr, "%d,%001d", iInt, iDec);
+		sprintf(cStr, "%d,%02d", iInt, iDec);
 		return cStr;
 	}
 
@@ -123,6 +124,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 	memset(sMessage,0,sizeof(sMessage));
 	switch(ucParamReturn) {
 		case 't':
+			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fTemperatureSensorGetTemperature(),ucParamReturn));
 			strcat(sMessage,sData2);
@@ -132,6 +134,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'h':
+			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fHeaterPWMDutyCycle,ucParamReturn));
 			strcat(sMessage,sData2);
@@ -141,6 +144,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'c':
+			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fCoolerPWMDutyCycle,ucParamReturn));
 			strcat(sMessage,sData2);
@@ -150,6 +154,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'p':
+			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fPidGetKp(),ucParamReturn));
 			strcat(sMessage,sData2);
@@ -159,6 +164,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'd':
+			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fPidGetKd(),ucParamReturn));
 			strcat(sMessage,sData2);
@@ -168,6 +174,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'i':
+			sData[2] = ucParamReturn;
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fPidGetKi(),ucParamReturn));
 			strcat(sMessage,sData2);
@@ -177,30 +184,35 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'a':
-
+			vReturnParam('t');
+			vReturnParam('h');
+			vReturnParam('c');
+			vReturnParam('p');
+			vReturnParam('i');
+			vReturnParam('d');
 			break;
 	}
 }
 
-void vSetParam(unsigned char ucParamSet, unsigned char* ucValue){
+void vSetParam(unsigned char ucParamSet, char* cValue){
 	switch(ucParamSet) {
 		case 't':
-			fSetPointTemperature = atof(ucValue);
+			fSetPointTemperature = atof(cValue);
 			break;
 		case 'h':
-			fHeaterPWMDutyCycle = atof(ucValue); // it should be treated afterwards
+			fHeaterPWMDutyCycle = atof(cValue); // it should be treated afterwards
 			break;
 		case 'c':
-			fCoolerPWMDutyCycle = atof(ucValue);
+			fCoolerPWMDutyCycle = atof(cValue);
 			break;
 		case 'p':
-			vPidSetKp(atof(ucValue));
+			vPidSetKp(atof(cValue));
 			break;
 		case 'i':
-			vPidSetKi(atof(ucValue));
+			vPidSetKi(atof(cValue));
 			break;
 		case 'd':
-			vPidSetKd(atof(ucValue));
+			vPidSetKd(atof(cValue));
 			cFlag = 1;
 			break;
 	}

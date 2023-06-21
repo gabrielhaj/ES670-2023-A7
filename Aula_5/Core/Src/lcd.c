@@ -12,6 +12,8 @@
 #include "string.h"
 #include "i2c.h"
 #include "lcd.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 
 /* line and columns */
