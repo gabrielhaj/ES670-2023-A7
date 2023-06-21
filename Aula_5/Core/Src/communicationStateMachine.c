@@ -32,9 +32,10 @@ extern float fHeaterPWMDutyCycle;
 extern float fCoolerPWMDutyCycle;
 extern unsigned char ucData;
 extern char cFlag;
-unsigned char ucParam;
+static unsigned char ucParam;
 static char cValue[MAX_VALUE_LENGHT+1];
 char sMessage[MAX_VALUE_LENGHT + 5 + 2] = {0};
+char sAllMessage[(MAX_VALUE_LENGHT+5+2)*6] = {0};
 
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 	if('-' == ucByte) {
@@ -78,7 +79,10 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					ucMachineState = IDDLE;
 					break;
 				case VALUE:
-					if((ucByte >= '0' && ucByte <= '9') || ',' == ucByte) {
+					if((ucByte >= '0' && ucByte <= '9') || ',' == ucByte || '.' == ucByte) {
+						if(',' == ucByte) {
+							ucByte = '.';
+						}
 						if(ucValueCount < MAX_VALUE_LENGHT){
 							cValue[ucValueCount++] = ucByte;
 						}
@@ -184,12 +188,35 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'a':
-			vReturnParam('t');
-			vReturnParam('h');
-			vReturnParam('c');
-			vReturnParam('p');
-			vReturnParam('i');
-			vReturnParam('d');
+			memset(sAllMessage,0,sizeof(sAllMessage));
+			sData[2] = 't';
+			strcat(sAllMessage,sData);
+			strcat(sAllMessage,vFtoa(fTemperatureSensorGetTemperature(),ucParamReturn));
+			strcat(sAllMessage,sData2);
+			sData[2] = 'h';
+			strcat(sAllMessage,sData);
+			strcat(sAllMessage,vFtoa(fHeaterPWMDutyCycle,ucParamReturn));
+			strcat(sAllMessage,sData2);
+			sData[2] = 'c';
+			strcat(sAllMessage,sData);
+			strcat(sAllMessage,vFtoa(fCoolerPWMDutyCycle,ucParamReturn));
+			strcat(sAllMessage,sData2);
+			sData[2] = 'p';
+			strcat(sAllMessage,sData);
+			strcat(sAllMessage,vFtoa(fPidGetKp(),ucParamReturn));
+			strcat(sAllMessage,sData2);
+			sData[2] = 'i';
+			strcat(sAllMessage,sData);
+			strcat(sAllMessage,vFtoa(fPidGetKi(),ucParamReturn));
+			strcat(sAllMessage,sData2);
+			sData[2] = 'd';
+			strcat(sAllMessage,sData);
+			strcat(sAllMessage,vFtoa(fPidGetKd(),ucParamReturn));
+			strcat(sAllMessage,sData2);
+			while(sAllMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sAllMessage, (uint16_t)iSize);
 			break;
 	}
 }
@@ -197,7 +224,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 void vSetParam(unsigned char ucParamSet, char* cValue){
 	switch(ucParamSet) {
 		case 't':
-			fSetPointTemperature = atof(cValue);
+			fSetPointTemperature = (float)atof(cValue);
 			break;
 		case 'h':
 			fHeaterPWMDutyCycle = atof(cValue); // it should be treated afterwards
