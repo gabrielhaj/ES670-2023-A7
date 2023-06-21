@@ -290,11 +290,11 @@ void vLcdUpdateScreen(screens screen){
 		  vLcdSendCommand(CMD_CLEAR);
 		  vLcdSetCursor(0,0);
 		  strcat(cLine1,"Kp:");
-		  strcat(cLine1,vFtoa(pid_getKp(),'0'));
+		  strcat(cLine1,vFtoa(fPidGetKp(),'0'));
 		  vLcdWriteString(cLine1);
 		  vLcdSetCursor(1,0);
 		  strcat(cLine2,"Ki:");
-		  strcat(cLine2,vFtoa(pid_getKi(),'0'));
+		  strcat(cLine2,vFtoa(fPidGetKi(),'0'));
 		  vLcdWriteString(cLine2);
 		  break;
 	  case screen4:

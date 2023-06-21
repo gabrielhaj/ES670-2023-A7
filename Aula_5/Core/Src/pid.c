@@ -23,12 +23,12 @@ float fError, fDifference, fOut;
 extern float fSetPointTemperature;
 
 /* ************************************************ */
-/* Method name:        pid_init                     */
+/* Method name:        vPidInit                     */
 /* Method description: Initialize the PID controller*/
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
+void vPidInit(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float fOutputSaturation)
 {
 	pidConfig.fKp = fKp;
 	pidConfig.fKd = fKd;
@@ -46,90 +46,90 @@ void pid_init(float fKp, float fKi, float fKd, unsigned short usIntSizeMs, float
 }
 
 /* ************************************************** */
-/* Method name:        pid_setKp                      */
+/* Method name:        vPidSetKp                      */
 /* Method description: Set a new value for the PID    */
 /*                     proportional constant          */
 /* Input params:       fKp: New value                 */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setKp(float fKp)
+void vPidSetKp(float fKp)
 {
 	pidConfig.fKp = fKp;
 }
 
 
 /* ************************************************** */
-/* Method name:        pid_getKp                      */
+/* Method name:        fPidGetKp                      */
 /* Method description: Get the value from the PID     */
 /*                     proportional constant          */
 /* Input params:       n/a                            */
 /* Output params:      float: Value                   */
 /* ************************************************** */
-float pid_getKp(void)
+float fPidGetKp(void)
 {
 	return pidConfig.fKp;
 }
 
 
 /* ************************************************** */
-/* Method name:        pid_setKi                      */
+/* Method name:        vPidSetKi                      */
 /* Method description: Set a new value for the PID    */
 /*                     integrative constant           */
 /* Input params:       fKi: New value                 */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setKi(float fKi)
+void vPidSetKi(float fKi)
 {
 	pidConfig.fKi = fKi;
 }
 
 
 /* ************************************************** */
-/* Method name:        pid_getKi                      */
+/* Method name:        fPidGetKi                      */
 /* Method description: Get the value from the PID     */
 /*                     integrative constant           */
 /* Input params:       n/a                            */
 /* Output params:      float: Value                   */
 /* ************************************************** */
-float pid_getKi(void)
+float fPidGetKi(void)
 {
 	return pidConfig.fKi;
 }
 
 
 /* ************************************************** */
-/* Method name:        pid_setKd                      */
+/* Method name:        vPidSetKd                      */
 /* Method description: Set a new value for the PID    */
 /*                     derivative constant            */
 /* Input params:       fKd: New value                 */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setKd(float fKd)
+void vPidSetKd(float fKd)
 {
 	pidConfig.fKd = fKd;
 }
 
 
 /* ************************************************** */
-/* Method name:        pid_getKd                      */
+/* Method name:        fPidGetKd                      */
 /* Method description: Get the value from the PID     */
 /*                     derivative constant            */
 /* Input params:       n/a                            */
 /* Output params:      float: Value                   */
 /* ************************************************** */
-float pid_getKd(void)
+float fPidGetKd(void)
 {
 	return pidConfig.fKd;
 }
 
 /* ************************************************** */
-/* Method name:        pid_setIntegratorWindow        */
+/* Method name:        vPidSetIntegratorWindow        */
 /* Method description: Set a new value for the        */
 /*                     integrator window (in ms)      */
 /* Input params:       usIntSizeMs: New value (in ms) */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setIntegratorWindow (unsigned short usIntSizeMs)
+void vPidSetIntegratorWindow (unsigned short usIntSizeMs)
 {
 	// Saturates Integrator size (10000 ms)
 	if((usIntSizeMs/UPDATE_RATE_MS)> INTEGRATOR_MAX_SIZE)
@@ -139,13 +139,13 @@ void pid_setIntegratorWindow (unsigned short usIntSizeMs)
 }
 
 /* ************************************************** */
-/* Method name:        pid_getIntegratorWindow        */
+/* Method name:        usPidGetIntegratorWindow        */
 /* Method description: Get the value from the         */
 /*                     integrator window (in ms)      */
 /* Input params:       n/a                            */
 /* Output params:      usIntSizeMs: Value (in ms)     */
 /* ************************************************** */
-unsigned short pid_getIntegratorWindow (void)
+unsigned short usPidGetIntegratorWindow (void)
 {
 	return (pidConfig.usIntegratorSize*UPDATE_RATE_MS);
 }
@@ -161,7 +161,7 @@ unsigned short pid_getIntegratorWindow (void)
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData(float fSensorValue, float fSetValue)
+float fPidUpdateData(float fSensorValue, float fSetValue)
 {
 	//float fError, fDifference, fOut;
 

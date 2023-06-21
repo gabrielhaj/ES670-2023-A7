@@ -54,7 +54,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case GET:
-					if('t' == ucByte || 'b' == ucByte || 'h' == ucByte || 'c' == ucByte || 'a'== ucByte) {
+					if('t' == ucByte || 'h' == ucByte || 'c' == ucByte || 'a'== ucByte || 'p' == ucByte || 'i' == ucByte || 'd' == ucByte ) {
 						ucParam = ucByte;
 						ucMachineState = PARAM;
 					} else {
@@ -62,7 +62,7 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 				case SET:
-					if('t' == ucByte || 'b' == ucByte || 'h' == ucByte || 'c' == ucByte || 'p' == ucByte || 'i' == ucByte || 'd' == ucByte ) {
+					if('t' == ucByte ||'h' == ucByte || 'c' == ucByte || 'p' == ucByte || 'i' == ucByte || 'd' == ucByte ) {
 						ucParam = ucByte;
 						ucValueCount = 0;
 						ucMachineState = VALUE;
@@ -120,6 +120,7 @@ char* vFtoa(float fNum, unsigned char ucType){ //Colocar ucParam como global na 
 
 void vReturnParam(unsigned char ucParamReturn) {
 	int iSize = 1;
+	memset(sMessage,0,sizeof(sMessage));
 	switch(ucParamReturn) {
 		case 't':
 			strcat(sMessage,sData);
@@ -130,33 +131,58 @@ void vReturnParam(unsigned char ucParamReturn) {
 			}
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
-		case 'b':
-			strcat(sMessage,sData);
-			if(ucButtonsBlocked) {
-				strcat(sMessage,"1");
-			} else {
-				strcat(sMessage,"0");
-			}
-			strcat(sMessage,sData2);
-			HAL_UART_Transmit_IT(&hlpuart1, sMessage, sizeof(sMessage));
-			break;
 		case 'h':
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fHeaterPWMDutyCycle,ucParamReturn));
 			strcat(sMessage,sData2);
-			HAL_UART_Transmit_IT(&hlpuart1, sMessage, sizeof(sMessage));
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'c':
 			strcat(sMessage,sData);
 			strcat(sMessage,vFtoa(fCoolerPWMDutyCycle,ucParamReturn));
 			strcat(sMessage,sData2);
-			HAL_UART_Transmit_IT(&hlpuart1, sMessage, sizeof(sMessage));
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
+		case 'p':
+					strcat(sMessage,sData);
+					strcat(sMessage,vFtoa(fPidGetKp(),ucParamReturn));
+					strcat(sMessage,sData2);
+					while(sMessage[iSize] != '\0'){
+						iSize ++;
+					}
+					HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
+					break;
+		case 'd':
+					strcat(sMessage,sData);
+					strcat(sMessage,vFtoa(fPidGetKd(),ucParamReturn));
+					strcat(sMessage,sData2);
+					while(sMessage[iSize] != '\0'){
+						iSize ++;
+					}
+					HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
+					break;
+		case 'i':
+					strcat(sMessage,sData);
+					strcat(sMessage,vFtoa(fPidGetKi(),ucParamReturn));
+					strcat(sMessage,sData2);
+					while(sMessage[iSize] != '\0'){
+						iSize ++;
+					}
+					HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
+					break;
 		case 'a':
 			vReturnParam('t');
-			vReturnParam('b');
 			vReturnParam('h');
 			vReturnParam('c');
+			vReturnParam('p');
+			vReturnParam('d');
+			vReturnParam('i');
 			break;
 	}
 }
@@ -166,9 +192,6 @@ void vSetParam(unsigned char ucParamSet, unsigned char* ucValue){
 		case 't':
 			fSetPointTemperature = atof(ucValue);
 			break;
-		case 'b':
-			ucButtonsBlocked = ucValue;
-			break;
 		case 'h':
 			fHeaterPWMDutyCycle = atof(ucValue); // it should be treated afterwards
 			break;
@@ -176,13 +199,13 @@ void vSetParam(unsigned char ucParamSet, unsigned char* ucValue){
 			fCoolerPWMDutyCycle = atof(ucValue);
 			break;
 		case 'p':
-			pid_setKp(atof(ucValue));
+			vPidSetKp(atof(ucValue));
 			break;
 		case 'i':
-			pid_setKi(atof(ucValue));
+			vPidSetKi(atof(ucValue));
 			break;
 		case 'd':
-			pid_setKd(atof(ucValue));
+			vPidSetKd(atof(ucValue));
 			cFlag = 1;
 			break;
 	}
