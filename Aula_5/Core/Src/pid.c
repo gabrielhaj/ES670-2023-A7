@@ -203,6 +203,10 @@ float fPIDGetSetPointTemperature() {
 	return fSetPointTemperature;
 }
 
+void vPIDSetSetPointTemperature(float fNewSetPointTemperature) {
+	fSetPointTemperature = fNewSetPointTemperature;
+}
+
 void vPIDActuatorSetValue(float fActuatorValue) {
 	/*
 	 * Controle utilizando tanto heater quanto o cooler */

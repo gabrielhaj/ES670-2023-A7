@@ -8,11 +8,10 @@
 /* Revision date:    19/06/2023                                      */
 /* ***************************************************************** */
 
-#include <lcd.h>
 #include <main.h>
 #include "string.h"
 #include "i2c.h"
-
+#include "lcd.h"
 
 
 /* line and columns */
@@ -244,6 +243,16 @@ void vLcdBackLightOff(void) {
 }
 
 /* ************************************************ */
+/* Method name:        cLcdGetBackLight             */
+/* Method description: Returns the back light status*/
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+char cLcdGetBackLight(void){
+	return cBackLight;
+}
+
+/* ************************************************ */
 /* Method name:        vLcdUpdateScreen             */
 /* Method description: Go to the next screen,       */
 /* 					   updating the values and      */
@@ -278,7 +287,7 @@ void vLcdUpdateScreen(screens screen){
 	  case screen2:
 		  vLcdSendCommand(CMD_CLEAR);
 		  vLcdSetCursor(0,0);
-		  sprintf(cLine1,"DutyHeater:%d",(int)fHeaterPWMDutyCycle/10);
+		  sprintf(cLine1,"DutyHeater:%d",(int)(fHeaterPWMDutyCycle/10));
 		  strcat(cLine1,"%");
 		  vLcdWriteString(cLine1);
 		  vLcdSetCursor(1,0);

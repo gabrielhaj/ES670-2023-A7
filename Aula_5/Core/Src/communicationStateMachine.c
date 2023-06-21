@@ -150,39 +150,34 @@ void vReturnParam(unsigned char ucParamReturn) {
 			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
 			break;
 		case 'p':
-					strcat(sMessage,sData);
-					strcat(sMessage,vFtoa(fPidGetKp(),ucParamReturn));
-					strcat(sMessage,sData2);
-					while(sMessage[iSize] != '\0'){
-						iSize ++;
-					}
-					HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
-					break;
+			strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(fPidGetKp(),ucParamReturn));
+			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
 		case 'd':
-					strcat(sMessage,sData);
-					strcat(sMessage,vFtoa(fPidGetKd(),ucParamReturn));
-					strcat(sMessage,sData2);
-					while(sMessage[iSize] != '\0'){
-						iSize ++;
-					}
-					HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
-					break;
+			strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(fPidGetKd(),ucParamReturn));
+			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
 		case 'i':
-					strcat(sMessage,sData);
-					strcat(sMessage,vFtoa(fPidGetKi(),ucParamReturn));
-					strcat(sMessage,sData2);
-					while(sMessage[iSize] != '\0'){
-						iSize ++;
-					}
-					HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
-					break;
+			strcat(sMessage,sData);
+			strcat(sMessage,vFtoa(fPidGetKi(),ucParamReturn));
+			strcat(sMessage,sData2);
+			while(sMessage[iSize] != '\0'){
+				iSize ++;
+			}
+			HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sMessage, (uint16_t)iSize);
+			break;
 		case 'a':
-			vReturnParam('t');
-			vReturnParam('h');
-			vReturnParam('c');
-			vReturnParam('p');
-			vReturnParam('d');
-			vReturnParam('i');
+
 			break;
 	}
 }

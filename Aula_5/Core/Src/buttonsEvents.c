@@ -18,6 +18,7 @@
 #include "help.h"
 #include "buttonsEvents.h"
 #include "tim.h"
+#include "lcd.h"
 
 
 //Pointer for Debouncer
@@ -30,6 +31,7 @@ char cFlagDebouncer[5];
 unsigned int  uiCounterButtons[5];
 //Flag for long press timer
 char cFlagLongPressTimer = 0;
+extern screens xScreen;
 
 /* ************************************************ */
 /* Method name:        vButtonsEventsInit           */
@@ -137,7 +139,7 @@ void vButtonsEventChangeScreen(buttons xBt){
 	if(xBt == up){
 			switch(xScreen){
 				case screen1:
-					fSetPointTemperature ++;
+					vPIDSetSetPointTemperature(fPIDGetSetPointTemperature() + 1);
 					break;
 				case screen2:
 					break;
@@ -149,7 +151,7 @@ void vButtonsEventChangeScreen(buttons xBt){
 		} else if(xBt == down){
 			switch(xScreen){
 				case screen1:
-					fSetPointTemperature --;
+					vPIDSetSetPointTemperature(fPIDGetSetPointTemperature() - 1);
 					break;
 				case screen2:
 					break;
@@ -170,7 +172,7 @@ void vButtonsEventChangeScreen(buttons xBt){
 				xScreen --;
 			}
 		} else if(xBt == enter) {
-			if(cBackLight) {
+			if(cLcdGetBackLight()) {
 				vLcdBackLightOff();
 			} else {
 				vLcdBackLightOn();

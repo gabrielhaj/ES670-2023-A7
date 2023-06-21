@@ -110,6 +110,14 @@ void vLcdBackLightOn(void);
 void vLcdBackLightOff(void);
 
 /* ************************************************ */
+/* Method name:        cLcdGetBackLight             */
+/* Method description: Returns the back light status*/
+/* Input params:       n/a                          */
+/* Output params:      n/a                          */
+/* ************************************************ */
+char cLcdGetBackLight(void);
+
+/* ************************************************ */
 /* Method name:        vLcdUpdateScreen             */
 /* Method description: Go to the next screen        */
 /* Input params:       Actual screen                */

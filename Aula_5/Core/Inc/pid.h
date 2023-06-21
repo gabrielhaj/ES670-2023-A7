@@ -105,7 +105,7 @@ void vPidSetIntegratorWindow (unsigned short usIntSizeMs);
 /* Input params:       n/a                            */
 /* Output params:      usIntSizeMs: Value (in ms)     */
 /* ************************************************** */
-unsigned short pid_getIntegratorWindow (void);
+unsigned short usPidGetIntegratorWindow (void);
 
 /* ************************************************** */
 /* Method name:        pid_updateData                 */
@@ -122,6 +122,7 @@ float fPidUpdateData(float fSensorValue, float fReferenceValue);
 
 void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();
+void vPIDSetSetPointTemperature(float fNewSetPointTemperature);
 void vPIDActuatorSetValue(float fActuatorValue);
 
 
