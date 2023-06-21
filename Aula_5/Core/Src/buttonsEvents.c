@@ -6,7 +6,7 @@
 //                                                //
 // Author names: Gabriel Haj and Luccas Yonei     //
 // Creation date: 18/04/2023                      //
-// Revision date: 19/04/2023					  //
+// Revision date: 21/06/2023					  //
 // ********************************************** //
 
 
@@ -31,6 +31,7 @@ char cFlagDebouncer[5];
 unsigned int  uiCounterButtons[5];
 //Flag for long press timer
 char cFlagLongPressTimer = 0;
+//Variable that holds the next screen information to be updated on display
 extern screens xScreen;
 
 /* ************************************************ */
@@ -90,6 +91,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	HAL_TIM_Base_Start_IT(pTimDebouncer);
 
 }
+
 /* ***************************************************************** */
 /* Method name:        vButtonsEventsDebouncingPeriodElapsedCallback */
 /* Method description: Enable Interruption                            */
@@ -118,6 +120,15 @@ void vButtonsEventsDebouncingPeriodElapsedCallback(void){
 
 }
 
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsLongPressPeriodElapsedCallback  */
+/* Method description: Callback for LongPress timer                  */
+/*                     Check each buttons state and increment their  */
+/*					   counter for 500ms and 3s.If the button is not */
+/*                     on restart the counter                        */
+/* Input params:                                                     */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventsLongPressPeriodElapsedCallback(void){
 	for(int i = 0; i < 5; i++) {
 		//increase the counter of the timers if the buttons are pressed
@@ -135,6 +146,15 @@ void vButtonsEventsLongPressPeriodElapsedCallback(void){
 	}
 }
 
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsChangeScreen                    */
+/* Method description: Change LCD screen value to update screen      */
+/*                     LCD display. Also allows user to increment    */
+/*					   temperature setpoint in the first screen and  */
+/*                     to turn on/off backlight screen by Enter button*/
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventChangeScreen(buttons xBt){
 	if(xBt == up){
 			switch(xScreen){

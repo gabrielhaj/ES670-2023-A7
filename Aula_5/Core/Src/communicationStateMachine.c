@@ -24,7 +24,7 @@ unsigned char ucMachineState = IDDLE;
 unsigned char ucValueCount;
 char sData[5] = {"-a  \0"};
 char sData2[4] = {"!\n\r\0"};
-char cStr[6] = {0};
+char cStr[7] = {0};
 extern float fCurrentTemperature;
 extern float fSetPointTemperature;
 extern unsigned char ucButtonsBlocked;
@@ -224,7 +224,7 @@ void vReturnParam(unsigned char ucParamReturn) {
 void vSetParam(unsigned char ucParamSet, char* cValue){
 	switch(ucParamSet) {
 		case 't':
-			fSetPointTemperature = (float)atof(cValue);
+			fSetPointTemperature = atof(cValue);
 			break;
 		case 'h':
 			fHeaterPWMDutyCycle = atof(cValue); // it should be treated afterwards
