@@ -23,80 +23,80 @@ typedef struct pid_data_type {
 
 
 /* ************************************************ */
-/* Method name:        pid_init                     */
+/* Method name:        vPidInit                     */
 /* Method description: Initialize the PID controller*/
 /* Input params:       n/a                          */
 /* Output params:      n/a                          */
 /* ************************************************ */
-void pid_init(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
+void vPidInit(float fKp, float fKi, float fKd, unsigned short usIntegratorSize, float fOutputSaturation);
 
 
 /* ************************************************** */
-/* Method name:        pid_setKp                      */
+/* Method name:        vPidSetKp                      */
 /* Method description: Set a new value for the PID    */
 /*                     proportional constant          */
 /* Input params:       fKp: New value                 */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setKp(float fKp);
+void vPidSetKp(float fKp);
 
 
 /* ************************************************** */
-/* Method name:        pid_getKp                      */
+/* Method name:        fPidGetKp                      */
 /* Method description: Get the value from the PID     */
 /*                     proportional constant          */
 /* Input params:       n/a                            */
 /* Output params:      float: Value                   */
-float pid_getKp(void);
+float fPidGetKp(void);
 
 
 /* ************************************************** */
-/* Method name:        pid_setKi                      */
+/* Method name:        vPidSetKi                      */
 /* Method description: Set a new value for the PID    */
 /*                     integrative constant           */
 /* Input params:       fKi: New value                 */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setKi(float fKi);
+void vPidSetKi(float fKi);
 
 
 /* ************************************************** */
-/* Method name:        pid_getKi                      */
+/* Method name:        fPidGetKi                      */
 /* Method description: Get the value from the PID     */
 /*                     integrative constant           */
 /* Input params:       n/a                            */
 /* Output params:      float: Value                   */
 /* ************************************************** */
-float pid_getKi(void);
+float fPidGetKi(void);
 
 
 /* ************************************************** */
-/* Method name:        pid_setKd                      */
+/* Method name:        vPidSetKd                      */
 /* Method description: Set a new value for the PID    */
 /*                     derivative constant            */
 /* Input params:       fKd: New value                 */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setKd(float fKd);
+void vPidSetKd(float fKd);
 
 
 /* ************************************************** */
-/* Method name:        pid_getKd                      */
+/* Method name:        fPidGetKd                      */
 /* Method description: Get the value from the PID     */
 /*                     derivative constant            */
 /* Input params:       n/a                            */
 /* Output params:      float: Value                   */
 /* ************************************************** */
-float pid_getKd(void);
+float fPidGetKd(void);
 
 /* ************************************************** */
-/* Method name:        pid_setIntegratorWindow        */
+/* Method name:        vPidSetIntegratorWindow        */
 /* Method description: Set a new value for the        */
 /*                     integrator window (in ms)      */
 /* Input params:       usIntSizeMs: New value (in ms) */
 /* Output params:      n/a                            */
 /* ************************************************** */
-void pid_setIntegratorWindow (unsigned short usIntSizeMs);
+void vPidSetIntegratorWindow (unsigned short usIntSizeMs);
 
 /* ************************************************** */
 /* Method name:        pid_getIntegratorWindow        */
@@ -118,7 +118,7 @@ unsigned short pid_getIntegratorWindow (void);
 /*                     control reference              */
 /* Output params:      float: New Control effort     */
 /* ************************************************** */
-float pidUpdateData(float fSensorValue, float fReferenceValue);
+float fPidUpdateData(float fSensorValue, float fReferenceValue);
 
 void vPIDPeriodicControlTask();
 float fPIDGetSetPointTemperature();

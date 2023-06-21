@@ -164,7 +164,7 @@ int main(void)
   vBuzzerConfig(1000, 100, &htim20);
   vTachometerInit(&htim4,500);
   vTemperatureSensorInit(&hadc1);
-  pid_init(Kp, Ki, Kd, 100, 100);
+  vPidInit(Kp, Ki, Kd, 100, 100);
   HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   vLcdInitLcd(&hi2c1,ucLcdAddress);
   /* USER CODE END 2 */
@@ -332,7 +332,7 @@ void vPIDPeriodicControlTask(){
 	float fSensorValue, fSetPoint, fActuatorValue;
 	fSensorValue = fTemperatureSensorGetTemperature();
 	fSetPoint = fPIDGetSetPointTemperature();
-	fActuatorValue = pidUpdateData(fSensorValue,fSetPoint);
+	fActuatorValue = fPidUpdateData(fSensorValue,fSetPoint);
 	vPIDActuatorSetValue(fActuatorValue/100); //Saturação igual a 100
 }
 
