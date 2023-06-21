@@ -20,20 +20,43 @@
 #include "tim.h"
 
 
-
+//Pointer for Debouncer
 TIM_HandleTypeDef *pTimDebouncer;
+//Pointer for long press
 TIM_HandleTypeDef *pTimPressedTime;
-char cFlagDebouncer[5]; //Flag that stores information about which button is being debounced
-unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
+//Flag that stores information about which button is being debounced
+char cFlagDebouncer[5];
+//Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
+unsigned int  uiCounterButtons[5];
+//Flag for long press timer
 char cFlagLongPressTimer = 0;
 
-
+/* ************************************************ */
+/* Method name:        vButtonsEventsInit           */
+/* Method description: Stores Debouncer and Pressed */
+/*					   pointer localy               */
+/* Input params:       TIM_HandleTypeDef pointers   */
+/*                    for debouncer and pressed time*/
+/*                    handlers                      */
+/* Output params:                                   */
+/* ************************************************ */
 void vButtonsEventsInit(TIM_HandleTypeDef *pTimDebouncerParam, TIM_HandleTypeDef *pTimPressedTimeParam) {
 	pTimDebouncer = pTimDebouncerParam;
 	pTimPressedTime = pTimPressedTimeParam;
 }
 
-
+/* ************************************************ */
+/* Method name:        HAL_GPIO_EXIT_Callback       */
+/* Method description: Callback from gpio           */
+/*					   exti module where we         */
+/*                     turn on debouncer timer      */
+/*                     and off exti interruption    */
+/*                     and set their flag on        */
+/*                     Also turn on timer from      */
+/*                     pressed time if it is not yet*/
+/* Input params:       GPIO_Pin                     */
+/* Output params:                                   */
+/* ************************************************ */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	if(GPIO_Pin == GPIO_PIN_0){
 		HAL_NVIC_DisableIRQ(EXTI0_IRQn);
@@ -65,7 +88,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	HAL_TIM_Base_Start_IT(pTimDebouncer);
 
 }
-
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsDebouncingPeriodElapsedCallback */
+/* Method description: Enable Interruption                            */
+/*					   exti module where we                          */
+/*                     turn on debouncer timer                       */
+/*                     and off exti interruption                     */
+/*                     and set their flag on                         */
+/*                     Also turn on timer from                       */
+/*                     pressed time if it is not yet                 */
+/* Input params:       GPIO_Pin                                      */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventsDebouncingPeriodElapsedCallback(void){
 	for(int i = 0; i < 5; i++){
 		if(cFlagDebouncer[i] == 1){
@@ -97,6 +131,51 @@ void vButtonsEventsLongPressPeriodElapsedCallback(void){
 			uiCounterButtons[i] = 0;
 		}
 	}
+}
+
+void vButtonsEventChangeScreen(buttons xBt){
+	if(xBt == up){
+			switch(xScreen){
+				case screen1:
+					fSetPointTemperature ++;
+					break;
+				case screen2:
+					break;
+				case screen3:
+					break;
+				case screen4:
+					break;
+			}
+		} else if(xBt == down){
+			switch(xScreen){
+				case screen1:
+					fSetPointTemperature --;
+					break;
+				case screen2:
+					break;
+				case screen3:
+					break;
+				case screen4:
+					break;
+			}
+		} else if(xBt == right) {
+			xScreen ++;
+			if(xScreen > screen4){
+				xScreen = screen1;
+			}
+		} else if(xBt == left) {
+			if(xScreen == screen1){
+				xScreen = screen4;
+			} else {
+				xScreen --;
+			}
+		} else if(xBt == enter) {
+			if(cBackLight) {
+				vLcdBackLightOff();
+			} else {
+				vLcdBackLightOn();
+			}
+		}
 }
 __weak void vButtonsEventCallbackPressedEvent(buttons xBt){}
 __weak void vButtonsEventCallbackReleasedEvent(buttons xBt){}

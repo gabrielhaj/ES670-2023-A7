@@ -21,6 +21,7 @@ void vButtonsEventCallback500msPressedEvent(buttons xBt);
 void vButtonsEventCallback3sPressedEvent(buttons xBt);
 void vButtonsEventCallbackPressedEvent(buttons xBt);
 void vButtonsEventCallbackReleasedEvent(buttons xBt);
+void vButtonsEventChangeScreen(buttons xBt);
 
 
 

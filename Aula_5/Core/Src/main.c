@@ -310,51 +310,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 }
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
-	if(xBt == up){
-		switch(xScreen){
-			case screen1:
-				fSetPointTemperature ++;
-				break;
-			case screen2:
-				break;
-			case screen3:
-				break;
-			case screen4:
-				break;
-		}
-		//vBuzzerPlay();
-	} else if(xBt == down){
-		switch(xScreen){
-			case screen1:
-				fSetPointTemperature --;
-				break;
-			case screen2:
-				break;
-			case screen3:
-				break;
-			case screen4:
-				break;
-		}
-		//vBuzzerPlay();
-	} else if(xBt == right) {
-		xScreen ++;
-		if(xScreen > screen4){
-			xScreen = screen1;
-		}
-	} else if(xBt == left) {
-		if(xScreen == screen1){
-			xScreen = screen4;
-		} else {
-			xScreen --;
-		}
-		//vBuzzerPlay();
-	} else if(xBt == enter) {
-		if(cBackLight) {
-			vLcdBackLightOff();
-		} else {
-			vLcdBackLightOn();
-		}
-	}
+	vButtonsEventChangeScreen(xBt);
 }
 void vButtonsEventCallbackReleasedEvent(buttons xBt){
 	if(uiCounterButtons[0] == 0 && uiCounterButtons[1] == 0 && uiCounterButtons[2] == 0 && uiCounterButtons[3] == 0 && uiCounterButtons[4] == 0){
