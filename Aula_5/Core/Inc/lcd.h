@@ -3,9 +3,9 @@
 /* File description: Header file containing the functions/methods    */
 /*                   interfaces for handling the LCD hardware from   */
 /*                   the hardware kit                                */
-/* Author name:      dloubach, bacurau                               */
+/* Author name:      dloubach, bacurau, Gabriel Haj, Luccas Yonei    */
 /* Creation date:    16out2015                                       */
-/* Revision date:    03apr2023                                       */
+/* Revision date:    19/06/2023                                      */
 /* ***************************************************************** */
 
 #ifndef SOURCES_LCD_H_
@@ -37,12 +37,14 @@
 #define LCD_BIT_E               0x04U
 #define LCD_BIT_BACKIGHT        0x08U
 
+/*LCD Data Structure*/
 typedef struct{
 	I2C_HandleTypeDef *hi2c;
 	char cAddress;
 }Lcd;
 
-typedef enum {screen1,screen2,screen3,screen4,screen5} screens;
+/*LCD screens enumeration*/
+typedef enum {screen1,screen2,screen3,screen4} screens;
 
 /* ************************************************ */
 /* Method name:        vLcdInitLcd                  */
@@ -89,16 +91,7 @@ void vLcdWriteString(const char *cBuffer);
 /*                     cColumn = COLUMN0..MAX_COLUMN*/
 /* Output params:      n/a                          */
 /* ************************************************ */
-void vLcdSetCursor(unsigned char cLine, unsigned char cColumn);
-
-
-/* ************************************************ */
-/* Method name:        vLcdDummyText                */
-/* Method description: Write a dummy hard coded text*/
-/* Input params:       n/a                          */
-/* Output params:      n/a                          */
-/* ************************************************ */
-void vLcdDummyText(void);
+void vLcdSetCursor(unsigned char ucLine, unsigned char ucColumn);
 
 /* ************************************************ */
 /* Method name:        vLcdBackLightOn              */
@@ -116,7 +109,13 @@ void vLcdBackLightOn(void);
 /* ************************************************ */
 void vLcdBackLightOff(void);
 
-void vLcdClearToSendLCD(void);
+/* ************************************************ */
+/* Method name:        vLcdUpdateScreen             */
+/* Method description: Go to the next screen        */
+/* Input params:       Actual screen                */
+/* Output params:      n/a                          */
+/* ************************************************ */
+void vLcdUpdateScreen(screens screen);
 
 
 #endif /* SOURCES_LCD_H_ */

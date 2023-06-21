@@ -49,8 +49,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-screens screen;
-screens ActualScreen;
+extern screens xScreen;
+extern screens xActualScreen;
 extern TIM_HandleTypeDef *pTimerMatrixKeyboard;
 extern TIM_HandleTypeDef *pTimDebouncer;
 extern TIM_HandleTypeDef *pTimPressedTime;
@@ -167,10 +167,6 @@ int main(void)
   pid_init(Kp, Ki, Kd, 100, 100);
   HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   vLcdInitLcd(&hi2c1,ucLcdAddress);
-  vLcdClearToSendLCD();
-  vLcdWriteString("Temperatura [oC]:");
-  vLcdSetCursor(1,0);
-  vLcdWriteString(vFtoa(fTemperatureSensorGetTemperature(), '0'));
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -186,46 +182,9 @@ int main(void)
 	   * Apertar o botão enter liga/desliga o ventilador
 	   * Controlador tunado usando a técnica de zigler nichols
 	   */
-	  if(ActualScreen != screen || !(ui1sCounter%100)){
-		  ActualScreen = screen;
-		  switch(screen) {
-		  	  case screen1:
-		  		  vLcdClearToSendLCD();
-		  		  vLcdWriteString("Temperatura [oC]:");
-		  		  vLcdSetCursor(1,0);
-		  		  vLcdWriteString(vFtoa(fTemperatureSensorGetTemperature(), '0'));
-		  		  break;
-		  	  case screen2:
-		  		  vLcdClearToSendLCD();
-		  		  sprintf(cTestLine1,"Kp:%d",(int)pid_getKp());
-		  		  vLcdWriteString(cTestLine1);
-		  		  vLcdSetCursor(1,0);
-		  		  sprintf(cTestLine1,"DCicle:%d",(int)fHeaterPWMDutyCycle/10);
-		  		  vLcdWriteString(cTestLine1);
-		  		  break;
-		  	  case screen3:
-		  		  vLcdClearToSendLCD();
-		  		  sprintf(cTestLine1,"Ki:%d",(int)pid_getKi());
-		  		  vLcdWriteString(cTestLine1);
-		  		  vLcdSetCursor(1,0);
-		  		  sprintf(cTestLine1,"DCicle:%d",(int)fHeaterPWMDutyCycle/10);
-		  		  vLcdWriteString(cTestLine1);
-		  		  break;
-		  	  case screen4:
-		  		  vLcdClearToSendLCD();
-		  		  sprintf(cTestLine1,"Kd:%d",(int)pid_getKd());
-		  		  vLcdWriteString(cTestLine1);
-		  		  vLcdSetCursor(1,0);
-		  		  sprintf(cTestLine1,"DCicle:%d",(int)fHeaterPWMDutyCycle/10);
-		  		  vLcdWriteString(cTestLine1);
-		  		  break;
-		  	  case screen5:
-		  		  vLcdClearToSendLCD();
-		  		  vLcdWriteString("SetPoint[oC]:");
-		  		  vLcdSetCursor(1,0);
-		  		  vLcdWriteString(vFtoa(fSetPointTemperature, '0'));
-		  		  break;
-		  }
+	  if(xActualScreen != xScreen || !(ui1sCounter%100)){
+		  xActualScreen = xScreen;
+		  vLcdUpdateScreen(xActualScreen);
 	  }
 //	  if(!(ui1sCounter%100)){
 //		  vLcdClearToSendLCD();
@@ -351,75 +310,49 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 }
 
 void vButtonsEventCallbackPressedEvent(buttons xBt){
-	float k = 0;
 	if(xBt == up){
-		switch(screen){
+		switch(xScreen){
 			case screen1:
+				fSetPointTemperature ++;
 				break;
 			case screen2:
-				k = pid_getKp();
-				k ++;
-				pid_setKp(k);
 				break;
 			case screen3:
-				k = pid_getKi();
-				k ++;
-				pid_setKi(k);
 				break;
 			case screen4:
-				k = pid_getKd();
-				k ++;
-				pid_setKd(k);
-				break;
-			case screen5:
-				fSetPointTemperature++;
 				break;
 		}
 		//vBuzzerPlay();
 	} else if(xBt == down){
-		switch(screen){
+		switch(xScreen){
 			case screen1:
+				fSetPointTemperature --;
 				break;
 			case screen2:
-				k = pid_getKp();
-				k --;
-				pid_setKp(k);
 				break;
 			case screen3:
-				k = pid_getKi();
-				k --;
-				pid_setKi(k);
 				break;
 			case screen4:
-				k = pid_getKd();
-				k --;
-				pid_setKd(k);
-				break;
-			case screen5:
-				fSetPointTemperature--;
 				break;
 		}
 		//vBuzzerPlay();
 	} else if(xBt == right) {
-		screen ++;
-		if(screen > screen5){
-			screen = screen1;
+		xScreen ++;
+		if(xScreen > screen4){
+			xScreen = screen1;
 		}
 	} else if(xBt == left) {
-		if(screen == screen1){
-			screen = screen5;
+		if(xScreen == screen1){
+			xScreen = screen4;
 		} else {
-			screen --;
+			xScreen --;
 		}
 		//vBuzzerPlay();
 	} else if(xBt == enter) {
-		vBuzzerPlay();
-		if(cFlagCooler == 0){
-			vHeaterAndCoolerCoolerfanPWMDuty(1);
-			cFlagCooler = 1;
-		}else if(cFlagCooler == 1){
-			vHeaterAndCoolerCoolerfanPWMDuty(0);
-			cFlagCooler = 0;
+		if(cBackLight) {
+			vLcdBackLightOff();
+		} else {
+			vLcdBackLightOn();
 		}
 	}
 }
