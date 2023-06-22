@@ -58,7 +58,7 @@ extern TIM_HandleTypeDef *pCounterBuzzer;
 extern TIM_HandleTypeDef *pBuzzer;
 extern TIM_HandleTypeDef *pTachometerWindow;
 extern TIM_HandleTypeDef *pTachometer;
-extern unsigned int  uiCounterButtons[5];
+extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
 extern ADC_HandleTypeDef hadc1;
 extern char cFlagLongPressTimer;
 extern float fSetPointTemperature;
