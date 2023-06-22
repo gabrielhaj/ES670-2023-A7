@@ -218,7 +218,12 @@ float fPIDGetSetPointTemperature() {
 /* Output params:                                     */
 /* ************************************************** */
 void vPIDSetSetPointTemperature(float fNewSetPointTemperature) {
-	fSetPointTemperature = fNewSetPointTemperature;
+	if(fNewSetPointTemperature > 90)  {
+		fSetPointTemperature = 90;
+	} else {
+		fSetPointTemperature = fNewSetPointTemperature;
+	}
+
 }
 
 /* ************************************************** */
@@ -234,8 +239,7 @@ void vPIDSetSetPointTemperature(float fNewSetPointTemperature) {
 /* ************************************************** */
 void vPIDActuatorSetValue(float fActuatorValue) {
 	if(fActuatorValue < 0) {
-		//vHeaterAndCoolerCoolerfanPWMDuty(-0.3-fActuatorValue);
-		vHeaterAndCoolerCoolerfanPWMDuty(-fActuatorValue);
+		vHeaterAndCoolerCoolerfanPWMDuty(-(fActuatorValue+0.3));
 		vHeaterAndCoolerHeaterPWMDuty(0);
 	} else if(fActuatorValue > 0) {
 		vHeaterAndCoolerHeaterPWMDuty(fActuatorValue);
