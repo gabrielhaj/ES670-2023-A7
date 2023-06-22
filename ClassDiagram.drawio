@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-06-22T03:25:01.362Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="Ik5Nx-ANWF5XDVUNdBo5" version="21.5.0" type="github">
+<mxfile host="app.diagrams.net" modified="2023-06-22T03:31:54.995Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="G4pEyitRZkrJW1an1HQ-" version="21.5.0" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1434" dy="796" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -147,28 +147,95 @@
         <mxCell id="0i5cV93Fo1JxYbAB2r_D-39" value="+vHeaterAndCoolerHeaterPWMDuty(float fHeaterDuty):void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-28">
           <mxGeometry y="294" width="360" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-56" value="Led" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="360" y="250" width="310" height="164" as="geometry">
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-63" value="Tachometer" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="350" y="230" width="370" height="200" as="geometry">
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-57" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-56">
-          <mxGeometry y="26" width="310" height="8" as="geometry" />
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-64" value="pTachometerWindow: TIM_Handler pointer" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="26" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-58" value="+vLedInit(void): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-56">
-          <mxGeometry y="34" width="310" height="26" as="geometry" />
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-65" value="pTachometer: TIM_Handler pointer" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="52" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-59" value="+vLedWrite(leds xLed, pinState xState): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-56">
-          <mxGeometry y="60" width="310" height="26" as="geometry" />
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-66" value="usCoolerSpeed: unsigned short int" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="78" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-60" value="+vLedTurnOn(leds xLed): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-56">
-          <mxGeometry y="86" width="310" height="26" as="geometry" />
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-76" value="uiPeriodTachometer: unsigned int" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="104" width="370" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-61" value="+vLedTurnOff(leds xLed): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-56">
-          <mxGeometry y="112" width="310" height="26" as="geometry" />
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-67" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="130" width="370" height="8" as="geometry" />
         </mxCell>
-        <mxCell id="0i5cV93Fo1JxYbAB2r_D-62" value="+vLedToggle(leds xLed): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-56">
-          <mxGeometry y="138" width="310" height="26" as="geometry" />
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-68" value="+vTachometerInit(TIM_Handler *htim, unsigned int uiPeriod):void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="138" width="370" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-69" value="+vTachometerUpdate(void): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-63">
+          <mxGeometry y="164" width="370" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-77" value="temperatureSensor" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="440" y="470" width="290" height="120" as="geometry">
+            <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-78" value="usTemperature: unsigned short int" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-77">
+          <mxGeometry y="26" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-82" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-77">
+          <mxGeometry y="52" width="290" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-83" value="+vTemperatureSensorInit(ADC_Handler *hadc):void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-77">
+          <mxGeometry y="60" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-84" value="+fTemperatureSensorGetTemperature(void): float" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-77">
+          <mxGeometry y="86" width="290" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-85" value="pid" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="430" y="610" width="390" height="392" as="geometry">
+            <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-86" value="pidConfig: pid_data_type" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="26" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-87" value="pTimPressedTime: TIM_Handler pointer" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="52" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-88" value="cFlagDebouncer[5] : string" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="78" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-89" value="uiCounterButtons[5]: unsigned integer vector" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="104" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-90" value="cFlagLongPressTimer: char (flag)" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rounded=0;shadow=0;html=0;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="130" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-91" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="156" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-92" value="+vButtonsEventsInit(TIM_Handler* pTimDebouncer,TIM_Handler* &#xa;pTimPressedTime): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="164" width="390" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-93" value="+HAL_GPIO_EXTI_Callback(unsigned integer GPIO_Pin): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="200" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-94" value="+vButtonsEventsDebouncingPeriodElapsedCallback(void) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="226" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-95" value="+vButtonsEventsLongPressPeriodElapsedCallback(void): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="252" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-96" value="+vButtonsEventChangeScreen(buttons xBt) : void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="278" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-97" value="+(weak)vButtonsEventCallbackPressedEvent(buttons xBt): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="304" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-98" value="+(weak)vButtonsEventCallbackReleasedEvent(buttons xBt): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="330" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="0i5cV93Fo1JxYbAB2r_D-99" value="+(weak)vButtonsEventCallback500msPressedEvent(buttons xBt): void" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="0i5cV93Fo1JxYbAB2r_D-85">
+          <mxGeometry y="356" width="390" height="26" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
