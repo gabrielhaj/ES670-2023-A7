@@ -59,10 +59,12 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern ADC_HandleTypeDef hadc1;
 extern I2C_HandleTypeDef hi2c1;
 extern UART_HandleTypeDef hlpuart1;
+extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim16;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -301,6 +303,21 @@ void ADC1_2_IRQHandler(void)
   /* USER CODE BEGIN ADC1_2_IRQn 1 */
 
   /* USER CODE END ADC1_2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM1 update interrupt and TIM16 global interrupt.
+  */
+void TIM1_UP_TIM16_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 0 */
+
+  /* USER CODE END TIM1_UP_TIM16_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim1);
+  HAL_TIM_IRQHandler(&htim16);
+  /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM16_IRQn 1 */
 }
 
 /**

@@ -137,9 +137,6 @@ void vButtonsEventsLongPressPeriodElapsedCallback(void){
 			if(((int)uiCounterButtons[i] % 500) == 0){
 				vButtonsEventCallback500msPressedEvent(i);
 			}
-			if(uiCounterButtons[i] == 3000 ){
-				vButtonsEventCallback3sPressedEvent(i);
-			}
 		} else {
 			uiCounterButtons[i] = 0;
 		}
