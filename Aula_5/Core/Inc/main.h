@@ -32,12 +32,9 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "buttons.h"
-#include "led.h"
 #include "help.h"
-#include "matrixKeyboard.h"
 #include "buttonsEvents.h"
 #include "heaterAndCooler.h"
-#include "buzzer.h"
 #include "tachometer.h"
 #include "temperatureSensor.h"
 #include "communicationStateMachine.h"

@@ -62,7 +62,7 @@ extern unsigned int  uiCounterButtons[5]; //Time counter for each button, rememb
 extern ADC_HandleTypeDef hadc1;
 extern char cFlagLongPressTimer;
 extern float fSetPointTemperature;
-unsigned char ucData = 0;
+extern unsigned char ucData;
 unsigned int ui1sCounter = 0;
 extern char cBackLight;
 float Kp = 600;
@@ -134,7 +134,6 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   vButtonsInit();
-  vLedInit();
   //vMatrixKeyboardInit(&htim6);
   vButtonsEventsInit(&htim7, &htim16);
   vHeaterAndCoolerCoolerInit(&htim8);
@@ -222,22 +221,23 @@ void SystemClock_Config(void)
 /* Output params:                                                    */
 /* ***************************************************************** */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	char sLogTemp[10] = {0};
-	int iSize = 1;
-	if(htim == pTimerMatrixKeyboard){
-		//vMatrixKeyboardPeriodElapsedCallback();
-		ui1sCounter ++;
-		if(!(ui1sCounter%10)){
-			vPIDPeriodicControlTask();
-			strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
-			strcat(sLogTemp,"\n\r\0");
-			while(sLogTemp[iSize] != '\0'){
-				iSize ++;
-			}
-			//HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
-		}
-	}
-	else if(htim == pTachometerWindow) {
+//	char sLogTemp[10] = {0};
+//	int iSize = 1;
+//	if(htim == pTimerMatrixKeyboard){
+//		//vMatrixKeyboardPeriodElapsedCallback();
+//		ui1sCounter ++;
+//		if(!(ui1sCounter%10)){
+//			vPIDPeriodicControlTask();
+//			strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
+//			strcat(sLogTemp,"\n\r\0");
+//			while(sLogTemp[iSize] != '\0'){
+//				iSize ++;
+//			}
+//			//HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
+//		}
+//	}
+//	else
+	if(htim == pTachometerWindow) {
 		vTachometerUpdate();
 		pTachometer->Instance->CNT = 0;
 	}
