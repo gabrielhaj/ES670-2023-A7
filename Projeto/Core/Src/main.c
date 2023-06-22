@@ -65,14 +65,11 @@ extern float fSetPointTemperature;
 extern unsigned char ucData;
 unsigned int ui1sCounter = 0;
 extern char cBackLight;
-float Kp = 600;
-float Ki = 1;
-float Kd = 1;
-unsigned char ucLcdAddress = 0x27;
 extern float fHeaterPWMDutyCycle;
 extern float fCoolerPWMDutyCycle;
 extern unsigned short int usCoolerSpeed;
 extern uint16_t usTemperature;
+unsigned char ucLcdAddress = 0x27;
 float fCurrentTemperature;
 
 
@@ -81,8 +78,6 @@ float fCurrentTemperature;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void vInitButtons(void);
-void vInitLed(void);
 
 /* USER CODE END PFP */
 
@@ -135,15 +130,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
   vButtonsInit();
   //vMatrixKeyboardInit(&htim6);
-  vButtonsEventsInit(&htim7, &htim16);
-  vHeaterAndCoolerCoolerInit(&htim8);
-  vHeaterAndCoolerHeaterInit(&htim1);
   //vBuzzerConfig(1000, 100, &htim20);
   vTachometerInit(&htim4,500);
   vTemperatureSensorInit(&hadc1);
-  vPidInit(Kp, Ki, Kd, 100, 100);
+  vPidInit(600, 1, 0, 100, 100);
   HAL_UART_Receive_IT(&hlpuart1, (uint8_t*)&ucData, 1);
   vLcdInitLcd(&hi2c1,ucLcdAddress);
+  vHeaterAndCoolerCoolerInit(&htim8);
+  vHeaterAndCoolerHeaterInit(&htim1);
+  vButtonsEventsInit(&htim7, &htim16);
+  HAL_TIM_Base_Start_IT(&htim6);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -156,7 +153,7 @@ int main(void)
 
 	  //Updates the screen every 100ms or
 	  //if the screen have been changed by a button
-	  if(xActualScreen != xScreen || !(ui1sCounter%100)){
+	  if(xActualScreen != xScreen || !(ui1sCounter%200)){
 		  xActualScreen = xScreen;
 		  vLcdUpdateScreen(xActualScreen);
 	  }
@@ -221,23 +218,14 @@ void SystemClock_Config(void)
 /* Output params:                                                    */
 /* ***************************************************************** */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-//	char sLogTemp[10] = {0};
-//	int iSize = 1;
-//	if(htim == pTimerMatrixKeyboard){
-//		//vMatrixKeyboardPeriodElapsedCallback();
-//		ui1sCounter ++;
-//		if(!(ui1sCounter%10)){
-//			vPIDPeriodicControlTask();
-//			strcat(sLogTemp,vFtoa(fTemperatureSensorGetTemperature(),'0'));
-//			strcat(sLogTemp,"\n\r\0");
-//			while(sLogTemp[iSize] != '\0'){
-//				iSize ++;
-//			}
-//			//HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
-//		}
-//	}
-//	else
-	if(htim == pTachometerWindow) {
+	if(htim == &htim6){
+		ui1sCounter ++;
+		if(ui1sCounter == 10000)
+			ui1sCounter = 0;
+		vPIDPeriodicControlTask();
+	}
+
+	else if(htim == pTachometerWindow) {
 		vTachometerUpdate();
 		pTachometer->Instance->CNT = 0;
 	}

@@ -29,7 +29,7 @@ extern float fCoolerPWMDutyCycle;
 extern float fSetPointTemperature;
 extern unsigned short int usCoolerSpeed;
 Lcd xLcd = {0};
-char cBackLight = 0;
+char cBackLight = 1;
 screens xScreen = 0;
 screens xActualScreen = 0;
 
@@ -276,13 +276,13 @@ void vLcdUpdateScreen(screens screen){
 		  vLcdSetCursor(0,0);
 		  strcat(cLine1,"T.Des.:");
 		  strcat(cAuxLine1,vFtoa(fSetPointTemperature,'0'));
-		  strcat(cAuxLine1,"°C");
+		  strcat(cAuxLine1," C");
 		  strcat(cLine1,cAuxLine1);
 		  vLcdWriteString(cLine1);
 		  vLcdSetCursor(1,0);
 		  strcat(cLine2,"T.Atual:");
 		  strcat(cAuxLine2,vFtoa(fTemperatureSensorGetTemperature(),'0'));
-		  strcat(cAuxLine2,"°C");
+		  strcat(cAuxLine2," C");
 		  strcat(cLine2,cAuxLine2);
 		  vLcdWriteString(cLine2);
 		  break;
