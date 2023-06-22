@@ -1,16 +1,18 @@
-/*
- * communicationStateMachine.c
- *
- *  Created on: Apr 27, 2023
- *      Author: aluno
- */
-
+/* ***************************************************************** */
+/* File name:        communicationStateMachine.c                     */
+/* File description: This file implements the state machine,         */
+/*                   controlled by UART                              */
+/* Author name:      Gabriel Haj, Luccas Yonei                       */
+/* Creation date:    21jun2023                                       */
+/* Revision date:    21jun2023                                       */
+/* ***************************************************************** */
 #include "usart.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "communicationStateMachine.h"
 
+//Possible states of the state machine
 #define IDDLE '0'
 #define READY '1'
 #define GET '2'
@@ -18,25 +20,51 @@
 #define PARAM '4'
 #define VALUE '5'
 
+//Maximum lenght of string of values ("100,00")
 #define MAX_VALUE_LENGHT 6
 
+//Current state of the state machine
 unsigned char ucMachineState = IDDLE;
+
+//Counter for positioning on the string
 unsigned char ucValueCount;
+
+//The beggining of the answer string
 char sData[5] = {"-a  \0"};
+
+//The end of the answer string
 char sData2[4] = {"!\n\r\0"};
+
+//Variable to save the number cast to string
 char cStr[7] = {0};
+
+
 extern float fCurrentTemperature;
 extern float fSetPointTemperature;
-extern unsigned char ucButtonsBlocked;
 extern float fHeaterPWMDutyCycle;
 extern float fCoolerPWMDutyCycle;
-extern unsigned char ucData;
-extern char cFlag;
+
+//Char sent via UART
+unsigned char ucData;
+
+//Variable to save the parameter received by the state machine
 static unsigned char ucParam;
+
+//String to save the char values to be send to vSetParam
 static char cValue[MAX_VALUE_LENGHT+1];
+
+//The whole answer string sent from successful GET
 char sMessage[MAX_VALUE_LENGHT + 5 + 2] = {0};
+
+//The whole answer string sent from successful GET (all parameters at once)
 char sAllMessage[(MAX_VALUE_LENGHT+5+2)*6] = {0};
 
+/* ************************************************************************************* */
+/* Method name:        vCommunicationStateMachineProcessStateMachine                     */
+/* Method description: The state machine logic and flow implementation                   */
+/* Input params:       ucByte: byte received via UART                                    */
+/* Output params:      n/a                                                               */
+/* ************************************************************************************* */
 void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 	if('-' == ucByte) {
 		ucMachineState = READY;
@@ -100,15 +128,28 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 	}
 }
 
+/* ************************************************************************************* */
+/* Method name:        HAL_UART_RxCpltCallback                                           */
+/* Method description: The callback to receive the data from pc keyboard                 */
+/* Input params:       UART_HandleTypeDef pointer for UART handler                       */
+/* Output params:      n/a                                                               */
+/* ************************************************************************************* */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	if(huart == &hlpuart1) {
 		vCommunicationStateMachineProcessStateMachine(ucData);
 		HAL_UART_Receive_IT(huart, (uint8_t*)&ucData, 1);
 	}
-
 }
 
-char* vFtoa(float fNum, unsigned char ucType){ //Colocar ucParam como global na hora de mandar o final
+/* ************************************************************************************* */
+/* Method name:        vFtoa                                                             */
+/* Method description: Transforms a float variable to a string variable                  */
+/* Input params:       fNum: float number to be transformed;                             */
+/* 					   ucType: parameter to select the correct output, depending on which*/
+/* 							   input                                                     */
+/* Output params:      n/a                                                               */
+/* ************************************************************************************* */
+char* vFtoa(float fNum, unsigned char ucType){
 	int iInt, iDec;
 	if(ucType == 'h' || ucType == 'c') {
 		iInt = (int)fNum;
@@ -240,7 +281,6 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			break;
 		case 'd':
 			vPidSetKd(atof(cValue));
-			cFlag = 1;
 			break;
 	}
 }
