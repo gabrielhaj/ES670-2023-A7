@@ -123,7 +123,6 @@ void vCommunicationStateMachineProcessStateMachine(unsigned char ucByte) {
 					}
 					break;
 			}
-
 		}
 	}
 }
@@ -145,9 +144,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 /* Method name:        vFtoa                                                             */
 /* Method description: Transforms a float variable to a string variable                  */
 /* Input params:       fNum: float number to be transformed;                             */
-/* 					   ucType: parameter to select the correct output, depending on which*/
-/* 							   input                                                     */
-/* Output params:      n/a                                                               */
+/* 					   ucType: parameter to select the correct output format, depending  */
+/* 							   on which input                                            */
+/* Output params:      cStr: float transformed to string                                 */
 /* ************************************************************************************* */
 char* vFtoa(float fNum, unsigned char ucType){
 	int iInt, iDec;
@@ -164,6 +163,19 @@ char* vFtoa(float fNum, unsigned char ucType){
 
 }
 
+/* ************************************************************************************* */
+/* Method name:        vReturnParam                                                      */
+/* Method description: Transmit via UART the parameters requested by GET. Those can be:  */
+/* 						't' for current temperature;                                     */
+/* 						'h' for current heater duty cycle;                               */
+/* 						'c' for current cooler duty cycle;                               */
+/* 						'p' for current controller kp;                                   */
+/* 						'i' for current controller ki;                                   */
+/* 						'd' for current controller kd;                                   */
+/* 						'a' for all previous parameters.                                 */
+/* Input params:       ucParamReturn: selector of which parameter is requested           */
+/* Output params:      n/a                                                               */
+/* ************************************************************************************* */
 void vReturnParam(unsigned char ucParamReturn) {
 	int iSize = 1;
 	memset(sMessage,0,sizeof(sMessage));
@@ -262,13 +274,26 @@ void vReturnParam(unsigned char ucParamReturn) {
 	}
 }
 
+/* ************************************************************************************* */
+/* Method name:        vSetParam                                                         */
+/* Method description: Set parameters of the system                                      */
+/* Input params:       ucParamSet: parameter to be set. They can be:                     */
+/* 								't' for temperature;                                     */
+/* 								'h' for heater duty cycle;                               */
+/* 								'c' for cooler duty cycle;                               */
+/* 								'p' for controller kp;                                   */
+/* 								'i' for controller ki;                                   */
+/* 								'd' for controller kd.                                   */
+/* 					   cValue: pointer to the new value for the parameter                */
+/* Output params:      n/a                                                               */
+/* ************************************************************************************* */
 void vSetParam(unsigned char ucParamSet, char* cValue){
 	switch(ucParamSet) {
 		case 't':
 			fSetPointTemperature = atof(cValue);
 			break;
 		case 'h':
-			fHeaterPWMDutyCycle = atof(cValue); // it should be treated afterwards
+			fHeaterPWMDutyCycle = atof(cValue);
 			break;
 		case 'c':
 			fCoolerPWMDutyCycle = atof(cValue);
