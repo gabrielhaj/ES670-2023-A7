@@ -58,44 +58,22 @@ extern TIM_HandleTypeDef *pCounterBuzzer;
 extern TIM_HandleTypeDef *pBuzzer;
 extern TIM_HandleTypeDef *pTachometerWindow;
 extern TIM_HandleTypeDef *pTachometer;
-extern unsigned int  uiCounterButtons[5]; //Time counter for each button, remember that each button is associated to a number (Enter = 0, Up = 1 ...)
+extern unsigned int  uiCounterButtons[5];
 extern ADC_HandleTypeDef hadc1;
-int iLedValue = 0;
 extern char cFlagLongPressTimer;
-extern unsigned short int usBuzzerPeriod;
-float fCurrentTemperature;
 extern float fSetPointTemperature;
-unsigned char ucButtonsBlocked = 0;
-unsigned char ucDutyHeater  = 10;
-unsigned char ucDutyCooler = 20;
 unsigned char ucData = 0;
 unsigned int ui1sCounter = 0;
-unsigned int uiTimeCounter = 0;
-unsigned int uiTimeCounterBuzzer = 0;
 extern char cBackLight;
-char cTestLine1[16] = {0};
-char cTestLine2[16] = {0};
-char cFlagLcdTachometer = 0;
-char cFlag500ms = 0;
-char cFlag1s = 0;
-char *cTestString;
-char cFlag100ms = 0;
-char cFlag = 0;
-char cFlagCooler = 0;
-char *pDummy = {0};
 float Kp = 600;
 float Ki = 1;
 float Kd = 1;
-unsigned int uiMask;
-unsigned int uiMasked;
-unsigned int uiBit;
 unsigned char ucLcdAddress = 0x27;
 extern float fHeaterPWMDutyCycle;
 extern float fCoolerPWMDutyCycle;
 extern unsigned short int usCoolerSpeed;
 extern uint16_t usTemperature;
-float fTemp;
-
+float fCurrentTemperature;
 
 
 /* USER CODE END PV */
@@ -157,11 +135,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   vButtonsInit();
   vLedInit();
-  vMatrixKeyboardInit(&htim6);
+  //vMatrixKeyboardInit(&htim6);
   vButtonsEventsInit(&htim7, &htim16);
   vHeaterAndCoolerCoolerInit(&htim8);
   vHeaterAndCoolerHeaterInit(&htim1);
-  vBuzzerConfig(1000, 100, &htim20);
+  //vBuzzerConfig(1000, 100, &htim20);
   vTachometerInit(&htim4,500);
   vTemperatureSensorInit(&hadc1);
   vPidInit(Kp, Ki, Kd, 100, 100);
@@ -176,39 +154,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  /*O dispositivo possui a seguinte funcionalidade: Os botões direita e esquerda escolhem
-	   * a tela do LCD a ser apresentada. Enquanto estiver nas telas dos ganhos ou na tela do
-	   * Setpoint de temperatura, você pode alterar seus valores usando os botões cima e baixo
-	   * Apertar o botão enter liga/desliga o ventilador
-	   * Controlador tunado usando a técnica de zigler nichols
-	   */
+
+	  //Updates the screen every 100ms or
+	  //if the screen have been changed by a button
 	  if(xActualScreen != xScreen || !(ui1sCounter%100)){
 		  xActualScreen = xScreen;
 		  vLcdUpdateScreen(xActualScreen);
 	  }
-//	  if(!(ui1sCounter%100)){
-//		  vLcdClearToSendLCD();
-//		  sprintf(cTestLine1,"P:%d I:%d D:%d",(int)pid_getKp(),(int)pid_getKi(), (int)pid_getKd());
-//		  vLcdWriteString(cTestLine1);
-//		  vLcdSetCursor(1,0);
-//		  sprintf(cTestLine2,"T:%d S:%d H:%d",(int)fTemperatureSensorGetTemperature(),(int)fSetPointTemperature,(int)fHeaterPWMDutyCycle*100);
-//		  strcat(cTestLine2,"%");
-//		  vLcdWriteString(cTestLine2);
-//	  }
 
-
-
-//	  if(cFlag500ms){
-//		  vLcdSendCommand(CMD_CLEAR);
-//		  vLcdBackLightOn();
-//		  vLcdSetCursor(0,1);
-//		  vLcdWriteString("Temperatura:");
-//		  vLcdSetCursor(1,0);
-//		  cTestString = vFtoa(fTemp,'0');
-//		  strcat(cTestString,"C");
-//		  vLcdWriteString(cTestString);
-//		  cFlag500ms = 0;
-//	  }
   }
   /* USER CODE END 3 */
 }
@@ -261,12 +214,16 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-
+/* ***************************************************************** */
+/* Method name:        HAL_TIM_PeriodElapsedCallback                 */
+/* Method description: Call each callback related to the tim that    */
+/*                     called the general callback                   */
+/* Input params:       TIM_HandleTypeDef* htim: generic tim handler  */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	char sLogTemp[10] = {0};
 	int iSize = 1;
-	//pTimerMatrixKeyboard = Pointer that holds the handler TIM6 address (&htim6)
-	// Utilized by MatrixKeyboard Library
 	if(htim == pTimerMatrixKeyboard){
 		//vMatrixKeyboardPeriodElapsedCallback();
 		ui1sCounter ++;
@@ -280,20 +237,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 			//HAL_UART_Transmit_IT(&hlpuart1, (uint8_t*)sLogTemp, (uint16_t)iSize);
 		}
 	}
-	else if(htim == pCounterBuzzer){
-		uiTimeCounterBuzzer ++;
-
-		if(uiTimeCounterBuzzer == 10) {
-			uiTimeCounterBuzzer = 0;
-			HAL_TIM_Base_Stop_IT(pCounterBuzzer);
-			HAL_TIM_PWM_Stop(pBuzzer, TIM_CHANNEL_1);
-		}
-	}
 	else if(htim == pTachometerWindow) {
 		vTachometerUpdate();
 		pTachometer->Instance->CNT = 0;
-		cFlagLcdTachometer = 1;
-
 	}
 	else {
 		//pTimerButtonsEventsDebouncing = Pointer that holds the handler TIM7 address (&htim7)

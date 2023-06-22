@@ -240,7 +240,6 @@ void vSetParam(unsigned char ucParamSet, char* cValue){
 			break;
 		case 'd':
 			vPidSetKd(atof(cValue));
-			cFlag = 1;
 			break;
 	}
 }
