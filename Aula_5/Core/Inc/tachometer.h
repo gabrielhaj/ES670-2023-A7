@@ -14,8 +14,29 @@
 #include "buttons.h"
 #include "tim.h"
 
-
+/* ************************************************ */
+/* Method name:        vTachometerInit              */
+/* Method description: Initialize the timers of the */
+/*                     tachometer measurement       */
+/*                     window and the extern timer  */
+/*                     that is the tachometer       */
+/*                     itself. Also defines the     */
+/*                     window period                */
+/* Input params:       *htim: window timer pointer  */
+/*                     uiPeriod: window period      */
+/* Output params:                                   */
+/* ************************************************ */
 void vTachometerInit(TIM_HandleTypeDef *htim, unsigned int uiPeriod);
+
+/* ************************************************ */
+/* Method name:        vTachometerUpdate            */
+/* Method description: Retrieves tachometer extern  */
+/*                     timer counter value and      */
+/*                     properly updates cooler speed*/
+/*                     global variable              */
+/* Input params:                                    */
+/* Output params:                                   */
+/* ************************************************ */
 void vTachometerUpdate(void);
 
 

@@ -3,8 +3,9 @@
 /* File description: This file has a couple of useful functions to   */
 /*                   control the implemented PID controller          */
 /* Author name:      julioalvesMS, IagoAF, rBacurau                  */
+/*                   Gabriel Haj, Luccas Yonei                       */
 /* Creation date:    21jun2018                                       */
-/* Revision date:    21mai2023                                       */
+/* Revision date:    21jun2023                                       */
 /* ***************************************************************** */
 
 #include "pid.h"
@@ -20,7 +21,7 @@ float fIntegratorBuffer[INTEGRATOR_MAX_SIZE]={0};
 
 float fError, fDifference, fOut;
 
-extern float fSetPointTemperature;
+float fSetPointTemperature = 25;
 
 /* ************************************************ */
 /* Method name:        vPidInit                     */
@@ -159,7 +160,7 @@ unsigned short usPidGetIntegratorWindow (void)
 /*                     the sensor                     */
 /*                     fReferenceValue: Value used as */
 /*                     control reference              */
-/* Output params:      float: New Control effort     */
+/* Output params:      fOut: New Control effort       */
 /* ************************************************** */
 float fPidUpdateData(float fSensorValue, float fSetValue)
 {
@@ -196,20 +197,42 @@ float fPidUpdateData(float fSensorValue, float fSetValue)
 //		fOut = -pidConfig.fOutputSaturation;
 //	}
 
-	return fOut;
+	return fOut/pidConfig.fOutputSaturation;
 }
 
+
+/* ************************************************** */
+/* Method name:        fPIDGetSetPointTemperature     */
+/* Method description: Return set point temperature   */
+/* Input params:                                      */
+/* Output params:      fSetPointTemperature           */
+/* ************************************************** */
 float fPIDGetSetPointTemperature() {
 	return fSetPointTemperature;
 }
 
+/* ************************************************** */
+/* Method name:        fPIDSetSetPointTemperature     */
+/* Method description: Update set point temperature   */
+/* Input params:       fNewSetPointTemperature        */
+/* Output params:                                     */
+/* ************************************************** */
 void vPIDSetSetPointTemperature(float fNewSetPointTemperature) {
 	fSetPointTemperature = fNewSetPointTemperature;
 }
 
+/* ************************************************** */
+/* Method name:        vPIDActuatorSetValue           */
+/* Method description: This function chooses which    */
+/*                     actuator will actuate based in */
+/*                     if the controller output is    */
+/*                     positive or negative.           */
+/*                     It also turns off the other    */
+/*                     actuator                       */
+/* Input params:       fActuatorValue                 */
+/* Output params:                                     */
+/* ************************************************** */
 void vPIDActuatorSetValue(float fActuatorValue) {
-	/*
-	 * Controle utilizando tanto heater quanto o cooler */
 	if(fActuatorValue < 0) {
 		//vHeaterAndCoolerCoolerfanPWMDuty(-0.3-fActuatorValue);
 		vHeaterAndCoolerCoolerfanPWMDuty(-fActuatorValue);

@@ -202,7 +202,6 @@ void vButtonsEventChangeScreen(buttons xBt){
 __weak void vButtonsEventCallbackPressedEvent(buttons xBt){}
 __weak void vButtonsEventCallbackReleasedEvent(buttons xBt){}
 __weak void vButtonsEventCallback500msPressedEvent(buttons xBt){}
-__weak void vButtonsEventCallback3sPressedEvent(buttons xBt){}
 
 
 

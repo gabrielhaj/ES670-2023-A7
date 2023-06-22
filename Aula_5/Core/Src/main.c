@@ -64,7 +64,7 @@ int iLedValue = 0;
 extern char cFlagLongPressTimer;
 extern unsigned short int usBuzzerPeriod;
 float fCurrentTemperature;
-float fSetPointTemperature = 25;
+extern float fSetPointTemperature;
 unsigned char ucButtonsBlocked = 0;
 unsigned char ucDutyHeater  = 10;
 unsigned char ucDutyCooler = 20;
@@ -90,10 +90,10 @@ unsigned int uiMask;
 unsigned int uiMasked;
 unsigned int uiBit;
 unsigned char ucLcdAddress = 0x27;
-float fHeaterPWMDutyCycle = 0;
-float fCoolerPWMDutyCycle = 0;
+extern float fHeaterPWMDutyCycle;
+extern float fCoolerPWMDutyCycle;
 extern unsigned short int usCoolerSpeed;
-uint16_t usTemperature;
+extern uint16_t usTemperature;
 float fTemp;
 
 
@@ -309,9 +309,22 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 
 }
 
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsCallbackPressedEvent            */
+/* Method description: Calls change screen function                  */
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventCallbackPressedEvent(buttons xBt){
 	vButtonsEventChangeScreen(xBt);
 }
+
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsCallbackReleasedEvent           */
+/* Method description: Stop pressed timer and reset its flag         */
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventCallbackReleasedEvent(buttons xBt){
 	if(uiCounterButtons[0] == 0 && uiCounterButtons[1] == 0 && uiCounterButtons[2] == 0 && uiCounterButtons[3] == 0 && uiCounterButtons[4] == 0){
 		//Verify if all counters are 0, therefore all buttons are released and turns off the timer
@@ -319,21 +332,34 @@ void vButtonsEventCallbackReleasedEvent(buttons xBt){
 		cFlagLongPressTimer = 0;
 	}
 }
+
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsCallback500msPressedEvent       */
+/* Method description: Calls Pressed event callback if the button is */
+/*                     continusly pressed every 500ms                */
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventCallback500msPressedEvent(buttons xBt){
 	vButtonsEventCallbackPressedEvent(xBt); // the events of 500 ms have the same effect as single press
 }
-void vButtonsEventCallback3sPressedEvent(buttons xBt){
-	if(xBt == enter){
-		iLedValue = 0;
-	}
-}
 
+
+/* ***************************************************************** */
+/* Method name:        vPIDPeriodicControlTask                       */
+/* Method description: Gets actual temperature, set point temperature*/
+/*                     and calls the controller.                     */
+/*                     Then takes the controller output and feed the */
+/*                     actuator function                             */
+/* Input params:                                                     */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vPIDPeriodicControlTask(){
 	float fSensorValue, fSetPoint, fActuatorValue;
 	fSensorValue = fTemperatureSensorGetTemperature();
 	fSetPoint = fPIDGetSetPointTemperature();
 	fActuatorValue = fPidUpdateData(fSensorValue,fSetPoint);
-	vPIDActuatorSetValue(fActuatorValue/100); //Saturação igual a 100
+	vPIDActuatorSetValue(fActuatorValue);
 }
 
 

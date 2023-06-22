@@ -14,6 +14,13 @@
 #include <stm32g4xx.h>
 #include <main.h>
 
+
+/* ************************************************ */
+/* Method name:        vLedInit                     */
+/* Method description: Initialize the leds registers*/
+/* Input params:                                    */
+/* Output params:                                   */
+/* ************************************************ */
 void vLedInit(void){
 	RCC->AHB2ENR |= 0x0; /*Enabling clock for GPIOA*/
 
@@ -50,6 +57,14 @@ void vLedInit(void){
 	CLEAR_BIT(LED_BLUE_PORT->OSPEEDR,3<<(5*2));
 }
 
+/* ************************************************ */
+/* Method name:        vLedWrite                    */
+/* Method description: Write leds registers field to*/
+/*                     turn on or turn off the led  */
+/* Input params:       xLed: led to change value    */
+/*                     xState: set or reset         */
+/* Output params:                                   */
+/* ************************************************ */
 void vLedWrite(leds xLed, pinState xState){
 	if(xLed == green1){
 		if(xState == set){
@@ -84,12 +99,34 @@ void vLedWrite(leds xLed, pinState xState){
 	}
 }
 
+/* ************************************************ */
+/* Method name:        vLedTurnOn                   */
+/* Method description: Call led write with set value*/
+/* Input params:       xLed: led to change value    */
+/* Output params:                                   */
+/* ************************************************ */
 void vLedTurnOn(leds xLed){
 	vLedWrite(xLed,set);
 }
+
+/* ************************************************ */
+/* Method name:        vLedTurnOf                   */
+/* Method description: Call led write with          */
+/*                     reset value                  */
+/* Input params:       xLed: led to change value    */
+/* Output params:                                   */
+/* ************************************************ */
 void vLedTurnOff(leds xLed){
 	vLedWrite(xLed,reset);
 }
+
+/* ************************************************ */
+/* Method name:        vLedToogle                   */
+/* Method description: Check led value and          */
+/*                     toogles it                   */
+/* Input params:       xLed: led to change value    */
+/* Output params:                                   */
+/* ************************************************ */
 void vLedToggle(leds xLed){
 	if(xLed == green1){
 		if(READ_BIT(LED_GREEN1_PORT->ODR,LED_GREEN1_PIN)){

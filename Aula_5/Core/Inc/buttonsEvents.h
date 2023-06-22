@@ -61,10 +61,29 @@ void vButtonsEventsDebouncingPeriodElapsedCallback(void);
 /* ***************************************************************** */
 void vButtonsEventChangeScreen(buttons xBt);
 
-
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsCallback500msPressedEvent       */
+/* Method description: Calls Pressed event callback if the button is */
+/*                     continusly pressed every 500ms                */
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventCallback500msPressedEvent(buttons xBt);
-void vButtonsEventCallback3sPressedEvent(buttons xBt);
+
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsCallbackPressedEvent            */
+/* Method description: Calls change screen function                  */
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventCallbackPressedEvent(buttons xBt);
+
+/* ***************************************************************** */
+/* Method name:        vButtonsEventsCallbackReleasedEvent           */
+/* Method description: Stop pressed timer and reset its flag         */
+/* Input params:  xBt buttons                                        */
+/* Output params:                                                    */
+/* ***************************************************************** */
 void vButtonsEventCallbackReleasedEvent(buttons xBt);
 
 

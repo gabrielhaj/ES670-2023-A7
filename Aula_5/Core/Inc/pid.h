@@ -120,10 +120,45 @@ unsigned short usPidGetIntegratorWindow (void);
 /* ************************************************** */
 float fPidUpdateData(float fSensorValue, float fReferenceValue);
 
-void vPIDPeriodicControlTask();
+/* ************************************************** */
+/* Method name:        fPIDGetSetPointTemperature     */
+/* Method description: Return set point temperature   */
+/* Input params:                                      */
+/* Output params:      fSetPointTemperature           */
+/* ************************************************** */
 float fPIDGetSetPointTemperature();
+
+/* ************************************************** */
+/* Method name:        fPIDSetSetPointTemperature     */
+/* Method description: Update set point temperature   */
+/* Input params:       fNewSetPointTemperature        */
+/* Output params:                                     */
+/* ************************************************** */
 void vPIDSetSetPointTemperature(float fNewSetPointTemperature);
+
+/* ************************************************** */
+/* Method name:        vPIDActuatorSetValue           */
+/* Method description: This function chooses which    */
+/*                     actuator will actuate based in */
+/*                     if the controller output is    */
+/*                     positive or negative.           */
+/*                     It also turns off the other    */
+/*                     actuator                       */
+/* Input params:       fActuatorValue                 */
+/* Output params:                                     */
+/* ************************************************** */
 void vPIDActuatorSetValue(float fActuatorValue);
+
+/* ***************************************************************** */
+/* Method name:        vPIDPeriodicControlTask                       */
+/* Method description: Gets actual temperature, set point temperature*/
+/*                     and calls the controller.                     */
+/*                     Then takes the controller output and feed the */
+/*                     actuator function                             */
+/* Input params:                                                     */
+/* Output params:                                                    */
+/* ***************************************************************** */
+void vPIDPeriodicControlTask();
 
 
 
