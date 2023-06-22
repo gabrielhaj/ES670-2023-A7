@@ -1,9 +1,99 @@
-<mxfile host="app.diagrams.net" modified="2023-06-22T06:35:57.044Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" version="21.5.0" etag="-quH4i362H5XBkCt5Lbx" type="github">
+<mxfile host="app.diagrams.net" modified="2023-06-22T07:37:39.582Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="13ALh_ZYkLye_QiPJw1n" version="21.5.0" type="github">
   <diagram name="Página-1" id="VuSBhUzVQ2cKnlZLaoIi">
-    <mxGraphModel>
+    <mxGraphModel dx="1674" dy="796" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="182.19" width="330" height="387.81" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-3" value="Temperature sensor" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="400" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-4" value="Tachometer" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="480" width="90" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-5" value="Buttons" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="220" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-6" value="PC" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="320" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-14" value="GPIO" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="220" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-15" value="TIM" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="470" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-17" value="LCD (2X16)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-19" value="Heater Resistor" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="450" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-20" value="Cooler" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="500" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-33" value="A/D Conversor&lt;br&gt;(DMA)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-34" value="UART (USB)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="320" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-36" value="Microcontrolador (STM32G474)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="450" y="190" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-39" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="507" as="sourcePoint" />
+            <mxPoint x="450" y="507.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-40" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="239.5" as="sourcePoint" />
+            <mxPoint x="450" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-41" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="424.5" as="sourcePoint" />
+            <mxPoint x="460" y="425" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-42" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="kMxdVW5m-ip-JiFGbRhT-6">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="350" y="344.5" as="sourcePoint" />
+            <mxPoint x="460" y="345" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-43" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="610" y="480" as="sourcePoint" />
+            <mxPoint x="770" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-44" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="610" y="520" as="sourcePoint" />
+            <mxPoint x="770" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-45" value="I2C" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="270" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-46" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600" y="289.5" as="sourcePoint" />
+            <mxPoint x="760" y="289.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-47" value="5x" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="354" y="210" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="kMxdVW5m-ip-JiFGbRhT-48" value="4x" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="690" y="260" width="60" height="30" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
